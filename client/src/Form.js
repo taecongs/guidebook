@@ -35,9 +35,8 @@ const GuideAdd = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            // handle success
         } catch (error) {
-            // handle error
+            console.log(error);
         }
     };
 
