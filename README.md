@@ -7,7 +7,6 @@
 ```
 guidebook/client/npm i 
 guidebook/client/npm start
-
 ```
 
 <code>server</code>
@@ -15,5 +14,4 @@ guidebook/client/npm start
 ```
 guidebook/server/npm i
 guidebook/server/src/node server.js
-
 ```
