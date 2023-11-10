@@ -1,0 +1,28 @@
+section {
+    flex-grow: 1;
+    padding-top:120px;
+}
+
+.registration-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+.registration-wrap{
+    max-width:580px;
+    margin:0 auto;
+}
+
+.content{
+    background:#fff;
+    padding:55px;
+}
+
+.content-tit{
+    font-size:32px;
+    font-weight: 600;
+    margin-bottom:25px;
+}

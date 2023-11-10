@@ -1,0 +1,83 @@
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: 120px;
+    background-color: #fff;
+    box-shadow: 0 1px 20px 0px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 로고 */
+.logo{
+    display: flex;
+    width: 17%;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 포켓몬 도감 & 포켓몬 등록 */
+.nav{
+    min-width: 1250px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.acc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acc > li {
+    margin: 0 15px;
+}
+
+.acc_a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.acc_tit{
+    margin-top:7px;
+    font-size:13px;
+    
+}
+
+
+
+/* 포켓몬 공식 스토어 이동 */
+.btn-site {
+    display: flex;
+    position: relative;
+    width: 10%;
+    /* margin-left: 45px; */
+    /* padding: 0 15px 0 7px; */
+    align-items: center;
+    justify-content: center;
+    background:#FFDE00;
+    color: transparent !important;
+    font-size: 0;
+}
+
+.btn-site:after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -15px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    transform: skew(-45deg);
+}
+
+.site-img {
+    width: 100%;
+}
