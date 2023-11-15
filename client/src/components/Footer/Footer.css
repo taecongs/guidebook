@@ -4,18 +4,42 @@ footer{
     padding:30px 40px;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+
+    flex-direction: column;
+    align-items: center;
 }
 
 /* 로고 */
-.logo{
+.footer-logo{
     display: flex;
-    width: 17%;
+    width: 22.3%;
+    /* width: 17%; */
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: space-between;
 }
 
 
 .lu-txt{
-    padding-left:50px;
+    /* padding-left:50px; */
+}
+
+
+.sidemap {
+    display: flex;
+    padding-left:20px;
+}
+
+.copy-txt{
+    font-size:12px;
+    color: #444444;
+    margin-top:10px;
+}
+
+.sm-line{
+    font-size: 12px;
+    position: relative;
+    margin: 0px 10px;
+    top: 2px;
 }
