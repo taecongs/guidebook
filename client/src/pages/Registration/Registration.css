@@ -1,6 +1,6 @@
-section {
-    flex-grow: 1;
-    padding-top:120px;
+:root{
+    --common-padding:15px 20px;
+    --common-background:#fff;
 }
 
 .registration-container {
@@ -12,17 +12,197 @@ section {
 }
 
 .registration-wrap{
-    max-width:580px;
+    width:90%;
+    /* max-width:580px; */
     margin:0 auto;
 }
 
 .content{
     background:#fff;
-    padding:55px;
+    padding:27.5px;
+    /* padding:55px; */
 }
 
 .content-tit{
     font-size:32px;
     font-weight: 600;
     margin-bottom:25px;
+}
+
+
+/* 시리얼넘버, 이름 */
+.content-row1{
+    display:grid;
+    grid-template-columns: 120px 1fr 120px 1fr;
+    align-items: center;
+    margin-bottom:25px;
+}
+
+input#id, input#name{
+    height: auto;
+    padding: var(--common-padding);
+    border: 1px solid #bbb;
+    border-radius: 0;
+    background: var(--common-background);
+}
+
+/* 라벨 */
+label {
+    text-align: center;
+}
+
+.right-tit{
+    text-align: center;
+}
+
+/* 상세 설명 */
+.content-row2{
+    display:grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+textarea#defail{
+    height: auto;
+    padding: var(--common-padding);
+    border: 1px solid #bbb;
+    border-radius: 0;
+    background: var(--common-background);
+}
+
+/* 타입 */
+.content-row3{
+    display:grid;
+    grid-template-columns: 120px 1fr 120px 1fr;
+    align-items: center;
+    margin-bottom:25px;
+}
+
+input#type1, input#type2{
+    height: auto;
+    padding: var(--common-padding);
+    border: 1px solid #bbb;
+    border-radius: 0;
+    background: var(--common-background);
+}
+
+.type1, .type2{
+    display:flex;
+    justify-content: center;
+}
+
+.type-tooltip-img {
+    width: 15px;
+    height: 15px;
+    margin-left:5px;
+}
+
+.con-tooltip .type-tooltip{
+    display: none;
+    position: absolute;
+    top:41%;
+    left:11.5%;
+    background:rgba(0,0,0,0.7);
+    border: 1px solid #ccc;
+    color:#fff;
+    font-size:12px;
+    padding: 10px;
+
+    width:10%;
+    word-break: keep-all;
+    line-height: 1.5;
+}
+
+
+.con-tooltip.tooltip-visible .type-tooltip{
+    display: block;
+}
+
+.type1:hover .type-tooltip {
+    display: block;
+}
+
+
+
+/* 키, 분류 */
+.content-row4{
+    display:grid;
+    grid-template-columns: 120px 1fr 120px 1fr;
+    align-items: center;
+    margin-bottom:25px;
+}
+
+input#height, input#category{
+    height: auto;
+    padding: var(--common-padding);
+    border: 1px solid #bbb;
+    border-radius: 0;
+    background: var(--common-background);
+}
+
+/* 성별 */
+.content-row5{
+    display:grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.gender-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.male{
+    padding-right: 5px;
+}
+
+input#male, input#female {
+    width: 17px;
+    height: 17px;
+    position: relative;
+    top: -1px;
+}
+
+.female {
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+/* 몸무게, 특성 */
+.content-row6{
+    display:grid;
+    grid-template-columns: 120px 1fr 120px 1fr;
+    align-items: center;
+    margin-bottom:25px;
+}
+
+input#weight, input#characteristic{
+    height: auto;
+    padding: var(--common-padding);
+    border: 1px solid #bbb;
+    border-radius: 0;
+    background: var(--common-background);
+}
+
+/* 이미지 */
+.content-row7{
+    display:grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+
+/* 등록하기 */
+.btn-submit{
+    width: 100%;
+    padding: 20px 0;
+    background-color: #da343c;
+    border: none;
+    color: #fff !important;
+    cursor: pointer;
+    font-family: 'Pretendard-Regular';
+    font-size:16px;
 }
