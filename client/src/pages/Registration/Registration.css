@@ -87,18 +87,19 @@ input#type1, input#type2{
     background: var(--common-background);
 }
 
-.type1, .type2{
+.type1, .char1{
     display:flex;
     justify-content: center;
 }
 
-.type-tooltip-img {
+.type-tooltip-img, .char-tooltip-img {
     width: 15px;
     height: 15px;
     margin-left:5px;
 }
 
-.con-tooltip .type-tooltip{
+/* 타입 툴팁 정의 */
+.type-tooltip1{
     display: none;
     position: absolute;
     top:41%;
@@ -115,14 +116,13 @@ input#type1, input#type2{
 }
 
 
-.con-tooltip.tooltip-visible .type-tooltip{
+.con-tooltip.tooltip-visible .type-tooltip1{
     display: block;
 }
 
-.type1:hover .type-tooltip {
+.type-tooltip-img:hover .type-tooltip1 {
     display: block;
 }
-
 
 
 /* 키, 분류 */
@@ -185,6 +185,40 @@ input#weight, input#characteristic{
     border-radius: 0;
     background: var(--common-background);
 }
+
+
+/* 특성 툴팁 정의 */
+.type-tooltip2{
+    display: none;
+    position: absolute;
+    /* top:37.8%; */
+    top:49%;
+    right:14.7%;
+    /* left:11.5%; */
+    background:rgba(0,0,0,0.7);
+    border: 1px solid #ccc;
+    color:#fff;
+    font-size:12px;
+    padding: 10px;
+
+    width:30%;
+    word-break: keep-all;
+    line-height: 1.5;
+}
+
+
+.con-tooltip.tooltip-visible .type-tooltip2{
+    display: block;
+}
+
+.char-tooltip-img:hover .type-tooltip2{
+    display: block;
+}
+
+.viewmore-txt{
+    color:yellow;
+}
+
 
 /* 이미지 */
 .content-row7{
