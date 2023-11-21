@@ -3,6 +3,10 @@
     --common-background:#fff;
 }
 
+
+/*=========================================================
+    section 정의
+=========================================================*/
 .registration-container {
     height: 100%;
     display: flex;
@@ -15,6 +19,8 @@
     width:90%;
     /* max-width:580px; */
     margin:0 auto;
+    padding: 25px 0;
+    box-sizing: border-box;
 }
 
 .content{
@@ -23,6 +29,9 @@
     /* padding:55px; */
 }
 
+/*=========================================================
+    section 타이틀 정의
+=========================================================*/
 .content-tit{
     font-size:32px;
     font-weight: 600;
@@ -30,12 +39,36 @@
 }
 
 
-/* 시리얼넘버, 이름 */
-.content-row1{
+/*=========================================================
+    유효성 검사 에러 메시지 정의
+=========================================================*/
+.error-message {
+    color: #ff0000;
+    font-size: 12px;
+    padding-left: 120px;
+    padding-top: 10px;
+}
+
+
+/*=========================================================
+    시리얼넘버, 이름 정의
+=========================================================*/
+.content-row1, .content-row3, .content-row4, .content-row6{
     display:grid;
-    grid-template-columns: 120px 1fr 120px 1fr;
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    align-items: flex-start;
     margin-bottom:25px;
+}
+
+.row1-col, .row2-col{
+    display: flex;
+    flex-direction: column;
+}
+
+.col-content{
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
 }
 
 input#id, input#name{
@@ -55,30 +88,28 @@ label {
     text-align: center;
 }
 
-/* 상세 설명 */
+/*=========================================================
+    상세 설명 정의
+=========================================================*/
 .content-row2{
     display:grid;
-    grid-template-columns: 120px 1fr;
     align-items: center;
     margin-bottom: 25px;
 }
 
 textarea#defail{
-    height: auto;
+    height:47px;
+    /* height: auto; */
     padding: var(--common-padding);
     border: 1px solid #bbb;
     border-radius: 0;
     background: var(--common-background);
 }
 
-/* 타입 */
-.content-row3{
-    display:grid;
-    grid-template-columns: 120px 1fr 120px 1fr;
-    align-items: center;
-    margin-bottom:25px;
-}
 
+/*=========================================================
+    타입 정의
+=========================================================*/
 input#type1, input#type2{
     height: auto;
     padding: var(--common-padding);
@@ -102,7 +133,7 @@ input#type1, input#type2{
 .type-tooltip1{
     display: none;
     position: absolute;
-    top:41%;
+    top:40%;
     left:11.5%;
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
@@ -110,11 +141,10 @@ input#type1, input#type2{
     font-size:12px;
     padding: 10px;
 
-    width:10%;
+    width:11%;
     word-break: keep-all;
     line-height: 1.5;
 }
-
 
 .con-tooltip.tooltip-visible .type-tooltip1{
     display: block;
@@ -125,14 +155,9 @@ input#type1, input#type2{
 }
 
 
-/* 키, 분류 */
-.content-row4{
-    display:grid;
-    grid-template-columns: 120px 1fr 120px 1fr;
-    align-items: center;
-    margin-bottom:25px;
-}
-
+/*=========================================================
+    키, 분류 정의
+=========================================================*/
 input#height, input#category{
     height: auto;
     padding: var(--common-padding);
@@ -141,7 +166,10 @@ input#height, input#category{
     background: var(--common-background);
 }
 
-/* 성별 */
+
+/*=========================================================
+    성별 정의
+=========================================================*/
 .content-row5{
     display:grid;
     grid-template-columns: 120px 1fr;
@@ -170,14 +198,10 @@ input#male, input#female {
     padding-right: 5px;
 }
 
-/* 몸무게, 특성 */
-.content-row6{
-    display:grid;
-    grid-template-columns: 120px 1fr 120px 1fr;
-    align-items: center;
-    margin-bottom:25px;
-}
 
+/*=========================================================
+    몸무게, 특성 정의
+=========================================================*/
 input#weight, input#characteristic{
     height: auto;
     padding: var(--common-padding);
@@ -186,14 +210,13 @@ input#weight, input#characteristic{
     background: var(--common-background);
 }
 
-
 /* 특성 툴팁 정의 */
 .type-tooltip2{
     display: none;
     position: absolute;
     /* top:37.8%; */
-    top:49%;
-    right:14.7%;
+    top:50%;
+    right:14.9%;
     /* left:11.5%; */
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
@@ -205,7 +228,6 @@ input#weight, input#characteristic{
     word-break: keep-all;
     line-height: 1.5;
 }
-
 
 .con-tooltip.tooltip-visible .type-tooltip2{
     display: block;
@@ -219,17 +241,25 @@ input#weight, input#characteristic{
     color:yellow;
 }
 
+.viewmore-txt2{
+    color: #004682;
+    font-weight: 600;
+}
 
-/* 이미지 */
+
+/*=========================================================
+    이미지 정의
+=========================================================*/
 .content-row7{
     display:grid;
-    grid-template-columns: 120px 1fr;
     align-items: center;
     margin-bottom: 25px;
 }
 
 
-/* 등록하기 */
+/*=========================================================
+    등록하기 버튼 정의
+=========================================================*/
 .btn-submit{
     width: 100%;
     padding: 20px 0;
@@ -239,4 +269,8 @@ input#weight, input#characteristic{
     cursor: pointer;
     font-family: 'Pretendard-Regular';
     font-size:16px;
+}
+
+.btn-submit:hover{
+    opacity: 0.8;
 }
