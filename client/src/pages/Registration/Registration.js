@@ -15,7 +15,6 @@ const Registration = () => {
     const [weight, setWeight] = useState("");
     const [characteristic, setCharacteristic] = useState("");
     const [image, setImage] = useState(null);
-
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
@@ -42,28 +41,35 @@ const Registration = () => {
         setCharTooltipVisible(isVisible);
     };
 
-    // 시리얼넘버 유효성 검사
+    /*====================================================
+    // [유효성 검사] 시리얼넘버 
+    =====================================================*/
     const validateSerialNumber = () => {
         const serialRegex = /^No\.\d{4}$/;
         if (!id) {
+            // [공통] 입력필드에 값을 입력하지 않은 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 id: "시리얼넘버를 입력해주세요.",
             }));
             return false;
         } else if (!serialRegex.test(id)) {
+            // [공통] 입력 값이 존재하지만 유효성 검사를 통과하지 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 id: "시리얼넘버는 'No.0000' 형식으로 입력해주세요.",
             }));
             return false;
         } else {
+            // [공통] 유효성 검사를 통과한 경우 에러 메시지 제거(입력 값 존재, 유효성 검사 통과)
             setErrors((prevErrors) => ({ ...prevErrors, id: "" }));
             return true;
         }
     };
 
-    // 이름 유효성 검사
+    /*====================================================
+    // [유효성 검사] 이름 
+    =====================================================*/
     const validateName = () => {
         const nameRegex = /^[가-힣]+$/;
         if (!name) {
@@ -81,13 +87,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, name: "" }));
             return true;
         }
     };
 
-    // 상세설명 유효성 검사
+    /*====================================================
+    // [유효성 검사] 상세설명
+    =====================================================*/
     const validateDetail = () => {
         const koreanRegex = /^[가-힣\s.]+$/;
         if (!detail) {
@@ -105,13 +112,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, detail: "" }));
             return true;
         }
     };
 
-    // 타입1 유효성 검사
+    /*====================================================
+    // [유효성 검사] 타입 1
+    =====================================================*/
     const validateType1 = () => {
         const koreanRegex = /^[가-힣]+$/;
         if (!type1) {
@@ -129,31 +137,32 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
             return true;
         }
     };
 
-    // 타입2 유효성 검사
+    /*====================================================
+    // [유효성 검사] 타입 2
+    =====================================================*/
     const validateType2 = () => {
         const koreanRegex = /^[가-힣]+$/;
-        
         if (type2 && !koreanRegex.test(type2)) {
-            // 타입2가 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
+            // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 type2: "타입은 한글로만 입력해주세요.",
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, type2: "" }));
             return true;
         }
     };
 
-    // 키 유효성 검사
+    /*====================================================
+    // [유효성 검사] 키
+    =====================================================*/
     const validateHeight = () => {
         const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
         if (!height) {
@@ -171,13 +180,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, height: "" }));
             return true;
         }
     }
 
-    // 카테고리 유효성 검사
+    /*====================================================
+    // [유효성 검사] 분류 
+    =====================================================*/
     const validateCategory = () => {
         const koreanRegex = /^[가-힣]+$/;
         if (!category) {
@@ -195,13 +205,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, category: "" }));
             return true;
         }
     }
 
-    // 몸무게 유효성 검사
+    /*====================================================
+    // [유효성 검사] 몸무게
+    =====================================================*/
     const vaildateWeight = () => {
         const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
         if (!weight) {
@@ -219,13 +230,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, weight: "" }));
             return true;
         }
     }
 
-    // 특성 유효성 검사
+    /*====================================================
+    // [유효성 검사] 특성 
+    =====================================================*/
     const vaildateCharacteristic = () => {
         const koreanRegex = /^[가-힣]+$/;
         if (!characteristic) {
@@ -243,13 +255,14 @@ const Registration = () => {
             }));
             return false;
         } else {
-            // 유효성 검사를 통과한 경우 에러 메시지 제거
             setErrors((prevErrors) => ({ ...prevErrors, characteristic: "" }));
             return true;
         }
     }
 
-    // 이미지 유효성 검사
+    /*====================================================
+    // [유효성 검사] 이미지
+    =====================================================*/
     const validateImage = (file) => {
         if (!file) {
             setErrors((prevErrors) => ({
