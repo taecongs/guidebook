@@ -24,10 +24,10 @@ const Home = () => {
                 <div className='main-wrap'>
                     <div className='main-content'>
                         {data.map((item, index) => (
-                            <Link key={index} to={`/information/${item.serial}`}>
+                            <Link key={index} to={`/information/${item.serial}`} className='pokemon-col'>
                                 <div className='pokemon-data'>
                                     <div className='pokemon-image'>
-                                        <img src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                        <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
                                     </div>
                                     
                                     <div className='pokemon-serial'>

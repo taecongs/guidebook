@@ -12,12 +12,29 @@
     box-sizing: border-box;
 }
 
-.main-content{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
+.pokemon-col {
+    width: calc(16.666% - 10px); 
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
 
-.pokemon-data{
+.pokemon-image{
+    padding: 20px;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    transition: .5s;
+}
 
+/* 이미지 */
+.uploads-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
