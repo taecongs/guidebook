@@ -25,12 +25,26 @@ const Home = () => {
                     {data.map((item, index) => (
                         <div key={index} className='pokemon-data'>
                             <img src={`/uploads/${item.serial}.png`} alt={item.name} />
-                            <h2>{item.name}</h2>
-                            <p>{item.detail}</p>
+                            <div className='pokemon-serial'>
+                                <p>{item.serial}</p>
+                            </div>
 
+                            <div className='pokemon-name'>
+                                <h2>{item.name}</h2>
+                            </div>
+                            
+                            <div className='pokemon-type'>
+                                <p>{item.type1}</p>
+                                <p>{item.type2}</p>
+                            </div>
+
+
+
+                            {/*
                             {item.gender.split(',').map((gender, index) => (
                                 <p key={index}>{gender.trim()}</p>
                             ))}
+                            */}
                         </div>
                     ))}
 
