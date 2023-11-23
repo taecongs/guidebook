@@ -12,19 +12,20 @@
     box-sizing: border-box;
 }
 
-
 .main-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
+/* 데이터 레이아웃 정의(1행 6열) */
 .pokemon-col {
     width: calc(16.666% - 10px); 
     margin-bottom: 20px;
     box-sizing: border-box;
 }
 
+/* 이미지 */
 .pokemon-image{
     padding: 20px;
     border: 1px solid #e8e8e8;
@@ -32,7 +33,6 @@
     transition: .5s;
 }
 
-/* 이미지 */
 .uploads-image {
     max-width: 100%;
     height: auto;
