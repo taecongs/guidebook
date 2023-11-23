@@ -1,3 +1,6 @@
+/*=========================================================
+    section 정의
+=========================================================*/
 .main-container{
     height: 100%;
     display: flex;
@@ -8,28 +11,39 @@
 .main-wrap{
     width: 90%;
     margin: 0 auto;
-    padding: 25px 0;
+    padding: 50px 0;
+    /* padding: 25px 0; */
     box-sizing: border-box;
 }
 
 .main-content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: flex-start;
+    gap: 24px;
 }
 
-/* 데이터 레이아웃 정의(1행 6열) */
+/*=========================================================
+    데이터 레이아웃 정의(1행 6열)
+=========================================================*/
 .pokemon-col {
-    width: calc(16.666% - 10px); 
-    margin-bottom: 20px;
+    width: calc(16.666% - 20px); 
+    /* margin-bottom: 20px; */
     box-sizing: border-box;
 }
 
-/* 이미지 */
+/* 호버 시 정의 */
+.pokemon-col:hover .pokemon-image{
+    background:#e8e8e8;
+}
+
+/*=========================================================
+    이미지 정의
+=========================================================*/
 .pokemon-image{
     padding: 40px;
     border: 1px solid #e8e8e8;
-    /* border-radius: 10px; */
     transition: .5s;
 }
 
@@ -39,7 +53,9 @@
     display: block;
 }
 
-/* 시리얼넘버 */
+/*=========================================================
+    시리얼넘버 정의
+=========================================================*/
 .pokemon-serial p{
     font-size: 14px;
     font-weight: 300;
@@ -47,17 +63,21 @@
     padding:20px 0 0 10px;
 }
 
-/* 이름 */
+/*=========================================================
+    이름 정의
+=========================================================*/
 .pokemon-name h2{
     font-size: 20px;
     font-weight: 600;
     padding:10px 0 0 10px;
 }
 
-/* 타입 */
+/*=========================================================
+    타입 정의
+=========================================================*/
 .pokemon-type{
     display:flex;
-    padding-top:20px;
+    padding:20px 0;
     gap:11px;
 }
 
@@ -67,4 +87,5 @@
     box-sizing: border-box;
     color: #fff;
     text-align: center;
+    font-size:14px;
 }
