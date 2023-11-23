@@ -6,19 +6,15 @@ const Information = () => {
     const [pokemonData, setPokemonData] = useState(null);
 
     useEffect(() => {
+        // 해당 serial을 사용하여 데이터를 가져오는 API 호출
         fetch(`http://localhost:4001/guidebook/${serial}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('데이터 수신:', data);
+                // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 setPokemonData(data);
             })
             .catch(error => {
-                console.error('데이터 가져오기 오류:', error);
+                console.error('Error fetching data:', error);
             });
     }, [serial]);
 
@@ -30,7 +26,10 @@ const Information = () => {
                     <p>이름: {pokemonData.name}</p>
                     <p>타입1: {pokemonData.type1}</p>
                     <p>타입2: {pokemonData.type2}</p>
-                    {/* 원하는 세부 정보를 추가로 표시 */}
+
+                    {pokemonData.gender.split(',').map((gender, index) => (
+                        <p key={index}>{gender.trim()}</p>
+                    ))}
                 </div>
             ) : (
                 <p>Loading...</p>

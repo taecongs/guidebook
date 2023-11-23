@@ -7,19 +7,27 @@ const path = require("path");
 const app = express();
 const PORT = 4001;
 
+
+/*====================================================
+    // 파일 업로드를 위한 Multer 설정
+=====================================================*/
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../../client/public/uploads'));
+        cb(null, path.join(__dirname, '../../client/public/uploads'));   // 업로드 된 파일 저장 경로
     },
     filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        const serial = req.body.serial; // 받아온 serial 값 사용
-        cb(null, `${serial}${ext}`);
+        const ext = path.extname(file.originalname);   // 파일 확장자 추출
+        const serial = req.body.serial;   // 받아온 serial 값 사용
+        cb(null, `${serial}${ext}`);   // 파일 이름 생성: 시리얼넘버버 + 확장자
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });   // Multer 미들웨어 생성
 
+
+/*====================================================
+    // MySQL 데이터베이스 연결 설정
+=====================================================*/
 const db = mysql.createPool({
     host: "localhost",
     user: "root",
@@ -27,15 +35,27 @@ const db = mysql.createPool({
     database: "guidebook",
 });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, '../../client/public/uploads'))); // 정적 파일 제공
 
+/*====================================================
+    // 미들웨어 설정
+=====================================================*/
+app.use(cors());   // CORS 미들웨어
+app.use(express.json());   // JSON 파싱 미들웨어
+app.use(express.urlencoded({ extended: true }));   // URL 인코딩 파싱 미들웨어
+app.use('/uploads', express.static(path.join(__dirname, '../../client/public/uploads')));   // 정적 파일 제공
+
+
+/*====================================================
+    // 서버 실행
+=====================================================*/
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+
+/*====================================================
+    // 모든 정보 가져오기
+=====================================================*/
 app.get("/guidebook", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
 
@@ -51,7 +71,10 @@ app.get("/guidebook", (req, res) => {
     });
 });
 
-// Information 페이지에서 특정 일련번호에 해당하는 포켓몬 데이터 가져오기 위해 정의
+
+/*====================================================
+    // 특정 시리얼번호에 해당하는 정보 가져오기
+=====================================================*/
 app.get("/guidebook/:serial", (req, res) => {
     const { serial } = req.params;
 
@@ -69,6 +92,10 @@ app.get("/guidebook/:serial", (req, res) => {
     });
 });
 
+
+/*====================================================
+    // 포켓몬 정보 업로드
+=====================================================*/
 app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic } = req.body;
     const imagePath = req.file.path; // 이미지 파일 경로
