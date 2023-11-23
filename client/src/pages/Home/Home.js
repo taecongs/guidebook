@@ -26,7 +26,10 @@ const Home = () => {
                         {data.map((item, index) => (
                             <Link key={index} to={`/information/${item.serial}`}>
                                 <div className='pokemon-data'>
-                                    <img src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                    <div className='pokemon-image'>
+                                        <img src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                    </div>
+                                    
                                     <div className='pokemon-serial'>
                                         <p>{item.serial}</p>
                                     </div>

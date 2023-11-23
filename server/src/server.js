@@ -51,6 +51,24 @@ app.get("/guidebook", (req, res) => {
     });
 });
 
+// Information 페이지에서 특정 일련번호에 해당하는 포켓몬 데이터 가져오기 위해 정의
+app.get("/guidebook/:serial", (req, res) => {
+    const { serial } = req.params;
+
+    const sql = "SELECT * FROM guidebook WHERE serial = ?";
+
+    db.query(sql, [serial], (err, result) => {
+        if (err) {
+            console.error("Database query error:", err);
+            res.status(500).send("Database query error");
+        } else if (result.length === 0) {
+            res.status(404).send("Pokemon not found");
+        } else {
+            res.send(result[0]);
+        }
+    });
+});
+
 app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic } = req.body;
     const imagePath = req.file.path; // 이미지 파일 경로
