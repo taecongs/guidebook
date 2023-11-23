@@ -38,19 +38,23 @@
     background:#e8e8e8;
 }
 
+.pokemon-col:hover .uploads-image{
+    transform: scale(1.1);
+}
+
 /*=========================================================
     이미지 정의
 =========================================================*/
 .pokemon-image{
     padding: 40px;
     border: 1px solid #e8e8e8;
-    transition: .5s;
 }
 
 .uploads-image {
     max-width: 100%;
     height: auto;
     display: block;
+    transition: .5s;
 }
 
 /*=========================================================
