@@ -26,6 +26,14 @@ const Home = () => {
         });
     }, []);
 
+    // 타입 색상 정의
+    const typeColors= {
+        '풀': '#42bf24',
+        '독': '#994dcf',
+        '불꽃': '#ff612c',
+        '비행': '#95c9ff'
+    }
+
     return(
         <section>
             <div className='main-container'>
@@ -47,8 +55,8 @@ const Home = () => {
                                     </div>
                                     
                                     <div className='pokemon-type'>
-                                        <p>{item.type1}</p>
-                                        <p>{item.type2}</p>
+                                        <p style={{ backgroundColor: typeColors[item.type1] }} className='pokemon-type1'>{item.type1}</p>
+                                        <p style={{ backgroundColor: typeColors[item.type2] }} className='pokemon-type2'>{item.type2}</p>
                                     </div>
 
                                     {/*
