@@ -9,7 +9,7 @@ const PORT = 4001;
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../uploads'));
+        cb(null, path.join(__dirname, '../../client/public/uploads'));
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
@@ -30,7 +30,7 @@ const db = mysql.createPool({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // 정적 파일 제공
+app.use('/uploads', express.static(path.join(__dirname, '../../client/public/uploads'))); // 정적 파일 제공
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
