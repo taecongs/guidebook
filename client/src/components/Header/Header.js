@@ -11,7 +11,7 @@ const Header = () => {
             <div className="nav">
 			    <ul className="acc">
 			    	<li>
-                        <Link to="" className="acc_a">
+                        <Link to="/" className="acc_a">
                             <img src="./image/icon_ball_c.png" alt="guidebook" />
                             <span className="acc_tit">포켓몬 도감</span>
                         </Link>

@@ -8,13 +8,13 @@ const Footer = () => {
                 <img src="./image/ft_logo.png" alt="footer" />
 
                 <div className="sidemap">
-                    <Link to="" className="sm-1">
+                    <Link to="/" className="sm-1">
                         <span>포켓몬 도감</span>
                     </Link>
 
                     <span className="sm-line">|</span>
 
-                    <Link to="" className="sm-2">
+                    <Link to="/registration" className="sm-2">
                         <span>포켓몬 등록</span>
                     </Link>
                 </div>
