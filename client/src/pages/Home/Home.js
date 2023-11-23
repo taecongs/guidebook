@@ -11,7 +11,15 @@ const Home = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            setData(data);
+
+            const sortedData = data.sort((a, b) => {
+                // 'No.' 이후의 숫자를 추출하여 비교 (숫자로 변환하여 비교)
+                const serialA = parseInt(a.serial.split('.')[1]);
+                const serialB = parseInt(b.serial.split('.')[1]);
+                return serialA - serialB;
+            });
+
+            setData(sortedData);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
