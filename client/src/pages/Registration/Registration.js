@@ -352,8 +352,8 @@ const Registration = () => {
         <section>
             <div className="registration-container">
                 <div className="registration-wrap">
-                    <div className="content">
-                        <h2 className="content-tit">포켓몬 등록</h2>
+                    <div className="registration-content">
+                        <h2 className="registration-content-tit">포켓몬 등록</h2>
 
                         <form onSubmit={handleSubmit}>
                             {/* 시리얼넘버 & 이름 */}

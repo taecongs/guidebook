@@ -23,7 +23,7 @@
     box-sizing: border-box;
 }
 
-.content{
+.registration-content{
     background:#fff;
     padding:27.5px;
     /* padding:55px; */
@@ -32,7 +32,7 @@
 /*=========================================================
     section 타이틀 정의
 =========================================================*/
-.content-tit{
+.registration-content-tit{
     font-size:32px;
     font-weight: 600;
     margin-bottom:25px;
