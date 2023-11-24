@@ -52,6 +52,25 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+/*====================================================
+    // 시리얼넘버 중복 확인
+=====================================================*/
+app.get("/checkDuplicateSerial/:serial", (req, res) => {
+    const { serial } = req.params;
+
+    const sql = "SELECT COUNT(*) AS count FROM guidebook WHERE serial = ?";
+
+    db.query(sql, [serial], (err, result) => {
+        if (err) {
+            console.error("Database query error:", err);
+            res.status(500).send("Database query error");
+        } else {
+            const count = result[0].count;
+            res.send({ isDuplicate: count > 0 });
+        }
+    });
+});
+
 
 /*====================================================
     // 모든 정보 가져오기

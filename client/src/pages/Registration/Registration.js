@@ -44,8 +44,9 @@ const Registration = () => {
     /*====================================================
     // [유효성 검사] 시리얼넘버 
     =====================================================*/
-    const validateSerialNumber = () => {
+    const validateSerialNumber = async () => {
         const serialRegex = /^No\.\d{4}$/;
+        
         if (!id) {
             // [공통] 입력필드에 값을 입력하지 않은 경우
             setErrors((prevErrors) => ({
@@ -63,7 +64,26 @@ const Registration = () => {
         } else {
             // [공통] 유효성 검사를 통과한 경우 에러 메시지 제거(입력 값 존재, 유효성 검사 통과)
             setErrors((prevErrors) => ({ ...prevErrors, id: "" }));
-            return true;
+    
+            // 중복 확인
+            try {
+                const response = await axios.get(`http://localhost:4001/checkDuplicateSerial/${id}`);
+                console.log(response.data); // 확인용 로그
+                if (response.data.isDuplicate) {
+                    // 중복된 시리얼넘버인 경우
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        id: "현재 등록되어 있는 시리얼넘버입니다.",
+                    }));
+                    return false;
+                } else {
+                    // 중복되지 않은 경우
+                    return true;
+                }
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
         }
     };
 
@@ -261,6 +281,17 @@ const Registration = () => {
     }
 
     /*====================================================
+    // [유효성 검사] 이미지 업로드 핸들러
+    =====================================================*/
+    const handleImageChange = (e) => {
+        const selectedImage = e.target.files[0];
+        if (validateImage(selectedImage)) {
+            setImage(selectedImage);
+            validateImage(selectedImage);
+        }
+    };
+
+    /*====================================================
     // [유효성 검사] 이미지
     =====================================================*/
     const validateImage = (file) => {
@@ -276,13 +307,23 @@ const Registration = () => {
         }
     }
 
-    // 이미지 업로드 핸들러
-    const handleImageChange = (e) => {
-        const selectedImage = e.target.files[0];
-        if (validateImage(selectedImage)) {
-            setImage(selectedImage);
-        }
-    };
+    /*====================================================
+    // 폼 초기화 함수
+    =====================================================*/
+    const resetForm = () => {
+        setId('');
+        setName('');
+        setDetail('');
+        setType1('');
+        setType2('');
+        setHeight('');
+        setCategory('');
+        setIsMale(false);
+        setIsFemale(false);
+        setWeight('');
+        setCharacteristic('');
+        setImage(null);
+    }
 
     /*====================================================
     // 폼 데이터 전송
@@ -330,18 +371,8 @@ const Registration = () => {
                 alert("정상적으로 등록 되었습니다.");
 
                 // 폼 초기화
-                setId('');
-                setName('');
-                setDetail('');
-                setType1('');
-                setType2('');
-                setHeight('');
-                setCategory('');
-                setIsMale(false);
-                setIsFemale(false);
-                setWeight('');
-                setCharacteristic('');
-                setImage(null);
+                resetForm();
+
             } catch (error) {
                 console.log(error);
             }
