@@ -370,8 +370,10 @@ const Registration = () => {
 
                 alert("정상적으로 등록 되었습니다.");
 
+                window.location.href = '/';
+
                 // 폼 초기화
-                resetForm();
+                // resetForm();
 
             } catch (error) {
                 console.log(error);
