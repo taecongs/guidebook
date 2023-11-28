@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);   // 파일 확장자 추출
         const serial = req.body.serial;   // 받아온 serial 값 사용
-        cb(null, `${serial}${ext}`);   // 파일 이름 생성: 시리얼넘버버 + 확장자
+        cb(null, `${serial}${ext}`);   // 파일 이름 생성: 시리얼넘버 + 확장자
     }
 });
 
