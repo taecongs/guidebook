@@ -12,6 +12,7 @@ const Information = () => {
             .then(data => {
                 // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 setPokemonData(data);
+                console.error(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

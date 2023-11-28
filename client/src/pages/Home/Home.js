@@ -64,6 +64,10 @@ const Home = () => {
                                         <p style={{ backgroundColor: typeColors[item.type2] }} className='pokemon-type2'>{item.type2}</p>
                                     </div>
 
+                                    <div>
+                                        {item.upload_date}
+                                    </div>
+
                                     {/*
                                     {item.gender.split(',').map((gender, index) => (
                                         <p key={index}>{gender.trim()}</p>
