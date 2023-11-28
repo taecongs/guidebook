@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import moment from 'moment';
 import './Registration.css';
 
 const Registration = () => {
@@ -331,9 +330,6 @@ const Registration = () => {
     =====================================================*/
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-        console.error(currentDate);
     
         // 유효성 검사
         const isSerialValid = validateSerialNumber();
@@ -364,7 +360,6 @@ const Registration = () => {
             formData.append('weight', weight);
             formData.append('characteristic', characteristic);
             formData.append('image', image);
-            formData.append('upload_date', currentDate);
     
             try {
                 await axios.post('http://localhost:4001/upload', formData, {
