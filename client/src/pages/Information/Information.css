@@ -47,10 +47,10 @@
     [왼쪽] 패널 이름 정의
 =========================================================*/
 .info-pokemon-name {
-    font-size: 28px;
+    font-size: 24px;
     /* letter-spacing: 4px; */
     text-transform: capitalize;
-    height: 45px;
+    /* height: 45px; */
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
