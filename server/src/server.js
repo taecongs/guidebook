@@ -97,9 +97,32 @@ app.get("/guidebook", (req, res) => {
 app.get("/guidebook/:serial", (req, res) => {
     const { serial } = req.params;
 
-    const sql = "SELECT * FROM guidebook WHERE serial = ?";
+    // const sql = "SELECT * FROM guidebook WHERE serial = ?";
 
-    db.query(sql, [serial], (err, result) => {
+    const sql = `
+        select gui.*,(
+            SELECT 
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', g.id,
+                        'name', g.name,
+                        'serial', g.serial,
+                        'type1', g.type1,
+                        'type2', g.type2,
+                        'image', g.image 
+                    )
+                ) AS evo_list
+                FROM guidebook g
+                JOIN evolution e1 ON g.id = e1.pkm_id
+                JOIN evolution e2 ON e1.org_id = e2.org_id
+                WHERE e2.pkm_id = (
+                    SELECT id FROM guidebook WHERE serial = ?
+                ) 
+        ) as 'evo_list'
+        from guidebook gui WHERE serial = ?;
+    `;
+
+    db.query(sql, [serial, serial], (err, result) => {
         if (err) {
             console.error("Database query error:", err);
             res.status(500).send("Database query error");

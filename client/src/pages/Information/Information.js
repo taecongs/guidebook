@@ -27,10 +27,19 @@ const Information = () => {
                     <p>이름: {pokemonData.name}</p>
                     <p>타입1: {pokemonData.type1}</p>
                     <p>타입2: {pokemonData.type2}</p>
+                    <p>몸무게: {pokemonData.weight}</p>
+                    <p>키 {pokemonData.height}</p>
+                    <p>설명: {pokemonData.detail}</p>
+                    <img src={`/uploads/${pokemonData.serial}.png`} alt={pokemonData.name} />
 
                     {pokemonData.gender.split(',').map((gender, index) => (
                         <p key={index}>{gender.trim()}</p>
                     ))}
+
+                    <div>
+                        <h2>진화정보</h2>
+                        <p>{Object.keys(JSON.parse(pokemonData.evo_list)).map(item=><p>{item}</p>)}</p>
+                    </div>
                 </div>
             ) : (
                 <p>Loading...</p>
