@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import './Information.css';
 
 const Information = () => {
     const {serial} = useParams();
@@ -36,9 +37,25 @@ const Information = () => {
                         <p key={index}>{gender.trim()}</p>
                     ))}
 
+                    {/*  
                     <div>
                         <h2>진화정보</h2>
                         <p>{Object.keys(JSON.parse(pokemonData.evo_list)).map(item=><p>{item}</p>)}</p>
+                    </div>
+                    */}
+
+                    <div>
+                        <h2>진화정보</h2>
+                        {JSON.parse(pokemonData.evo_list).map((evo, index) => (
+                            <div key={index}>
+                                <p>ID: {evo.id}</p>
+                                <p>이름: {evo.name}</p>
+                                <img src={`/uploads/${evo.serial}.png`} alt={evo.name} />
+                                <p>타입1: {evo.type1}</p>
+                                <p>타입2: {evo.type2}</p>
+                                <p>일련번호: {evo.serial}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             ) : (
