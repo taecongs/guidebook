@@ -22,40 +22,49 @@ const Information = () => {
 
     return(
         <section>
-            <h1>세부 정보 - {serial}</h1>
+            {/* <h1>세부 정보 - {serial}</h1> */}
             {pokemonData ? (
-                <div>
-                    <p>이름: {pokemonData.name}</p>
-                    <p>타입1: {pokemonData.type1}</p>
-                    <p>타입2: {pokemonData.type2}</p>
-                    <p>몸무게: {pokemonData.weight}</p>
-                    <p>키 {pokemonData.height}</p>
-                    <p>설명: {pokemonData.detail}</p>
-                    <img src={`/uploads/${pokemonData.serial}.png`} alt={pokemonData.name} />
+                <div className="info-container">
+                    <div className="info-wrap">
+                        <div className="pokemon-depth">
+                            <div className="panel left-panel">
+                                <div className="info-pokemon-name screen">
+                                    <p>{pokemonData.name}</p>
+                                    <span className="info-pokemon-serial">{serial}</span>
+                                </div>
 
-                    {pokemonData.gender.split(',').map((gender, index) => (
-                        <p key={index}>{gender.trim()}</p>
-                    ))}
+                                <div className="info-pokemon-image">
+                                    <img className="info-image-size" src={`/uploads/${pokemonData.serial}.png`} alt={pokemonData.name} />
+                                </div>
 
-                    {/*  
-                    <div>
-                        <h2>진화정보</h2>
-                        <p>{Object.keys(JSON.parse(pokemonData.evo_list)).map(item=><p>{item}</p>)}</p>
-                    </div>
-                    */}
+                                <div className="info-sprite-controls">
+                                    <div className="info-pokemon-gender">
+                                        {pokemonData.gender.split(',').map((gender, index) => (
+                                            <div className="gender-icon" key={index}>{gender.trim()}</div>
+                                        ))}
+                                    </div>
 
-                    <div>
-                        <h2>진화정보</h2>
-                        {JSON.parse(pokemonData.evo_list).map((evo, index) => (
-                            <div key={index}>
-                                <p>ID: {evo.id}</p>
-                                <p>이름: {evo.name}</p>
-                                <img src={`/uploads/${evo.serial}.png`} alt={evo.name} />
-                                <p>타입1: {evo.type1}</p>
-                                <p>타입2: {evo.type2}</p>
-                                <p>일련번호: {evo.serial}</p>
+                                </div>
+
+                                <div className="info-pokemon-detail screen">
+                                    <p>{pokemonData.detail}</p>
+                                </div>
                             </div>
-                        ))}
+
+                            <div className="divider">
+                                <div className="gap"></div>
+                                <div className="hinge"></div>
+                                <div className="gap"></div>
+                                <div className="hinge"></div>
+                                <div className="gap"></div>
+                                <div className="hinge"></div>
+                                <div className="gap"></div>
+                            </div>
+
+                            <div className="panel right-panel">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             ) : (
