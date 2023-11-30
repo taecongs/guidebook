@@ -1,3 +1,6 @@
+import { typeColors } from "../../utils/TypeColors";
+import { typeImages } from "../../utils/TypeImages";
+import { characteristicDescriptions } from "../../utils/Characteristic";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,40 +35,7 @@ const Information = () => {
             });
     }, [serial]);
 
-    // 타입 색상 정의
-    const typeColors = {
-        '풀': '#42bf24',
-        '독': '#994dcf',
-        '불꽃': '#ff612c',
-        '비행': '#95c9ff',
-        '물': '#2992ff',
-        '벌레': '#9fa424',
-        '노말': '#999999',
-        '전기': '#ffdb00',
-    }
 
-    // 타입 이미지 정의
-    const typeImages = {
-        '풀': '/image/type/grass.png',
-        '독': '/image/type/poison.png',
-        '불꽃': '/image/type/fire.png',
-        '비행': '/image/type/wind.png',
-        '물': '/image/type/water.png',
-        '벌레': '/image/type/bug.png',
-    }
-
-    // 속성 정의
-    const characteristicDescriptions = {
-        '심록': 'HP가 줄었을 때 풀타입 기술의 위력이 올라간다.',
-        '맹화': 'HP가 줄었을 때 불꽃타입 기술의 위력이 올라간다.',
-        '급류': 'HP가 줄었을 때 물타입 기술의 위력이 올라간다.',
-        '인분': '인분에 보호받아 기술의 추가 효과를 받지 않게 된다.',
-        '탈피': '몸의 껍질을 벗어 던져 상태 이상을 회복할 때가 있다.',
-        '복안': '복안을 가지고 있어 기술의 명중률이 올라간다.',
-
-
-
-    };
 
     return(
         <section>
