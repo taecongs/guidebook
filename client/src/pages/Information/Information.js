@@ -35,7 +35,32 @@ const Information = () => {
             });
     }, [serial]);
 
+    // 현재 페이지의 시리얼 넘버를 가져오는 함수
+    const getCurrentPageSerialNumber = () => {
+        const currentSerialNumber = parseInt(serial.replace("No.", ""), 10);
+        return currentSerialNumber;
+    };
 
+    // 숫자를 4자리로 맞추어 문자열로 변환하는 함수
+    const formatSerialNumber = (number) => {
+        return number.toString().padStart(4, '0');
+    };
+
+    const prevBtn = () => {
+        const currentPage = getCurrentPageSerialNumber();
+        if(currentPage > 1){
+            const prevPageSerial = currentPage - 1;
+            navigate(`/information/No.${formatSerialNumber(prevPageSerial)}`);
+        }
+    }
+
+    // 다음 세부 페이지로 이동하는 함수
+    const nextBtn = () => {
+        const currentPage = getCurrentPageSerialNumber();
+        const nextPageSerial = currentPage + 1;
+        navigate(`/information/No.${formatSerialNumber(nextPageSerial)}`);
+        
+    }
 
     return(
         <section>
@@ -182,16 +207,16 @@ const Information = () => {
 
                                 {/* 기능은 없지만 도감에 있는 스타일링  */}
                                 <div className="panel-row blue-buttons">
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
-                                    <div class="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
+                                    <div className="blue-button"></div>
                                 </div>
 
 
@@ -211,13 +236,13 @@ const Information = () => {
 
                                 {/* 세부 페이지 이동 정의 */}
                                 <div className="panel-row controls">
-                                    <div className="prev-button" ></div>
+                                    <div className="prev-button" onClick={prevBtn}></div>
                                     <div>
                                         <div className="now-page screen">
                                             {parseInt(serial.replace("No.", ""), 10)}   
                                         </div>
                                     </div>
-                                    <div className="next-button" ></div>
+                                    <div className="next-button" onClick={nextBtn}></div>
                                 </div>
 
                             </div>
