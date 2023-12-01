@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer';
 import Home from './pages/Home/Home';
 import Registration from './pages/Registration/Registration';
 import Information from './pages/Information/Information';
+import Evolution from './pages/Evolution/Evolution';
 
 
 
@@ -19,6 +20,7 @@ root.render(
       <Route path="/" element={<Home />}></Route>
       <Route path="/registration" element={<Registration />}></Route>
       <Route path="/information/:serial" element={<Information />} />
+      <Route path="/evolution" element={<Evolution />}></Route>
     </Routes>
     <Footer />
   </BrowserRouter>

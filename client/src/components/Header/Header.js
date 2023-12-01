@@ -23,6 +23,13 @@ const Header = () => {
                             <span className="acc_tit">포켓몬 등록</span>
                         </Link>
 			    	</li>
+
+                    <li>
+			    		<Link to="/evolution" className="acc_a">
+                            <img src="./image/icon_evo.png" alt="guidebook" />
+                            <span className="acc_tit">포켓몬 진화</span>
+                        </Link>
+			    	</li>
 			    </ul>
             </div>
 
