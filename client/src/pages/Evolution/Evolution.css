@@ -1,0 +1,36 @@
+:root{
+    --common-padding:15px 20px;
+    --common-background:#fff;
+}
+
+/*=========================================================
+    section 정의
+=========================================================*/
+.evolution-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+.evolution-wrap{
+    width:60%;
+    margin:0 auto;
+    padding: 50px 0;
+    box-sizing: border-box;
+}
+
+.evolution-content{
+    background:#fff;
+    padding:27.5px;
+}
+
+/*=========================================================
+    section 타이틀 정의
+=========================================================*/
+.evolution-content-tit{
+    font-size:32px;
+    font-weight: 600;
+    margin-bottom:25px;
+}
