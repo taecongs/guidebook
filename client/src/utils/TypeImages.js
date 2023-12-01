@@ -6,4 +6,5 @@ export const typeImages = {
     '비행': '/image/type/wind.png',
     '물': '/image/type/water.png',
     '벌레': '/image/type/bug.png',
+    '노말': '/image/type/normal.png',
 };
