@@ -7,6 +7,9 @@ import './Home.css';
 const Home = () => {
     const [data, setData] = useState([]);
 
+    /*====================================================
+    // 서버 데이터 가져오기 위해 정의
+    =====================================================*/
     useEffect(() => {
         fetch('http://localhost:4001/guidebook')
         .then(response => response.json())
@@ -35,18 +38,22 @@ const Home = () => {
                         {data.map((item, index) => (
                             <Link key={index} to={`/information/${item.serial}`} className='pokemon-col'>
                                 <div className='pokemon-data'>
+                                    {/* 포켓몬 이미지 엘리먼트 정의 */}
                                     <div className='pokemon-image'>
                                         <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
                                     </div>
                                     
+                                    {/* 포켓몬 시리얼넘버 엘리먼트 정의 */}
                                     <div className='pokemon-serial'>
                                         <p>{item.serial}</p>
                                     </div>
 
+                                    {/* 포켓몬 이름 엘리먼트 정의  */}
                                     <div className='pokemon-name'>
                                         <h2>{item.name}</h2>
                                     </div>
                                     
+                                    {/* 포켓몬 타입 엘리먼트 정의 */}
                                     <div className='pokemon-type'>
                                         <p style={{ backgroundColor: typeColors[item.type1] }} className='pokemon-type1'>{item.type1}</p>
                                         <p style={{ backgroundColor: typeColors[item.type2] }} className='pokemon-type2'>{item.type2}</p>
@@ -56,11 +63,6 @@ const Home = () => {
                                         {item.upload_date}
                                     </div> */}
 
-                                    {/*
-                                    {item.gender.split(',').map((gender, index) => (
-                                        <p key={index}>{gender.trim()}</p>
-                                    ))}
-                                    */}
                                 </div>
                             </Link>
                         ))}
