@@ -449,6 +449,9 @@
     grid-template-columns: 107px 1fr;
     align-items: center;
     gap:10px;
+
+    width:100%;
+    box-sizing: border-box;
 }
 
 .char-screen {
@@ -468,10 +471,19 @@
     text-align: center;
 }
 
+.char-name:nth-child(2){
+    margin-top:10px;
+}
+
 /* 특성 설명 */
 .char_txt{
     font-size: 12px;
     text-align: right;
+    word-break:break-all;
+}
+
+.char_txt:nth-child(2){
+    margin-top:10px;
 }
 
 /*=========================================================
