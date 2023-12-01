@@ -1,3 +1,4 @@
+import { typeColors } from "../../utils/TypeColors";
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import './Home.css';
@@ -10,7 +11,7 @@ const Home = () => {
         fetch('http://localhost:4001/guidebook')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
 
             const sortedData = data.sort((a, b) => {
                 // 'No.' 이후의 숫자를 추출하여 비교 (숫자로 변환하여 비교)
@@ -25,19 +26,6 @@ const Home = () => {
             console.error('Error fetching data:', error);
         });
     }, []);
-
-    // 타입 색상 정의
-    const typeColors= {
-        '풀': '#42bf24',
-        '독': '#994dcf',
-        '불꽃': '#ff612c',
-        '비행': '#95c9ff',
-        '물': '#2992ff',
-        '벌레': '#9fa424',
-        '노말': '#999999',
-        '전기': '#ffdb00',
-        
-    }
 
     return(
         <section>
