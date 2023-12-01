@@ -482,7 +482,7 @@
 /* 특성 설명 */
 .char_txt{
     font-size: 12px;
-    text-align: right;
+    text-align: left;
     word-break:break-all;
 }
 

@@ -28,6 +28,7 @@
     background:#fff;
     padding:27.5px;
     /* padding:55px; */
+    min-height: 695px;
 }
 
 /*=========================================================
@@ -99,8 +100,8 @@ label {
 }
 
 textarea#defail{
-    height:47px;
-    /* height: auto; */
+    /* height:47px; */
+    height: auto;
     padding: var(--common-padding);
     border: 1px solid #bbb;
     border-radius: 0;
@@ -260,7 +261,8 @@ input#weight, input#characteristic1, input#characteristic2{
 .content-row7{
     display:grid;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
+    /* margin-bottom: 25px; */
 }
 
 
