@@ -172,11 +172,17 @@ input#height, input#category{
     성별 정의
 =========================================================*/
 .content-row5{
+    /* display:grid; */
+    /* grid-template-columns: 120px 1fr; */
+    /* align-items: center; */
+    /* margin-bottom: 25px; */
+
     display:grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom:25px;
 }
+
 
 .gender-wrap {
     display: flex;
@@ -203,7 +209,7 @@ input#male, input#female {
 /*=========================================================
     몸무게, 특성 정의
 =========================================================*/
-input#weight, input#characteristic{
+input#weight, input#characteristic1, input#characteristic2{
     height: auto;
     padding: var(--common-padding);
     border: 1px solid #bbb;

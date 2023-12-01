@@ -13,7 +13,8 @@ const Registration = () => {
     const [isMale, setIsMale] = useState(false);
     const [isFemale, setIsFemale] = useState(false);
     const [weight, setWeight] = useState("");
-    const [characteristic, setCharacteristic] = useState("");
+    const [characteristic1, setCharacteristic1] = useState("");
+    const [characteristic2, setCharacteristic2] = useState("");
     const [image, setImage] = useState(null);
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
@@ -27,7 +28,8 @@ const Registration = () => {
         height: "",
         category: "",
         weight: "",
-        characteristic: "",
+        characteristic1: "",
+        characteristic2: "",
         image: ""
     });
 
@@ -256,26 +258,44 @@ const Registration = () => {
     }
 
     /*====================================================
-    // [유효성 검사] 특성 
+    // [유효성 검사] 특성1
     =====================================================*/
-    const vaildateCharacteristic = () => {
+    const vaildateCharacteristic1 = () => {
         const koreanRegex = /^[가-힣]+$/;
-        if (!characteristic) {
+        if (!characteristic1) {
             // 특성을 입력하지 않은 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                characteristic: "참고해서 입력해주세요.",
+                characteristic1: "참고해서 입력해주세요.",
             }));
             return false;
-        } else if (!koreanRegex.test(characteristic)) {
+        } else if (!koreanRegex.test(characteristic1)) {
             // 특성이 한글이 아닌 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                characteristic: "특성은 한글로만 입력해주세요.",
+                characteristic1: "특성은 한글로만 입력해주세요.",
             }));
             return false;
         } else {
-            setErrors((prevErrors) => ({ ...prevErrors, characteristic: "" }));
+            setErrors((prevErrors) => ({ ...prevErrors, characteristic1: "" }));
+            return true;
+        }
+    }
+
+    /*====================================================
+    // [유효성 검사] 특성2 
+    =====================================================*/
+    const vaildateCharacteristic2 = () => {
+        const koreanRegex = /^[가-힣]+$/;
+        if (characteristic2 && !koreanRegex.test(characteristic2)) {
+            // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                characteristic2: "특성은 한글로만 입력해주세요.",
+            }));
+            return false;
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, characteristic2: "" }));
             return true;
         }
     }
@@ -341,10 +361,10 @@ const Registration = () => {
         const isHeightValid = validateHeight();
         const isCategoryValid = validateCategory();
         const isWeightValid = vaildateWeight();
-        const isCharacteristicValid = vaildateCharacteristic();
+        const isCharacteristic1Valid = vaildateCharacteristic1();
         const isImageValid = validateImage(image);
     
-        if (isSerialValid && isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristicValid && isImageValid) {
+        if (isSerialValid && isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isImageValid) {
             const formData = new FormData();
             formData.append('serial', id);
             formData.append('name', name);
@@ -360,7 +380,8 @@ const Registration = () => {
             formData.append('gender', selectedGenders.join(','));
     
             formData.append('weight', weight);
-            formData.append('characteristic', characteristic);
+            formData.append('characteristic1', characteristic1);
+            formData.append('characteristic2', characteristic2);
             formData.append('image', image);
     
             try {
@@ -470,20 +491,21 @@ const Registration = () => {
                                 </div>
                             </div>
 
-                            {/* 성별 */}
+                            {/* 성별 & 몸무게 */}
                             <div className='content-row5'>
-                                <label>성별</label>
-                                <div className='gender-wrap'>
-                                    <label htmlFor="male" className='male'>남자</label>
-                                    <input type="checkbox" id="male" checked={isMale} onChange={() => setIsMale(!isMale)} />
+                                <div className='row1-col'>
+                                    <div className='col-content'>
+                                        <label>성별</label>
+                                        <div className='gender-wrap'>
+                                            <label htmlFor="male" className='male'>남자</label>
+                                            <input type="checkbox" id="male" checked={isMale} onChange={() => setIsMale(!isMale)} />
 
-                                    <label htmlFor="female" className="female">여자</label>
-                                    <input type="checkbox" id="female" checked={isFemale} onChange={() => setIsFemale(!isFemale)} />
+                                            <label htmlFor="female" className="female">여자</label>
+                                            <input type="checkbox" id="female" checked={isFemale} onChange={() => setIsFemale(!isFemale)} />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* 몸무게 & 특성 */}
-                            <div className='content-row6'>
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='weight'>몸무게</label>
@@ -492,9 +514,14 @@ const Registration = () => {
                                     {errors.weight && <p className='error-message'>{errors.weight}</p>}
                                 </div>
 
+
+                            </div>
+
+                            {/* 특성1 & 특성2 */}
+                            <div className='content-row6'>
                                 <div className='row1-col'>
                                     <div className='col-content'>
-                                        <label htmlFor='characteristic' className="right-tit char1">특성
+                                        <label htmlFor='characteristic1' className="right-tit char1">특성
                                             <div className={`con-tooltip right ${charTooltipVisible ? 'tooltip-visible' : ''}`}>
                                                 <img className="char-tooltip-img" src="./image/icon_char.png" alt="char-tooltip-img" onMouseEnter={() => charTooltipHover(true)} onMouseLeave={() => charTooltipHover(false)} />
                                                 <div className="type-tooltip2">
@@ -512,9 +539,17 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="characteristic" value={characteristic} onChange={(e) => setCharacteristic(e.target.value)} onBlur={vaildateCharacteristic} />
+                                        <input type="text" id="characteristic1" value={characteristic1} onChange={(e) => setCharacteristic1(e.target.value)} onBlur={vaildateCharacteristic1} />
                                     </div>
-                                    {errors.characteristic && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic} </p>}
+                                    {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
+                                </div>
+
+                                <div className='row1-col'>
+                                    <div className='col-content'>
+                                        <label htmlFor='characteristic2' className="right-tit">특성</label>
+                                        <input type="text" id="characteristic2" value={characteristic2} onChange={(e) => setCharacteristic2(e.target.value)} onBlur={vaildateCharacteristic2} />
+                                    </div>
+                                    {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
                                 </div>
                             </div>
 

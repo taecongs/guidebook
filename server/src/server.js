@@ -139,11 +139,11 @@ app.get("/guidebook/:serial", (req, res) => {
     // 포켓몬 정보 업로드
 =====================================================*/
 app.post('/upload', upload.single('image'), (req, res) => {
-    const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic } = req.body;
+    const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
     const imagePath = req.file.path; // 이미지 파일 경로
 
-    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic, image) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic, imagePath], (err, result) => {
+    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath], (err, result) => {
         if (err) {
             console.error("Database query error:", err);
             res.status(500).send("Database query error");

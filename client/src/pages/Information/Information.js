@@ -224,11 +224,16 @@ const Information = () => {
                                 <div className="info-pokemon-char">
                                     <div className="char-body char-screen screen">
                                         <div className="char-left">
-                                            <div className="char-name">{pokemonData.characteristic}</div>
+                                            <div className="char-name">{pokemonData.characteristic1}</div>
+                                            {pokemonData.characteristic2 && <div className="char-name">{pokemonData.characteristic2}</div>}
                                         </div>
+
                                         <div className="char-right">
-                                            {characteristicDescriptions[pokemonData.characteristic] && (
-                                                <p className="char_txt">{characteristicDescriptions[pokemonData.characteristic]}</p>
+                                            {characteristicDescriptions[pokemonData.characteristic1] && (
+                                                <p className="char_txt">{characteristicDescriptions[pokemonData.characteristic1]}</p>
+                                            )}
+                                            {pokemonData.characteristic2 && characteristicDescriptions[pokemonData.characteristic2] && (
+                                                <p className="char_txt">{characteristicDescriptions[pokemonData.characteristic2]}</p>
                                             )}
                                         </div>
                                     </div>
