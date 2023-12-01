@@ -175,35 +175,33 @@ const Information = () => {
                                 </div>
 
                                 {/* [오른쪽] 진화 정보 이미지 정의 */}
-                                {pokemonData && pokemonData.evo_list && (
-                                    <div className="panel-row panel-evo">
-                                        {/* 포켓몬의 진화 리스트를 매핑하여 각 진화에 대한 정보를 표시 */}
-                                        {pokemonData.evo_list.map((evo, index) => (
-                                            <div key={index}>
-                                                <div className="evo-index">{index + 1}</div>
-                                                <Link to={`/information/${evo.serial}`}>
-                                                    <div className="evo-back"><img className="evo-img" src={`/uploads/${evo.serial}.png`} alt={evo.name} /></div>
-                                                </Link>
-                                                <div className="evo-name screen">{evo.name}</div>
+                                <div className="panel-row panel-evo">
+                                    {/** 포켓몬의 진화 리스트가 있을 때만 매핑하여 정보를 표시 */}
+                                    {pokemonData && pokemonData.evo_list && pokemonData.evo_list.map((evo, index) => (
+                                        <div key={index}>
+                                            <div className="evo-index">{index + 1}</div>
+                                            <Link to={`/information/${evo.serial}`}>
+                                                <div className="evo-back"><img className="evo-img" src={`/uploads/${evo.serial}.png`} alt={evo.name} /></div>
+                                            </Link>
+                                            <div className="evo-name screen">{evo.name}</div>
 
-                                                <div className="evo-type">
-                                                    {/*  첫 번째 타입의 배경색 및 이미지를 표시 */}
-                                                    <div style={{ backgroundColor: typeColors[evo.type1] }} className="evo-type1">
-                                                        <img className="evo-type-img" src={typeImages[evo.type1]} alt={evo.type1} />
-                                                        {evo.type1}
-                                                    </div>
-                                                        {/* 두 번째 타입이 존재하는 경우에만 해당 타입의 배경색 및 이미지를 표시 */} 
-                                                        {evo.type2 && (
-                                                            <div style={{ backgroundColor: typeColors[evo.type2] }} className="evo-type2">
-                                                                <img className="evo-type-img" src={typeImages[evo.type2]} alt={evo.type2} />
-                                                                {evo.type2}
-                                                            </div>
-                                                        )}
+                                            <div className="evo-type">
+                                                {/* 첫 번째 타입의 배경색 및 이미지를 표시 */}
+                                                <div style={{ backgroundColor: typeColors[evo.type1] }} className="evo-type1">
+                                                    <img className="evo-type-img" src={typeImages[evo.type1]} alt={evo.type1} />
+                                                    {evo.type1}
                                                 </div>
+                                                {/* 두 번째 타입이 존재하는 경우에만 해당 타입의 배경색 및 이미지를 표시 */}
+                                                {evo.type2 && (
+                                                    <div style={{ backgroundColor: typeColors[evo.type2] }} className="evo-type2">
+                                                        <img className="evo-type-img" src={typeImages[evo.type2]} alt={evo.type2} />
+                                                        {evo.type2}
+                                                    </div>
+                                                )}
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
+                                        </div>
+                                    ))}
+                                </div>
 
                                 {/* 기능은 없지만 도감에 있는 스타일링  */}
                                 <div className="panel-row blue-buttons">
