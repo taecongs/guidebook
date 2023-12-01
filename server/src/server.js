@@ -152,3 +152,21 @@ app.post('/upload', upload.single('image'), (req, res) => {
         }
     });
 });
+
+
+/*====================================================
+    // 포켓몬 진화 정보 업로드
+=====================================================*/
+app.post('/evolution', (req, res) => {
+    const {org_id, pkm_id, level} = req.body;
+
+    const sql = "INSERT INTO evolution (org_id, pkm_id, evolution_level) VALUES (?, ?, ?)";
+    db.query(sql, [org_id, pkm_id, level], (err, result) => {
+        if (err) {
+            console.error("Database query error:", err);
+            res.status(500).send("Database query error");
+        } else {
+            res.status(200).send("Evolution data inserted successfully");
+        }
+    });
+})
