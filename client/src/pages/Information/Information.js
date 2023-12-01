@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './Information.css';
-import { faMars, faVenus, faHome, faUndoAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faMars, faVenus, faHome, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Information = () => {
