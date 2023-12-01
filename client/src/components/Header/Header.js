@@ -1,10 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './Header.css';
 
 const Header = () => {
+    const navigate = useNavigate();
+
+    const handleLogoClick = () => {
+        // '/' 경로로 이동하면서 스크롤 위치를 최상단으로 이동
+        navigate('/');
+        window.scrollTo(0, 0);
+    };
+    
     return(
         <header>
-            <h1 className="logo">
+            <h1 className="logo" onClick={handleLogoClick}>
                 <Link to="/"><img src="./image/logo.png" alt="home" /></Link>
             </h1>
 
