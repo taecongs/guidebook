@@ -87,9 +87,9 @@ const Information = () => {
                                         {pokemonData.gender.split(',').map((gender, index) => (
                                             <div className="gender-icon" key={index}>
                                                 {gender.trim() === '남자' ? (
-                                                    <FontAwesomeIcon icon={faMars} />
+                                                    <FontAwesomeIcon icon={faMars} className="faMars" />
                                                 ) : (
-                                                    <FontAwesomeIcon icon={faVenus} />
+                                                    <FontAwesomeIcon icon={faVenus} className="faVenus" />
                                                 )}
                                             </div>
                                         ))}
