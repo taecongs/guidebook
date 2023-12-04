@@ -32,7 +32,7 @@ const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "taecongs@",
-    database: "guidebook3",
+    database: "guidebook4",
 });
 
 
