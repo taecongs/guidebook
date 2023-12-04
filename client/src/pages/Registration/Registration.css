@@ -100,8 +100,8 @@ label {
 }
 
 textarea#defail{
-    /* height:47px; */
-    height: auto;
+    height:47px;
+    /* height: auto; */
     padding: var(--common-padding);
     border: 1px solid #bbb;
     border-radius: 0;
