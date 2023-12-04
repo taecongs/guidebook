@@ -9,6 +9,12 @@ const Evolution = () => {
     const [selectedPkm, setSelectedPkm] = useState(null);
     const [selectedLevels, setSelectedLevels] = useState([]);
 
+    const [evoErrors, setEvoErrors] = useState({
+        org: '',
+        pkm: '',
+        levels: "",
+    })
+
     /*====================================================
     // Select2 라이브러리 커스텀 정의
     =====================================================*/
@@ -69,10 +75,13 @@ const Evolution = () => {
     }, []);
 
     /*====================================================
-    // 원형 ID(org_id) 선택 하는 함수 정의
+    // 원형 포켓몬(org_id) 선택 하는 함수 정의
     =====================================================*/
     const orgIdChange = (orgId) => {
         setSelectedOrg(orgId);
+        
+        // [유효성 검사] 옵션을 선택하는 경우 기존 에러 메시지 초기화
+        setEvoErrors((prevErrors) => ({ ...prevErrors, org: "" }));
         setSelectedPkm(null);
         setSelectedLevels([]);
     };
@@ -82,6 +91,9 @@ const Evolution = () => {
     =====================================================*/
     const pkmIdChange = (pkmId) => {
         setSelectedPkm(pkmId);
+
+        // [유효성 검사] 옵션을 선택하는 경우 기존 에러 메시지 초기화
+        setEvoErrors((prevErrors) => ({ ...prevErrors, pkm: "" }));
         setSelectedLevels([]);
     };
 
@@ -95,6 +107,8 @@ const Evolution = () => {
         } else{
             setSelectedLevels([]);
         }
+        // [유효성 검사] 옵션을 선택하는 경우 기존 에러 메시지 초기화
+        setEvoErrors((prevErrors) => ({ ...prevErrors, levels: "" }));
     };
 
     /*====================================================
@@ -102,6 +116,35 @@ const Evolution = () => {
     =====================================================*/
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        // [유효성 검사] 원형 포켓몬(org_id)
+        if (!selectedOrg) {
+            setEvoErrors((prevErrors) => ({
+                ...prevErrors,
+                org: "원형 포켓몬을 선택해주세요.",
+            }));
+            return;
+        } else {
+            setEvoErrors((prevErrors) => ({ ...prevErrors, org: "" }));
+        }
+
+        // [유효성 검사] 진화 포켓몬(pkm_id)
+        if (!selectedPkm) {
+            setEvoErrors((prevErrors) => ({
+                ...prevErrors,
+                pkm: "진화 포켓몬을 선택해주세요.",
+            }));
+            return;
+        }
+
+        // [유효성 검사] 진화 단계(evolution_level)
+        if(selectedLevels.length === 0){
+            setEvoErrors((prevErrors) => ({
+                ...prevErrors,
+                levels: "진화 단계를 선택해주세요.",
+            }));
+            return;
+        }
 
         const formData = new FormData();
         formData.append('org_id', selectedOrg.value);
@@ -137,13 +180,13 @@ const Evolution = () => {
                                 <div className='evo-row1-col'>
                                     <div className='evo-col-content'>
                                         <label>원형 포켓몬</label>
-                                        <Select styles={customStyles} value={selectedOrg} 
+                                        <Select styles={customStyles} value={selectedOrg}
                                                 onChange={orgIdChange} 
                                                 options={data.map(item => ({ label: item.name, value: item.id }))} 
                                                 placeholder="진화 전 가장 첫 번째의 포켓몬을 선택해주세요." 
                                         />
-
                                     </div>
+                                    <p className="evo-error-message">{evoErrors.org}</p>
                                 </div>
                             </div>
 
@@ -158,6 +201,7 @@ const Evolution = () => {
                                                 placeholder="원형 포켓몬에서 선택하신 포켓몬의 다음 진화를 선택해주세요."
                                         />
                                     </div>
+                                    <p className="evo-error-message">{evoErrors.pkm}</p>
                                 </div>
                             </div>
 
@@ -175,11 +219,12 @@ const Evolution = () => {
                                             ))}
                                         </div>
                                     </div>
+                                    <p className="evo-error-message">{evoErrors.levels}</p>
                                 </div>
                             </div>
 
                             {/* 설명 정의 */}
-                            <div class="terms_area">
+                            <div className="terms_area">
                                 <div className='terms_row1'>
                                     <h2 className='terms_title'># 원형 포켓몬</h2>
                                     <p>원형 포켓몬은 진화 전 가장 첫 번째의 포켓몬을 선택해주시면 됩니다.</p>
