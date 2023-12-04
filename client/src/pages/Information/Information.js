@@ -52,6 +52,7 @@ const Information = () => {
     // 숫자를 4자리로 맞추어 문자열로 변환하는 함수 정의
     =====================================================*/
     const formatSerialNumber = (number) => {
+        // 예시)No.0001 페이지라면? formatSerialNumber(1) -> '0001'
         return number.toString().padStart(4, '0');
     };
 
@@ -62,7 +63,6 @@ const Information = () => {
         const currentPage = getCurrentPageSerialNumber();
         if(currentPage > 1){
             const prevPageSerial = currentPage - 1;
-            // 예시)No.0001 페이지라면? formatSerialNumber(1) -> '0001'
             navigate(`/information/No.${formatSerialNumber(prevPageSerial)}`);
         }
     }
