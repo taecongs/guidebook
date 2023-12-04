@@ -13,6 +13,9 @@ const Information = () => {
     const [pokemonData, setPokemonData] = useState(null);
     const navigate = useNavigate();
 
+    /*====================================================
+    // 서버 데이터 가져오기 위해 정의
+    =====================================================*/
     useEffect(() => {
         // 해당 serial을 사용하여 데이터를 가져오는 API 호출
         fetch(`http://localhost:4001/guidebook/${serial}`)
@@ -35,30 +38,55 @@ const Information = () => {
             });
     }, [serial]);
 
-    // 현재 페이지의 시리얼 넘버를 가져오는 함수
+    /*====================================================
+    // 현재 페이지의 시리얼 넘버를 가져오는 함수 정의
+    =====================================================*/
     const getCurrentPageSerialNumber = () => {
+        // 예시)No.0001 페이지라면? 1
         const currentSerialNumber = parseInt(serial.replace("No.", ""), 10);
+        console.error(currentSerialNumber);
         return currentSerialNumber;
     };
 
-    // 숫자를 4자리로 맞추어 문자열로 변환하는 함수
+    /*====================================================
+    // 숫자를 4자리로 맞추어 문자열로 변환하는 함수 정의
+    =====================================================*/
     const formatSerialNumber = (number) => {
         return number.toString().padStart(4, '0');
     };
 
+    /*====================================================
+    // 이전 페이지로 이동하는 함수 정의
+    =====================================================*/
     const prevBtn = () => {
         const currentPage = getCurrentPageSerialNumber();
         if(currentPage > 1){
             const prevPageSerial = currentPage - 1;
+            // 예시)No.0001 페이지라면? formatSerialNumber(1) -> '0001'
             navigate(`/information/No.${formatSerialNumber(prevPageSerial)}`);
         }
     }
 
-    // 다음 세부 페이지로 이동하는 함수
+    /*====================================================
+    // 다음 페이지로 이동하는 함수 정의
+    =====================================================*/
     const nextBtn = () => {
         const currentPage = getCurrentPageSerialNumber();
-        const nextPageSerial = currentPage + 1;
-        navigate(`/information/No.${formatSerialNumber(nextPageSerial)}`);
+
+        // 세부 페이지에서 이동할 때만 총 개수를 가져온다.
+        fetch('http://localhost:4001/guidebook')
+            .then(response => response.json())
+            .then(data => {
+                const totalPokemons = data.length;
+
+                if(currentPage < totalPokemons){
+                    const nextPageSerial = currentPage + 1;
+                    navigate(`/information/No.${formatSerialNumber(nextPageSerial)}`);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
         
     }
 

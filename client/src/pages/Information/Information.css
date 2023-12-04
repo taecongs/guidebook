@@ -85,7 +85,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    image-rendering: pixelated;
+    /* image-rendering: pixelated; */
     border: inset #9aa28b 3px;
     padding:50px;
     margin: 10px 0;
