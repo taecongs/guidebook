@@ -58,11 +58,12 @@ app.listen(PORT, () => {
 app.get("/checkDuplicateSerial/:serial", (req, res) => {
     const { serial } = req.params;
 
+    // serial 값과 일치하는 행의 수를 반환
     const sql = "SELECT COUNT(*) AS count FROM guidebook WHERE serial = ?";
 
     db.query(sql, [serial], (err, result) => {
         if (err) {
-            console.error("Database query error:", err);
+            console.error(err);
             res.status(500).send("Database query error");
         } else {
             const count = result[0].count;
@@ -78,11 +79,12 @@ app.get("/checkDuplicateSerial/:serial", (req, res) => {
 app.get("/guidebook", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
 
+    // "guidebook" 테이블에서 모든 데이터 선택
     const sql = "SELECT * FROM guidebook";
 
     db.query(sql, (err, result) => {
         if (err) {
-            console.error("Database query error:", err);
+            console.error(err);
             res.status(500).send("Database query error");
         } else {
             res.send(result);
@@ -99,6 +101,7 @@ app.get("/guidebook/:serial", (req, res) => {
 
     // const sql = "SELECT * FROM guidebook WHERE serial = ?";
 
+    // 특정 serial 값과 일치하는 포켓몬에 대한 정보와 그 포켓몬의 진화 정보를 함께 반환
     const sql = `
         select gui.*,(
             SELECT 
@@ -124,7 +127,7 @@ app.get("/guidebook/:serial", (req, res) => {
 
     db.query(sql, [serial, serial], (err, result) => {
         if (err) {
-            console.error("Database query error:", err);
+            console.error(err);
             res.status(500).send("Database query error");
         } else if (result.length === 0) {
             res.status(404).send("Pokemon not found");
@@ -145,7 +148,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
     const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath], (err, result) => {
         if (err) {
-            console.error("Database query error:", err);
+            console.error(err);
             res.status(500).send("Database query error");
         } else {
             res.status(200).send("Data inserted successfully");
@@ -163,7 +166,7 @@ app.post('/evolution', (req, res) => {
     const sql = "INSERT INTO evolution (org_id, pkm_id, evolution_level) VALUES (?, ?, ?)";
     db.query(sql, [org_id, pkm_id, level], (err, result) => {
         if (err) {
-            console.error("Database query error:", err);
+            console.error(err);
             res.status(500).send("Database query error");
         } else {
             res.status(200).send("Evolution data inserted successfully");
