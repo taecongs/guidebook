@@ -135,8 +135,10 @@ input#type1, input#type2{
 .type-tooltip1{
     display: none;
     position: absolute;
-    top:40%;
-    left:11.5%;
+    top:43%;
+    left:26.5%;
+    /* top:40%; */
+    /* left:11.5%; */
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
     color:#fff;
@@ -222,10 +224,10 @@ input#weight, input#characteristic1, input#characteristic2{
 .type-tooltip2{
     display: none;
     position: absolute;
-    /* top:37.8%; */
-    top:50%;
-    right:14.9%;
-    /* left:11.5%; */
+    top:55%;
+    left:26.5%;
+    /* top:50%; */
+    /* right:14.9%; */
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
     color:#fff;
