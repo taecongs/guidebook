@@ -121,10 +121,17 @@
 .info-pokemon-gender, .info-pokemon-conven {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+}
+
+.info-pokemon-gender{
+    justify-content: flex-start;
 }
 
 .info-pokemon-conven{
+    justify-content: flex-end;
+}
+
+.info-pokemon-gender, .info-pokemon-conven{
     width:80px;
 }
 

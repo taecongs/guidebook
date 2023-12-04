@@ -31,10 +31,10 @@ const Information = () => {
                     });
                 }
                 setPokemonData(data);
-                console.log(data);
+                // console.log(data);
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
+                console.error(error);
             });
     }, [serial]);
 
@@ -134,7 +134,7 @@ const Information = () => {
                                     <div className="info-sprite-controls">
                                         <div className="info-pokemon-conven">
                                             {/* 수정하기 버튼 클릭 시? 수정 필요 할 수도 있다. */}
-                                            <Link to=''>
+                                            <Link to={`/edit/${serial}`}>
                                                 <div className="info-pokemon-refresh-icon">
                                                     <FontAwesomeIcon icon={faEdit} />
                                                 </div>                   
