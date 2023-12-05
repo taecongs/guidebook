@@ -19,6 +19,7 @@ const Registration = () => {
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
+    // [유효성 검사] 에러 메시지 관리하기 위해 정의
     const [errors, setErrors] = useState({
         id: "",
         name: "",
@@ -327,25 +328,7 @@ const Registration = () => {
         }
     }
 
-    /*====================================================
-    // 폼 초기화 함수
-    =====================================================*/
-    /*
-    const resetForm = () => {
-        setId('');
-        setName('');
-        setDetail('');
-        setType1('');
-        setType2('');
-        setHeight('');
-        setCategory('');
-        setIsMale(false);
-        setIsFemale(false);
-        setWeight('');
-        setCharacteristic('');
-        setImage(null);
-    }
-    */
+
 
     /*====================================================
     // 폼 데이터 전송
@@ -394,10 +377,6 @@ const Registration = () => {
                 alert("정상적으로 등록 되었습니다.");
 
                 window.location.href = '/';
-
-                // 폼 초기화
-                // resetForm();
-
             } catch (error) {
                 console.log(error);
             }
