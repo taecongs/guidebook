@@ -69,6 +69,9 @@ const Registration = () => {
             case 'characteristic2':
                 VaildateCharacteristic2(value, setErrors);
             break;
+            default:
+                console.log('에러 발생');
+                break;
         }
     };
 
@@ -100,7 +103,7 @@ const Registration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        // 유효성 검사
+        // [유효성 검사] 해당 입력필드의 유효성을 검사하고 에러 상태를 업데이트
         const isSerialValid = await ValidateSerialNumber(id, setErrors);
         const isNameValid = ValidateName(name, setErrors);
         const isDetailValid = ValidateDetail(detail, setErrors);
@@ -110,9 +113,12 @@ const Registration = () => {
         const isWeightValid = VaildateWeight(weight, setErrors);
         const isCharacteristic1Valid = VaildateCharacteristic1(characteristic1, setErrors);
         const isImageValid = ValidateImage(image, setErrors);
-    
+
+        // 모든 [유효성 검사]가 통과된 경우에만 데이터를 서버에 전송
         if (isSerialValid && isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isImageValid) {
             const formData = new FormData();
+
+            // 폼 데이터에 필드 추가
             formData.append('serial', id);
             formData.append('name', name);
             formData.append('detail', detail);
@@ -120,7 +126,8 @@ const Registration = () => {
             formData.append('type2', type2);
             formData.append('height', height);
             formData.append('category', category);
-    
+
+            // 선택된 성별을 배열에 추가하기 위해 정의
             const selectedGenders = [];
             if (isMale) selectedGenders.push('남자');
             if (isFemale) selectedGenders.push('여자');
