@@ -243,7 +243,7 @@ export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
         // 특성이 한글이 아닌 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            characteristic1: "특성은 한글로만 입력해주세요.",
+            characteristic1: "참고해주시고 특성은 한글로만 입력해주세요.",
         }));
         return false;
     } else {
