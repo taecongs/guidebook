@@ -72,7 +72,6 @@ const Registration = () => {
         }
     };
 
-
     // 타입 툴팁 정의
     const typeTooltipHover = (isVisible) => {
         setTypeTooltipVisible(isVisible);
