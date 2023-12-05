@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Registration.css';
+import { ValidateSerialNumber, ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2, ValidateImage } from '../../utils/Validation';
 
 const Registration = () => {
     const [id, setId] = useState("");
@@ -34,6 +35,44 @@ const Registration = () => {
         image: ""
     });
 
+    // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의 (유효성 검사를 수행하고 에러 메시지를 업데이트)
+    const handleBlur = async (fieldName, value) => {
+        // 각 입력 필드에 대한 유효성 검사 결과만 업데이트
+        switch (fieldName){
+            case 'id':
+                await ValidateSerialNumber(value, setErrors);
+                break;
+            case 'name':
+                ValidateName(value, setErrors);
+            break;
+            case 'detail':
+                ValidateDetail(value, setErrors);
+            break;
+            case 'type1':
+                ValidateType1(value, setErrors);
+            break;
+            case 'type2':
+                ValidateType2(value, setErrors);
+            break;
+            case 'height':
+                ValidateHeight(value, setErrors);
+            break;
+            case 'category':
+                ValidateCategory(value, setErrors);
+            break;
+            case 'weight':
+                VaildateWeight(value, setErrors);
+            break;
+            case 'characteristic1':
+                VaildateCharacteristic1(value, setErrors);
+            break;
+            case 'characteristic2':
+                VaildateCharacteristic2(value, setErrors);
+            break;
+        }
+    };
+
+
     // 타입 툴팁 정의
     const typeTooltipHover = (isVisible) => {
         setTypeTooltipVisible(isVisible);
@@ -44,290 +83,16 @@ const Registration = () => {
         setCharTooltipVisible(isVisible);
     };
 
-    /*====================================================
-    // [유효성 검사] 시리얼넘버 
-    =====================================================*/
-    const validateSerialNumber = async () => {
-        const serialRegex = /^No\.\d{4}$/;
-        
-        if (!id) {
-            // [공통] 입력필드에 값을 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                id: "시리얼넘버를 입력해주세요.",
-            }));
-            return false;
-        } else if (!serialRegex.test(id)) {
-            // [공통] 입력 값이 존재하지만 유효성 검사를 통과하지 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                id: "시리얼넘버는 'No.0000' 형식으로 입력해주세요.",
-            }));
-            return false;
-        } else {
-            // [공통] 유효성 검사를 통과한 경우 에러 메시지 제거(입력 값 존재, 유효성 검사 통과)
-            setErrors((prevErrors) => ({ ...prevErrors, id: "" }));
-    
-            // 중복 확인
-            try {
-                const response = await axios.get(`http://localhost:4001/checkDuplicateSerial/${id}`);
-                console.log(response.data); // 확인용 로그
-                if (response.data.isDuplicate) {
-                    // 중복된 시리얼넘버인 경우
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        id: "현재 등록되어 있는 시리얼넘버입니다.",
-                    }));
-                    return false;
-                } else {
-                    // 중복되지 않은 경우
-                    return true;
-                }
-            } catch (error) {
-                console.log(error);
-                return false;
-            }
-        }
-    };
 
     /*====================================================
-    // [유효성 검사] 이름 
-    =====================================================*/
-    const validateName = () => {
-        const nameRegex = /^[가-힣]+$/;
-        if (!name) {
-            // 이름을 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                name: "이름을 입력해주세요.",
-            }));
-            return false;
-        } else if (!nameRegex.test(name)) {
-            // 이름이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                name: "이름은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, name: "" }));
-            return true;
-        }
-    };
-
-    /*====================================================
-    // [유효성 검사] 상세설명
-    =====================================================*/
-    const validateDetail = () => {
-        const koreanRegex = /^[가-힣\s.]+$/;
-        if (!detail) {
-            // 상세설명을 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                detail: "상세설명을 입력해주세요.",
-            }));
-            return false;
-        } else if (!koreanRegex.test(detail)) {
-            // 상세설명이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                detail: "상세설명은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, detail: "" }));
-            return true;
-        }
-    };
-
-    /*====================================================
-    // [유효성 검사] 타입 1
-    =====================================================*/
-    const validateType1 = () => {
-        const koreanRegex = /^[가-힣]+$/;
-        if (!type1) {
-            // 타입1을 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                type1: "타입을 입력해주세요.",
-            }));
-            return false;
-        } else if (!koreanRegex.test(type1)) {
-            // 타입1이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                type1: "타입은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
-            return true;
-        }
-    };
-
-    /*====================================================
-    // [유효성 검사] 타입 2
-    =====================================================*/
-    const validateType2 = () => {
-        const koreanRegex = /^[가-힣]+$/;
-        if (type2 && !koreanRegex.test(type2)) {
-            // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                type2: "타입은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, type2: "" }));
-            return true;
-        }
-    };
-
-    /*====================================================
-    // [유효성 검사] 키
-    =====================================================*/
-    const validateHeight = () => {
-        const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
-        if (!height) {
-            // 키를 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                height: "키를 입력해주세요.",
-            }));
-            return false;
-        } else if (!numberRegex.test(height)) {
-            // 키가 숫자가 아니거나 소수점 형식이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                height: "키는 숫자로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, height: "" }));
-            return true;
-        }
-    }
-
-    /*====================================================
-    // [유효성 검사] 분류 
-    =====================================================*/
-    const validateCategory = () => {
-        const koreanRegex = /^[가-힣]+$/;
-        if (!category) {
-            // 카테고리를 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                category: "분류를 입력해주세요.",
-            }));
-            return false;
-        } else if (!koreanRegex.test(category)) {
-            // 카테고리가 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                category: "분류는 한글로만 입력해주세요. 예시)씨앗포켓몬",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, category: "" }));
-            return true;
-        }
-    }
-
-    /*====================================================
-    // [유효성 검사] 몸무게
-    =====================================================*/
-    const vaildateWeight = () => {
-        const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
-        if (!weight) {
-            // 몸무게를 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                weight: "몸무게를 입력해주세요.",
-            }));
-            return false;
-        } else if (!numberRegex.test(weight)) {
-            // 몸무게가 숫자가 아니거나 소수점 형식이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                weight: "몸무게는 숫자로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, weight: "" }));
-            return true;
-        }
-    }
-
-    /*====================================================
-    // [유효성 검사] 특성1
-    =====================================================*/
-    const vaildateCharacteristic1 = () => {
-        const koreanRegex = /^[가-힣]+$/;
-        if (!characteristic1) {
-            // 특성을 입력하지 않은 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                characteristic1: "참고해서 입력해주세요.",
-            }));
-            return false;
-        } else if (!koreanRegex.test(characteristic1)) {
-            // 특성이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                characteristic1: "특성은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, characteristic1: "" }));
-            return true;
-        }
-    }
-
-    /*====================================================
-    // [유효성 검사] 특성2 
-    =====================================================*/
-    const vaildateCharacteristic2 = () => {
-        const koreanRegex = /^[가-힣]+$/;
-        if (characteristic2 && !koreanRegex.test(characteristic2)) {
-            // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                characteristic2: "특성은 한글로만 입력해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, characteristic2: "" }));
-            return true;
-        }
-    }
-
-    /*====================================================
-    // [유효성 검사] 이미지 업로드 핸들러
+    // 이미지 업로드 핸들러 정의
     =====================================================*/
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
-        if (validateImage(selectedImage)) {
+        if (ValidateImage(selectedImage, setErrors)) {
             setImage(selectedImage);
-            validateImage(selectedImage);
         }
     };
-
-    /*====================================================
-    // [유효성 검사] 이미지
-    =====================================================*/
-    const validateImage = (file) => {
-        if (!file) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                image: "이미지를 등록해주세요.",
-            }));
-            return false;
-        } else {
-            setErrors((prevErrors) => ({ ...prevErrors, image: "" }));
-            return true;
-        }
-    }
-
 
 
     /*====================================================
@@ -337,15 +102,15 @@ const Registration = () => {
         e.preventDefault();
     
         // 유효성 검사
-        const isSerialValid = validateSerialNumber();
-        const isNameValid = validateName();
-        const isDetailValid = validateDetail();
-        const isType1Valid = validateType1();
-        const isHeightValid = validateHeight();
-        const isCategoryValid = validateCategory();
-        const isWeightValid = vaildateWeight();
-        const isCharacteristic1Valid = vaildateCharacteristic1();
-        const isImageValid = validateImage(image);
+        const isSerialValid = await ValidateSerialNumber(id, setErrors);
+        const isNameValid = ValidateName(name, setErrors);
+        const isDetailValid = ValidateDetail(detail, setErrors);
+        const isType1Valid = ValidateType1(type1, setErrors);
+        const isHeightValid = ValidateHeight(height, setErrors);
+        const isCategoryValid = ValidateCategory(category, setErrors);
+        const isWeightValid = VaildateWeight(weight, setErrors);
+        const isCharacteristic1Valid = VaildateCharacteristic1(characteristic1, setErrors);
+        const isImageValid = ValidateImage(image, setErrors);
     
         if (isSerialValid && isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isImageValid) {
             const formData = new FormData();
@@ -397,7 +162,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="id">시리얼넘버</label>
-                                        <input type="text" id="id" placeholder="No.0000" value={id} onChange={(e) => setId(e.target.value)} onBlur={validateSerialNumber} />
+                                        <input type="text" id="id" placeholder="No.0000" value={id} onChange={(e) => setId(e.target.value)} onBlur={() => handleBlur('id', id)} />
                                     </div>
                                     {errors.id && <p className='error-message'>{errors.id}</p>}
                                 </div>
@@ -405,7 +170,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="name" className="right-tit">이름</label>
-                                        <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} onBlur={validateName} />
+                                        <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => handleBlur('name', name)} />
                                     </div>
                                     {errors.name && <p className='error-message'>{errors.name}</p>}
                                 </div>
@@ -416,7 +181,7 @@ const Registration = () => {
                                 <div className='row2-col'>
                                     <div className='col-content'>
                                         <label htmlFor="defail">상세설명</label>
-                                        <textarea id="defail" name="detail" value={detail} onChange={(e) => setDetail(e.target.value)} onBlur={validateDetail} />
+                                        <textarea id="defail" name="detail" value={detail} onChange={(e) => setDetail(e.target.value)} onBlur={() => handleBlur('detail', detail)} />
                                     </div>
                                     {errors.detail && <p className='error-message'>{errors.detail}</p>}
                                 </div>
@@ -434,7 +199,7 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="type1" value={type1} onChange={(e) => setType1(e.target.value)} onBlur={validateType1} />
+                                        <input type="text" id="type1" value={type1} onChange={(e) => setType1(e.target.value)} onBlur={() => handleBlur('type1', type1)} />
                                     </div>
                                     {errors.type1 && <p className='error-message'>{errors.type1}</p>}
                                 </div>
@@ -442,7 +207,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="type2" className="right-tit">타입</label>
-                                        <input type="text" id="type2" value={type2} onChange={(e) => setType2(e.target.value)} onBlur={validateType2} />
+                                        <input type="text" id="type2" value={type2} onChange={(e) => setType2(e.target.value)} onBlur={() => handleBlur('type2', type2)} />
                                     </div>
                                     {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                                 </div>
@@ -456,7 +221,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='height'>키</label>
-                                        <input type="text" id="height" value={height} onChange={(e) => setHeight(e.target.value)} onBlur={validateHeight} />
+                                        <input type="text" id="height" value={height} onChange={(e) => setHeight(e.target.value)} onBlur={() => handleBlur('height', height)} />
                                     </div>
                                     {errors.height && <p className='error-message'>{errors.height}</p>}
                                 </div>
@@ -464,7 +229,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='category' className="right-tit">분류</label>
-                                        <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} onBlur={validateCategory} />
+                                        <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} onBlur={() => handleBlur('category', category)} />
                                     </div>
                                     {errors.category && <p className='error-message'>{errors.category}</p>}
                                 </div>
@@ -488,7 +253,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='weight'>몸무게</label>
-                                        <input type="text" id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} onBlur={vaildateWeight} />
+                                        <input type="text" id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} onBlur={() => handleBlur('weight', weight)} />
                                     </div>
                                     {errors.weight && <p className='error-message'>{errors.weight}</p>}
                                 </div>
@@ -518,7 +283,7 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="characteristic1" value={characteristic1} onChange={(e) => setCharacteristic1(e.target.value)} onBlur={vaildateCharacteristic1} />
+                                        <input type="text" id="characteristic1" value={characteristic1} onChange={(e) => setCharacteristic1(e.target.value)} onBlur={() => handleBlur('characteristic1', characteristic1)} />
                                     </div>
                                     {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
                                 </div>
@@ -526,7 +291,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='characteristic2' className="right-tit">특성</label>
-                                        <input type="text" id="characteristic2" value={characteristic2} onChange={(e) => setCharacteristic2(e.target.value)} onBlur={vaildateCharacteristic2} />
+                                        <input type="text" id="characteristic2" value={characteristic2} onChange={(e) => setCharacteristic2(e.target.value)} onBlur={() => handleBlur('characteristic2', characteristic2)} />
                                     </div>
                                     {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
                                 </div>
