@@ -3,6 +3,7 @@ const cors = require("cors");
 const mysql = require("mysql");
 const multer = require('multer');
 const path = require("path");
+const moment = require('moment-timezone');
 
 const app = express();
 const PORT = 4001;
@@ -147,8 +148,11 @@ app.post('/upload', upload.single('image'), (req, res) => {
     // 이미지 파일 경로
     const imagePath = req.file.path; 
 
-    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath], (err, result) => {
+    // 현재 한국 시간 정의
+    const formattedDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
+
+    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image, upload_date) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath, formattedDate], (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).send("Database query error");
@@ -222,7 +226,9 @@ app.put('/edit/:serial', upload.single('image'), (req, res) => {
                     gender = ?,
                     weight = ?,
                     characteristic1 = ?,
-                    characteristic2 = ?${imagePath ? ', image = ?' : ''}
+                    characteristic2 = ?,
+                    ${imagePath ? ', image = ?' : ''}
+                    edit_date = NOW()
                 WHERE serial = ?;
             `;
 
