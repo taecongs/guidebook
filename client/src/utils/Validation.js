@@ -9,13 +9,13 @@ export const ValidateSerialNumber = async (id, setErrors) => {
     if (!id) {
         setErrors((prevErrors) => ({
             ...prevErrors,
-            id: "시리얼넘버를 입력해주세요.",
+            id: "시리얼번호를 입력해주세요. (등록 후 변경이 불가능합니다.)",
         }));
         return false;
     } else if (!serialRegex.test(id)) {
         setErrors((prevErrors) => ({
             ...prevErrors,
-            id: "시리얼넘버는 'No.0000' 형식으로 입력해주세요.",
+            id: "시리얼번호는 'No.0000' 형식으로 입력해주세요. (등록 후 변경이 불가능합니다.)",
         }));
         return false;
     } else {
@@ -36,10 +36,10 @@ export const CheckDuplicateSerial = async (id, setErrors) => {
         const response = await axios.get(`http://localhost:4001/checkDuplicateSerial/${id}`);
         console.log(response.data); // 확인용 로그
         if (response.data.isDuplicate) {
-            // 중복된 시리얼넘버인 경우
+            // 중복된 시리얼번호인 경우
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                id: "현재 등록되어 있는 시리얼넘버입니다.",
+                id: "현재 등록되어 있는 시리얼번호입니다.",
             }));
             return false;
         } else {
@@ -114,14 +114,14 @@ export const ValidateType1 = (type1, setErrors) => {
         // 타입1을 입력하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            type1: "타입을 입력해주세요.",
+            type1: "타입을 입력해주세요. 예시)노말",
         }));
         return false;
     } else if (!koreanRegex.test(type1)) {
         // 타입1이 한글이 아닌 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            type1: "타입은 한글로만 입력해주세요.",
+            type1: "타입은 한글로만 입력해주세요. 예시)노말",
         }));
         return false;
     } else {
@@ -185,7 +185,7 @@ export const ValidateCategory = (category, setErrors) => {
         // 카테고리를 입력하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            category: "분류를 입력해주세요.",
+            category: "분류를 입력해주세요. 예시)씨앗포켓몬",
         }));
             return false;
     } else if (!koreanRegex.test(category)) {
