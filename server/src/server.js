@@ -143,7 +143,9 @@ app.get("/guidebook/:serial", (req, res) => {
 =====================================================*/
 app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
-    const imagePath = req.file.path; // 이미지 파일 경로
+
+    // 이미지 파일 경로
+    const imagePath = req.file.path; 
 
     const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath], (err, result) => {
@@ -177,3 +179,77 @@ app.post('/evolution', (req, res) => {
 /*====================================================
     // 포켓몬 정보 수정 업로드
 =====================================================*/
+app.put('/edit/:serial', upload.single('image'), (req, res) => {
+    const {serial} = req.params;
+    const {name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2} = req.body;
+    
+    // [True] 파일이 업로드 되었다면 해당 이미지 파일의 경로를 가져온다.
+    // [False] 파일이 업로드 되지 않았다면 imagePath 가 null이 된다.
+    const imagePath = req.file ? req.file.path : null;
+
+    // 이미지를 변경하지 않는 경우를 위해 기존 이미지 경로 가져온다.
+    const getImagePathSQL = "SELECT image FROM guidebook WHERE serial = ?";
+    db.query(getImagePathSQL, [serial], (err, result) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("Database query error");
+        } else{
+            // [True] 배열이 비어있지 않은 경우 이전 이미지의 경로를 가져온다.
+            // [False] 배열이 비어있으면 prevImagePath에 null을 할당한다.
+            const prevImagePath = result.length > 0 ? result[0].image : null;
+
+            // 이미지를 변경 한 경우 기존 이미지 파일 삭제
+            if(prevImagePath && imagePath && prevImagePath !== imagePath){
+                const fs = require('fs');
+                const filePath = path.join(__dirname, '../../client/public', prevImagePath);
+                fs.unlink(filePath, (err) => {
+                    if(err){
+                        console.error(err);
+                    }
+                });
+            }
+
+            // 테이블 업데이트 위해 정의
+            const updateSQL = `
+                UPDATE guidebook
+                SET 
+                    name = ?,
+                    detail = ?,
+                    type1 = ?,
+                    type2 = ?,
+                    height = ?,
+                    category = ?,
+                    gender = ?,
+                    weight = ?,
+                    characteristic1 = ?,
+                    characteristic2 = ?${imagePath ? ', image = ?' : ''}
+                WHERE serial = ?;
+            `;
+
+            // SQL문에 전달할 매개변수들을 배열로 정의
+            const params = [
+                name,
+                detail,
+                type1,
+                type2,
+                height,
+                category,
+                gender,
+                weight,
+                characteristic1,
+                characteristic2,
+                ...(imagePath ? [imagePath] : []),
+                serial,
+            ];
+
+            db.query(updateSQL, params, (err, result) => {
+                if(err){
+                    console.error(err);
+                    res.status(500).send("Database query error");
+                } else{
+                    res.status(200).send("Data updated successfully");
+                }
+            });
+        }
+    })
+}) 

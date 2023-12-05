@@ -75,7 +75,51 @@ const Edit = () => {
     =====================================================*/
     const editHandleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        const formData = new FormData();
+        formData.append('serial', pokemonData.serial);
+        formData.append('name', pokemonData.name);
+        formData.append('detail', pokemonData.detail);
+        formData.append('type1', pokemonData.type1);
+
+        if (pokemonData.type2) {
+            formData.append('type2', pokemonData.type2);
+        }
+
+        formData.append('height', pokemonData.height);
+        formData.append('category', pokemonData.category);
+
+        const genderArray = [];
+        if (pokemonData.isMale) {
+            genderArray.push('남자');
+        }
+        if (pokemonData.isFemale) {
+            genderArray.push('여자');
+        }
+
+        formData.append('gender', genderArray.join(','));
+
+        formData.append('weight', pokemonData.weight);
+        formData.append('characteristic1', pokemonData.characteristic1);
+
+        if (pokemonData.characteristic2) {
+            formData.append('characteristic2', pokemonData.characteristic2);
+        }
+
+        formData.append('image', pokemonData.image);
+
+        try{
+            await axios.put(`http://localhost:4001/edit/${pokemonData.serial}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            });
+
+            alert('정상적으로 수정 되었습니다.');
+            window.location.href = `/information/${pokemonData.serial}`;
+        } catch(error){
+            console.error(error);
+        }
     };
 
 
