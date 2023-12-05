@@ -36,3 +36,12 @@
     font-weight: 600;
     margin-bottom:25px;
 }
+
+/* 수정 페이지에서는 시리얼넘버 변경하지 못하도록 정의 */
+.edit-serial-disabled{
+    background: #F0F0F0 !important;
+    color:#333333;
+    border: none;
+    outline: none; 
+    pointer-events: none;
+}

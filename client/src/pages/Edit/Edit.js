@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import  './Edit.css';
+import { ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2} from '../../utils/Validation';
 
 const Edit = () => {
     const {serial} = useParams();
@@ -25,16 +26,20 @@ const Edit = () => {
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
-    // 타입 툴팁 정의
-    const typeTooltipHover = (isVisible) => {
-        setTypeTooltipVisible(isVisible);
-    };
-        
-    // 특성 툴팁 정의
-    const charTooltipHover = (isVisible) => {
-        setCharTooltipVisible(isVisible);
-    };
-
+    // [유효성 검사] 에러 메시지 관리하기 위해 정의
+    const [errors, setErrors] = useState({
+        id: "",
+        name: "",
+        detail: "",
+        type1: "",
+        type2: "",
+        height: "",
+        category: "",
+        weight: "",
+        characteristic1: "",
+        characteristic2: "",
+        image: ""
+    });
 
     /*====================================================
     // 서버 데이터 가져오기 위해 정의
@@ -67,6 +72,53 @@ const Edit = () => {
             ...prevData,
             [name]: value,
         }));
+        handleBlur(name, value);
+    };
+
+    const handleBlur = async (fieldName, value) => {
+        // 각 입력 필드에 대한 유효성 검사 결과만 업데이트
+        switch (fieldName){
+            case 'name':
+                ValidateName(value, setErrors);
+            break;
+            case 'detail':
+                ValidateDetail(value, setErrors);
+            break;
+            case 'type1':
+                ValidateType1(value, setErrors);
+            break;
+            case 'type2':
+                ValidateType2(value, setErrors);
+            break;
+            case 'height':
+                ValidateHeight(value, setErrors);
+            break;
+            case 'category':
+                ValidateCategory(value, setErrors);
+            break;
+            case 'weight':
+                VaildateWeight(value, setErrors);
+            break;
+            case 'characteristic1':
+                VaildateCharacteristic1(value, setErrors);
+            break;
+            case 'characteristic2':
+                VaildateCharacteristic2(value, setErrors);
+            break;
+            default:
+                break;
+        }
+    };
+
+
+    // 타입 툴팁 정의
+    const typeTooltipHover = (isVisible) => {
+        setTypeTooltipVisible(isVisible);
+    };
+            
+    // 특성 툴팁 정의
+    const charTooltipHover = (isVisible) => {
+        setCharTooltipVisible(isVisible);
     };
 
 
@@ -76,49 +128,63 @@ const Edit = () => {
     const editHandleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('serial', pokemonData.serial);
-        formData.append('name', pokemonData.name);
-        formData.append('detail', pokemonData.detail);
-        formData.append('type1', pokemonData.type1);
+        // [유효성 검사] 해당 입력필드의 유효성을 검사하고 에러 상태를 업데이트
+        // const isSerialValid = await ValidateSerialNumber(pokemonData.id, setErrors);
+        const isNameValid = ValidateName(pokemonData.name, setErrors);
+        const isDetailValid = ValidateDetail(pokemonData.detail, setErrors);
+        const isType1Valid = ValidateType1(pokemonData.type1, setErrors);
+        const isHeightValid = ValidateHeight(pokemonData.height, setErrors);
+        const isCategoryValid = ValidateCategory(pokemonData.category, setErrors);
+        const isWeightValid = VaildateWeight(pokemonData.weight, setErrors);
+        const isCharacteristic1Valid = VaildateCharacteristic1(pokemonData.characteristic1, setErrors);
+        const isCharacteristic2Valid = VaildateCharacteristic2(pokemonData.characteristic2, setErrors);
 
-        if (pokemonData.type2) {
-            formData.append('type2', pokemonData.type2);
-        }
+        // 모든 [유효성 검사]가 통과된 경우에만 데이터를 서버에 전송
+        if (isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isCharacteristic2Valid) {
+            const formData = new FormData();
+            formData.append('serial', pokemonData.serial);
+            formData.append('name', pokemonData.name);
+            formData.append('detail', pokemonData.detail);
+            formData.append('type1', pokemonData.type1);
 
-        formData.append('height', pokemonData.height);
-        formData.append('category', pokemonData.category);
+            if (pokemonData.type2) {
+                formData.append('type2', pokemonData.type2);
+            }
 
-        const genderArray = [];
-        if (pokemonData.isMale) {
-            genderArray.push('남자');
-        }
-        if (pokemonData.isFemale) {
-            genderArray.push('여자');
-        }
+            formData.append('height', pokemonData.height);
+            formData.append('category', pokemonData.category);
 
-        formData.append('gender', genderArray.join(','));
+            const genderArray = [];
+            if (pokemonData.isMale) {
+                genderArray.push('남자');
+            }
+            if (pokemonData.isFemale) {
+                genderArray.push('여자');
+            }
 
-        formData.append('weight', pokemonData.weight);
-        formData.append('characteristic1', pokemonData.characteristic1);
+            formData.append('gender', genderArray.join(','));
 
-        if (pokemonData.characteristic2) {
-            formData.append('characteristic2', pokemonData.characteristic2);
-        }
+            formData.append('weight', pokemonData.weight);
+            formData.append('characteristic1', pokemonData.characteristic1);
 
-        formData.append('image', pokemonData.image);
+            if (pokemonData.characteristic2) {
+                formData.append('characteristic2', pokemonData.characteristic2);
+            }
 
-        try{
-            await axios.put(`http://localhost:4001/edit/${pokemonData.serial}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-            });
+            formData.append('image', pokemonData.image);
 
-            alert('정상적으로 수정 되었습니다.');
-            window.location.href = `/information/${pokemonData.serial}`;
-        } catch(error){
-            console.error(error);
+            try{
+                await axios.put(`http://localhost:4001/edit/${pokemonData.serial}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                });
+    
+                alert('정상적으로 수정 되었습니다.');
+                window.location.href = `/information/${pokemonData.serial}`;
+            } catch(error){
+                console.error(error);
+            }
         }
     };
 
@@ -136,15 +202,18 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="id">시리얼넘버</label>
-                                        <input type="text" id="id" placeholder="No.0000" name="serial" value={pokemonData.serial || ""} onChange={editInputChange} />
+                                        <input type="text" id="id" className='edit-serial-disabled' placeholder="No.0000" name="serial" value={pokemonData.serial || ""}  readOnly />
+                                        {/* <input type="text" id="id" placeholder="No.0000" name="serial" value={pokemonData.serial || ""} onChange={editInputChange} onBlur={() => handleBlur('id', pokemonData.id)} /> */}
                                     </div>
+                                    {errors.id && <p className='error-message'>{errors.id}</p>}
                                 </div>
 
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="name" className="right-tit">이름</label>
-                                        <input type="text" id="name" name="name" value={pokemonData.name || ""} onChange={editInputChange}  />
+                                        <input type="text" id="name" name="name" value={pokemonData.name || ""} onChange={editInputChange} onBlur={() => handleBlur('name', pokemonData.name)} />
                                     </div>
+                                    {errors.name && <p className='error-message'>{errors.name}</p>}
                                 </div>
                             </div>
 
@@ -153,8 +222,9 @@ const Edit = () => {
                                 <div className='row2-col'>
                                     <div className='col-content'>
                                         <label htmlFor="defail">상세설명</label>
-                                        <textarea id="defail" name="detail" value={pokemonData.detail || ""} onChange={editInputChange}  />
+                                        <textarea id="defail" name="detail" value={pokemonData.detail || ""} onChange={editInputChange} onBlur={() => handleBlur('detail', pokemonData.detail)}  />
                                     </div>
+                                    {errors.detail && <p className='error-message'>{errors.detail}</p>}
                                 </div>
                             </div>
 
@@ -170,16 +240,18 @@ const Edit = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="type1" name="type1" value={pokemonData.type1 || ""} onChange={editInputChange} />
+                                        <input type="text" id="type1" name="type1" value={pokemonData.type1 || ""} onChange={editInputChange} onBlur={() => handleBlur('type1', pokemonData.type1)} />
                                     </div>
+                                    {errors.type1 && <p className='error-message'>{errors.type1}</p>}
                                 </div>
 
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="type2" className="right-tit">타입</label>
-                                        <input type="text" id="type2" name="type2" value={pokemonData.type2 || ""} onChange={editInputChange} />
+                                        <input type="text" id="type2" name="type2" value={pokemonData.type2 || ""} onChange={editInputChange} onBlur={() => handleBlur('type2', pokemonData.type2)} />
                                     </div>
                                 </div>
+                                {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                             </div>
 
                             {/* 키 & 분류 */}
@@ -187,15 +259,17 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='height'>키</label>
-                                        <input type="text" id="height" name="height" value={pokemonData.height || ""} onChange={editInputChange}  />
+                                        <input type="text" id="height" name="height" value={pokemonData.height || ""} onChange={editInputChange} onBlur={() => handleBlur('height', pokemonData.height)}  />
                                     </div>
+                                    {errors.height && <p className='error-message'>{errors.height}</p>}
                                 </div>
 
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='category' className="right-tit">분류</label>
-                                        <input type="text" id="category" name="category" value={pokemonData.category || ""} onChange={editInputChange} />
+                                        <input type="text" id="category" name="category" value={pokemonData.category || ""} onChange={editInputChange} onBlur={() => handleBlur('category', pokemonData.category)} />
                                     </div>
+                                    {errors.category && <p className='error-message'>{errors.category}</p>}
                                 </div>
                             </div>
 
@@ -217,8 +291,9 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='weight'>몸무게</label>
-                                        <input type="text" id="weight" name="weight" value={pokemonData.weight || ""} onChange={editInputChange}  />
+                                        <input type="text" id="weight" name="weight" value={pokemonData.weight || ""} onChange={editInputChange} onBlur={() => handleBlur('weight', pokemonData.weight)} />
                                     </div>
+                                    {errors.weight && <p className='error-message'>{errors.weight}</p>}
                                 </div>
 
 
@@ -246,15 +321,17 @@ const Edit = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="characteristic1" name="characteristic1" value={pokemonData.characteristic1 || ""}  onChange={editInputChange} />
+                                        <input type="text" id="characteristic1" name="characteristic1" value={pokemonData.characteristic1 || ""}  onChange={editInputChange} onBlur={() => handleBlur('characteristic1', pokemonData.characteristic1)} />
                                     </div>
+                                    {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
                                 </div>
 
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='characteristic2' className="right-tit">특성</label>
-                                        <input type="text" id="characteristic2" name="characteristic2" value={pokemonData.characteristic2 || ""}  onChange={editInputChange}  />
+                                        <input type="text" id="characteristic2" name="characteristic2" value={pokemonData.characteristic2 || ""}  onChange={editInputChange} onBlur={() => handleBlur('characteristic2', pokemonData.characteristic2)}  />
                                     </div>
+                                    {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
                                 </div>
                             </div>
 
