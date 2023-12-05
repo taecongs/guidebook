@@ -179,7 +179,7 @@ const Information = () => {
                                         <div className="stats-line">
                                             <div className="stats-name">몸무게</div>
                                             <div className="stats-dots">·································</div>
-                                            <div className="stats-txt">{pokemonData.weight.toFixed(1)}m</div>
+                                            <div className="stats-txt">{pokemonData.weight.toFixed(1)}kg</div>
                                         </div>
 
                                     </div>
