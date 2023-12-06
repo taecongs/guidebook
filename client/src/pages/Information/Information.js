@@ -21,6 +21,8 @@ const Information = () => {
         fetch(`http://localhost:4001/guidebook/${serial}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
+
                 // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 if (data && data.evo_list) {
                     // 진화 정보 정렬
@@ -88,6 +90,21 @@ const Information = () => {
                 console.error(error);
             })
         
+    }
+
+    // 
+    const getTypeInfo = (typeId) => {
+        const mainTypeInfo = typeId === pokemonData.type1 ? {
+            color: pokemonData.main_type_color,
+            image: pokemonData.main_type_image,
+            name: pokemonData.main_type_name
+        } : {
+            color: pokemonData.sub_type_color,
+            image: pokemonData.sub_type_image,
+            name: pokemonData.sub_type_name
+        };
+
+        return mainTypeInfo;
     }
 
     return(
@@ -188,14 +205,14 @@ const Information = () => {
                                     <div className="info-pokemon-type">
                                         <div className="panel-header">Types</div>
                                         <div className="type-box">
-                                            <div style={{ backgroundColor: typeColors[pokemonData.type1] }} className="info-type1">
-                                                <img className="info-type-img" src={typeImages[pokemonData.type1]} alt={pokemonData.type1} />
-                                                {pokemonData.type1}
+                                            <div style={{ backgroundColor: pokemonData.main_type_color }} className="info-type1">
+                                                <img className="info-type-img" src={pokemonData.main_type_image} alt={pokemonData.main_type_name} />
+                                                {pokemonData.main_type_name}
                                             </div>
                                                 {pokemonData.type2 && (
-                                                    <div style={{ backgroundColor: typeColors[pokemonData.type2] }} className="info-type2">
-                                                        <img className="info-type-img" src={typeImages[pokemonData.type2]} alt={pokemonData.type2} />
-                                                        {pokemonData.type2}
+                                                    <div style={{ backgroundColor: pokemonData.sub_type_color }} className="info-type2">
+                                                        <img className="info-type-img" src={pokemonData.sub_type_image} alt={pokemonData.sub_type_name} />
+                                                        {pokemonData.sub_type_name}
                                                     </div>
                                                 )}
                                         </div>
@@ -215,15 +232,15 @@ const Information = () => {
 
                                             <div className="evo-type">
                                                 {/* 첫 번째 타입의 배경색 및 이미지를 표시 */}
-                                                <div style={{ backgroundColor: typeColors[evo.type1] }} className="evo-type1">
-                                                    <img className="evo-type-img" src={typeImages[evo.type1]} alt={evo.type1} />
-                                                    {evo.type1}
+                                                <div style={{ backgroundColor: getTypeInfo(evo.type1).color }} className="evo-type1">
+                                                    <img className="evo-type-img" src={getTypeInfo(evo.type1).image} alt={getTypeInfo(evo.type1).name} />
+                                                    {getTypeInfo(evo.type1).name}
                                                 </div>
                                                 {/* 두 번째 타입이 존재하는 경우에만 해당 타입의 배경색 및 이미지를 표시 */}
                                                 {evo.type2 && (
-                                                    <div style={{ backgroundColor: typeColors[evo.type2] }} className="evo-type2">
-                                                        <img className="evo-type-img" src={typeImages[evo.type2]} alt={evo.type2} />
-                                                        {evo.type2}
+                                                    <div style={{ backgroundColor: getTypeInfo(evo.type2).color }} className="evo-type2">
+                                                        <img className="evo-type-img" src={getTypeInfo(evo.type2).image} alt={getTypeInfo(evo.type2).name} />
+                                                        {getTypeInfo(evo.type2).name}
                                                     </div>
                                                 )}
                                             </div>
