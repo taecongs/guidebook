@@ -113,6 +113,7 @@ app.get("/guidebook/:serial", (req, res) => {
     // const sql = "SELECT * FROM guidebook WHERE serial = ?";
 
     // 특정 serial 값과 일치하는 포켓몬에 대한 정보와 그 포켓몬의 진화 정보를 함께 반환
+    /*
     const sql = `
         select gui.*,(
             SELECT 
@@ -135,6 +136,35 @@ app.get("/guidebook/:serial", (req, res) => {
         ) as 'evo_list'
         from guidebook gui WHERE serial = ?;
     `;
+    */
+
+    const sql = `
+        SELECT gui.*, (
+            SELECT 
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', g.id,
+                        'name', g.name,
+                        'serial', g.serial,
+                        'type1', g.type1,
+                        'type2', g.type2,
+                        'image', g.image 
+                    )
+                ) AS evo_list
+            FROM guidebook g
+            JOIN evolution e1 ON g.id = e1.pkm_id
+            JOIN evolution e2 ON e1.org_id = e2.org_id
+            WHERE e2.pkm_id = (
+                SELECT id FROM guidebook WHERE serial = ?
+            ) 
+        ) AS 'evo_list',
+        pt_main.type_id 'main_type_id', pt_main.type_name 'main_type_name', pt_main.color 'main_type_color', pt_main.type_image 'main_type_image',
+        pt_sub.type_id 'sub_type_id', pt_sub.type_name 'sub_type_name', pt_sub.color 'sub_type_color', pt_sub.type_image 'sub_type_image'
+        FROM guidebook gui
+        LEFT JOIN pokemon_type pt_main ON gui.type1 = pt_main.type_id
+        LEFT JOIN pokemon_type pt_sub ON gui.type2 = pt_sub.type_id
+        WHERE gui.serial = ?;
+    `
 
     db.query(sql, [serial, serial], (err, result) => {
         if (err) {
