@@ -1,4 +1,3 @@
-import { typeColors } from "../../utils/TypeColors";
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import './Home.css';
@@ -14,7 +13,7 @@ const Home = () => {
         fetch('http://localhost:4001/guidebook')
         .then(response => response.json())
         .then(data => {
-            // console.log(data);
+            console.error(data);
 
             const sortedData = data.sort((a, b) => {
                 // 'No.' 이후의 숫자를 추출하여 비교 (숫자로 변환하여 비교)
@@ -55,8 +54,8 @@ const Home = () => {
                                     
                                     {/* 포켓몬 타입 엘리먼트 정의 */}
                                     <div className='pokemon-type'>
-                                        <p style={{ backgroundColor: typeColors[item.type1] }} className='pokemon-type1'>{item.type1}</p>
-                                        <p style={{ backgroundColor: typeColors[item.type2] }} className='pokemon-type2'>{item.type2}</p>
+                                        <p style={{ backgroundColor: item.main_type_color}} className='pokemon-type1'>{item.main_type_name}</p>
+                                        <p style={{ backgroundColor: item.sub_type_color}} className='pokemon-type2'>{item.sub_type_name}</p>
                                     </div>
 
                                     {/* <div>
