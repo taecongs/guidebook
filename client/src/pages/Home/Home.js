@@ -13,8 +13,6 @@ const Home = () => {
         fetch('http://localhost:4001/guidebook')
         .then(response => response.json())
         .then(data => {
-            console.error(data);
-
             const sortedData = data.sort((a, b) => {
                 // 'No.' 이후의 숫자를 추출하여 비교 (숫자로 변환하여 비교)
                 const serialA = parseInt(a.serial.split('.')[1]);
