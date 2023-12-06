@@ -130,6 +130,34 @@ export const ValidateType1 = (type1, setErrors) => {
     }
 };
 
+/*
+export const ValidateType1 = (type1, setErrors) => {
+    if (!type1) {
+        // 타입1을 선택하지 않은 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type1: "타입을 선택해주세요.",
+        }));
+        return false;
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
+        return true;
+    }
+};
+*/
+
+/*
+export const ValidateType1 = (selectedOption) => {
+    if (!selectedOption) {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type1: "타입을 선택해주세요.",
+        }));
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
+    }
+};
+*/
 
 /*====================================================
 // [유효성 검사] 타입 2
