@@ -35,9 +35,9 @@ const Registration = () => {
         image: ""
     });
 
-    // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의 (유효성 검사를 수행하고 에러 메시지를 업데이트)
+    // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
     const handleBlur = async (fieldName, value) => {
-        // 각 입력 필드에 대한 유효성 검사 결과만 업데이트
+        // 각 입력 필드에 대한 유효성 검사를 수행하고 에러 메시지 결과만 업데이트
         switch (fieldName){
             case 'id':
                 await ValidateSerialNumber(value, setErrors);
@@ -87,7 +87,10 @@ const Registration = () => {
 
     // 시리얼번호 핸들러 정의
     const handleKeyDown = (e) => {
+        // 입력 된 값
         const inputValue = e.target.value;
+
+        // 텍스트의 시작 위치
         const selectionStart = e.target.selectionStart;
 
         // 입력 필드의 값이 "No."로 시작하며, 선택된 텍스트의 시작 위치가 3 이하일 때 동작
