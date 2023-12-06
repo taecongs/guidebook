@@ -54,8 +54,8 @@ const Home = () => {
                                     
                                     {/* 포켓몬 타입 엘리먼트 정의 */}
                                     <div className='pokemon-type'>
-                                        <p style={{ backgroundColor: item.main_type_color}} className='pokemon-type1'>{item.main_type_name}</p>
-                                        <p style={{ backgroundColor: item.sub_type_color}} className='pokemon-type2'>{item.sub_type_name}</p>
+                                        <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>{item.main_type_name}</p>
+                                        <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>{item.sub_type_name}</p>
                                     </div>
 
                                     {/* <div>
