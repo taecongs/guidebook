@@ -85,6 +85,18 @@ const Registration = () => {
         setCharTooltipVisible(isVisible);
     };
 
+    // 시리얼번호 핸들러 정의
+    const handleKeyDown = (e) => {
+        const inputValue = e.target.value;
+        const selectionStart = e.target.selectionStart;
+
+        // 입력 필드의 값이 "No."로 시작하며, 선택된 텍스트의 시작 위치가 3 이하일 때 동작
+        // 쉽게 말해, No. 이전으로 백스페이스 동작을 막는다.
+        if(e.key === 'Backspace' && inputValue.startsWith("No.") && selectionStart <= 3){
+            e.preventDefault();
+        }
+    }
+
     // 이미지 업로드 핸들러 정의
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
@@ -165,7 +177,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="id">시리얼넘버</label>
-                                        <input type="text" id="id" placeholder="No.0000" value={id} onChange={(e) => setId(e.target.value)} onBlur={() => handleBlur('id', id)} />
+                                        <input type="text" id="id" placeholder="No.0000" value={id.startsWith("No.") ? id : `No.${id}`} onChange={(e) => setId(e.target.value)} onBlur={() => handleBlur('id', id)} onKeyDown={(e) => handleKeyDown(e)} />
                                     </div>
                                     {errors.id && <p className='error-message'>{errors.id}</p>}
                                 </div>
