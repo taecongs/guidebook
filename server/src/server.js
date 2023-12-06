@@ -81,7 +81,17 @@ app.get("/guidebook", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
 
     // "guidebook" 테이블에서 모든 데이터 선택
-    const sql = "SELECT * FROM guidebook";
+    // const sql = "SELECT * FROM guidebook";
+
+    // "guidebook" 테이블에서 데이터를 선택하면서, 포린 키를 사용하여 "pokemon_type" 테이블과 조인하여 각 타입에 대한 정보를 추가로 선택한다.
+    const sql = `
+        SELECT g.*, 
+            pt.type_id 'main_type_id', pt.type_name 'main_type_name', pt.color 'main_type_color', pt.type_image 'main_type_image',
+            pt2.type_id 'sub_type_id', pt2.type_name 'sub_type_name', pt2.color 'sub_type_color', pt2.type_image 'sub_type_image'
+            FROM guidebook g 
+            left join pokemon_type pt on g.type1 = pt.type_id
+            left join pokemon_type pt2 on g.type2 = pt2.type_id
+    `
 
     db.query(sql, (err, result) => {
         if (err) {
