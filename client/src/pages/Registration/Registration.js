@@ -85,10 +85,7 @@ const Registration = () => {
         setCharTooltipVisible(isVisible);
     };
 
-
-    /*====================================================
     // 이미지 업로드 핸들러 정의
-    =====================================================*/
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
         if (ValidateImage(selectedImage, setErrors)) {
