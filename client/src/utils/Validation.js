@@ -150,6 +150,7 @@ export const ValidateType1 = (selectedType1, setErrors) => {
 /*====================================================
 // [유효성 검사] 타입 2
 =====================================================*/
+/*
 export const ValidateType2 = (type2, setErrors) => {
     const koreanRegex = /^[가-힣]+$/;
     if (type2 && !koreanRegex.test(type2)) {
@@ -157,6 +158,21 @@ export const ValidateType2 = (type2, setErrors) => {
         setErrors((prevErrors) => ({
             ...prevErrors,
             type2: "타입은 한글로만 입력해주세요.",
+        }));
+        return false;
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, type2: "" }));
+        return true;
+    }
+};
+*/
+
+export const ValidateType2 = (selectedType2, setErrors) => {
+    if (!selectedType2) {
+        // 타입1을 선택하지 않은 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type2: "타입을 선택해주세요.",
         }));
         return false;
     } else {
