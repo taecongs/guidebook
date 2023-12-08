@@ -24,7 +24,7 @@ const Evolution = () => {
             border: '1px solid ' + (state.isFocused ? '#4a90e2' : '#bbb'),
             borderRadius: '0px',
             boxShadow: 'none',
-            minHeight: '47px',
+            minHeight: '47.78px',
             padding: '0px',
         }),
         option: (provided, state) => ({
