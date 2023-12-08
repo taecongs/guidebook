@@ -1,17 +1,17 @@
-import { typeColors } from "../../utils/TypeColors";
-import { typeImages } from "../../utils/TypeImages";
 import { characteristicDescriptions } from "../../utils/Characteristic";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import './Information.css';
 import { faMars, faVenus, faHome, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './Information.css';
+import { Type } from "../../components/Type/Type";
 
 const Information = () => {
     const {serial} = useParams();
     const [pokemonData, setPokemonData] = useState(null);
     const navigate = useNavigate();
+    const evoList = pokemonData?.evo_list || [];
 
     /*====================================================
     // 서버 데이터 가져오기 위해 정의
@@ -21,7 +21,7 @@ const Information = () => {
         fetch(`http://localhost:4001/guidebook/${serial}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
 
                 // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 if (data && data.evo_list) {
@@ -90,21 +90,6 @@ const Information = () => {
                 console.error(error);
             })
         
-    }
-
-    // 
-    const getTypeInfo = (typeId) => {
-        const mainTypeInfo = typeId === pokemonData.type1 ? {
-            color: pokemonData.main_type_color,
-            image: pokemonData.main_type_image,
-            name: pokemonData.main_type_name
-        } : {
-            color: pokemonData.sub_type_color,
-            image: pokemonData.sub_type_image,
-            name: pokemonData.sub_type_name
-        };
-
-        return mainTypeInfo;
     }
 
     return(
@@ -230,20 +215,7 @@ const Information = () => {
                                             </Link>
                                             <div className="evo-name screen">{evo.name}</div>
 
-                                            <div className="evo-type">
-                                                {/* 첫 번째 타입의 배경색 및 이미지를 표시 */}
-                                                <div style={{ backgroundColor: getTypeInfo(evo.type1).color }} className="evo-type1">
-                                                    <img className="evo-type-img" src={getTypeInfo(evo.type1).image} alt={getTypeInfo(evo.type1).name} />
-                                                    {getTypeInfo(evo.type1).name}
-                                                </div>
-                                                {/* 두 번째 타입이 존재하는 경우에만 해당 타입의 배경색 및 이미지를 표시 */}
-                                                {evo.type2 && (
-                                                    <div style={{ backgroundColor: getTypeInfo(evo.type2).color }} className="evo-type2">
-                                                        <img className="evo-type-img" src={getTypeInfo(evo.type2).image} alt={getTypeInfo(evo.type2).name} />
-                                                        {getTypeInfo(evo.type2).name}
-                                                    </div>
-                                                )}
-                                            </div>
+                                            <Type evoList={evoList} />
                                         </div>
                                     ))}
                                 </div>

@@ -333,6 +333,7 @@
     border-top: groove #757575 3px;
     min-height: 50px;
     /* min-height: 75px; */
+    padding:0 5px;
 }
 
 .info-type1, .info-type2{
@@ -341,8 +342,9 @@
     /* padding: 5px; */
     border: groove #757575 3px;
     /* width: 150px; */
-    width:105.53px;
-    /* width:50%; */
+    /* width:105.53px; */
+    width:50%;
+    max-width: 121px;
     text-align: center;
     letter-spacing: 2px;
     text-shadow: rgba(255, 255, 255, 0.3) -1px 1px;
@@ -355,11 +357,11 @@
 }
 
 .info-type1{
-    margin: 0 2px 0 4px;
+    margin: 0 2px 0 0;
 }
 
 .info-type2{
-    margin: 0 4px 0 2px;
+    /* margin: 0 4px 0 2px; */
 }
 
 .info-type-img{
