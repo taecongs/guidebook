@@ -109,30 +109,6 @@ export const ValidateDetail = (detail, setErrors) => {
 /*====================================================
 // [유효성 검사] 타입 1
 =====================================================*/
-/*
-export const ValidateType1 = (type1, setErrors) => {
-    const koreanRegex = /^[가-힣0-9]+$/;
-    if (!type1) {
-        // 타입1을 입력하지 않은 경우
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            type1: "타입을 입력해주세요. 예시)노말",
-        }));
-        return false;
-    } else if (!koreanRegex.test(type1)) {
-        // 타입1이 한글이 아닌 경우
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            type1: "타입은 한글로만 입력해주세요. 예시)노말",
-        }));
-        return false;
-    } else {
-        setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
-        return true;
-    }
-};
-*/
-
 export const ValidateType1 = (selectedType1, setErrors) => {
     if (!selectedType1) {
         // 타입1을 선택하지 않은 경우
@@ -150,29 +126,19 @@ export const ValidateType1 = (selectedType1, setErrors) => {
 /*====================================================
 // [유효성 검사] 타입 2
 =====================================================*/
-/*
-export const ValidateType2 = (type2, setErrors) => {
-    const koreanRegex = /^[가-힣]+$/;
-    if (type2 && !koreanRegex.test(type2)) {
-        // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            type2: "타입은 한글로만 입력해주세요.",
-        }));
-        return false;
-    } else {
-        setErrors((prevErrors) => ({ ...prevErrors, type2: "" }));
-        return true;
-    }
-};
-*/
-
-export const ValidateType2 = (selectedType2, setErrors) => {
+export const ValidateType2 = (selectedType2, selectedType1, setErrors) => {
     if (!selectedType2) {
-        // 타입1을 선택하지 않은 경우
+        // 타입2를 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
             type2: "타입을 선택해주세요.",
+        }));
+        return false;
+    } else if (selectedType1 && selectedType1.value === selectedType2.value) {
+        // 타입1과 중복된 타입을 선택한 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type2: "중복된 타입은 선택할 수 없습니다.",
         }));
         return false;
     } else {

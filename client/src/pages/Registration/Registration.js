@@ -158,8 +158,8 @@ const Registration = () => {
         //  선택된 옵션을 selectedType1 상태에 저장
         setSelectedType2(selectedOption);
 
-        // 선택된 옵션을 ValidateType1 함수에 전달하여 유효성 검사를 수행
-        ValidateType2(selectedOption, setErrors);
+        // 선택된 옵션을 ValidateType2 함수에 전달하여 유효성 검사를 수행
+        ValidateType2(selectedOption, selectedType1, setErrors);
     };
 
 
