@@ -202,14 +202,18 @@ app.get("/pokemon-types", (req, res) => {
 app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
 
+    // type2가 빈 문자열인 경우 NULL로 대체
+    const type2Value = type2 !== '' ? type2 : null;
+
     // 이미지 파일 경로
     const imagePath = req.file.path; 
 
     // 현재 한국 시간 정의
     const formattedDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
 
+
     const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image, upload_date) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, imagePath, formattedDate], (err, result) => {
+    db.query(sql, [serial, name, detail, type1, type2Value, height, category, gender, weight, characteristic1, characteristic2, imagePath, formattedDate], (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).send("Database query error");
