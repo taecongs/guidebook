@@ -8,15 +8,9 @@ const Registration = () => {
     const [id, setId] = useState("");
     const [name, setName] = useState("");
     const [detail, setDetail] = useState("");
-
-
-    // const [type1, setType1] = useState("");
-    const [selectedType1, setSelectedType1] = useState(null);  // 선택된 타입을 저장할 상태 추가
-    const [selectedType2, setSelectedType2] = useState(null);  // 선택된 타입을 저장할 상태 추가
-    const [selectOptions, setSelectOptions] = useState([]);    // React-Select에서 사용할 옵션을 저장하는 상태
-
-
-    const [type2, setType2] = useState("");
+    const [selectedType1, setSelectedType1] = useState(null);  // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
+    const [selectedType2, setSelectedType2] = useState(null);  // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
+    const [selectOptions, setSelectOptions] = useState([]);    // Input에서 Select로 변경 -> React-Select에서 사용할 옵션을 저장하는 상태
     const [height, setHeight] = useState("");
     const [category, setCategory] = useState("");
     const [isMale, setIsMale] = useState(false);
@@ -146,7 +140,9 @@ const Registration = () => {
         }
     };
 
-    // 타입1 옵션을 선택했을 때 호출
+    /*====================================================
+    // 타입1 옵션을 선택했을 때 호출 되는 함수 정의
+    =====================================================*/
     const handleType1Change = (selectedOption) => {
         //  선택된 옵션을 selectedType1 상태에 저장
         setSelectedType1(selectedOption);
@@ -155,6 +151,9 @@ const Registration = () => {
         ValidateType1(selectedOption, setErrors);
     };
 
+    /*====================================================
+    // 타입2 옵션을 선택했을 때 호출 되는 함수 정의
+    =====================================================*/
     const handleType2Change = (selectedOption) => {
         //  선택된 옵션을 selectedType1 상태에 저장
         setSelectedType2(selectedOption);
@@ -194,10 +193,7 @@ const Registration = () => {
         const isSerialValid = await ValidateSerialNumber(id, setErrors);
         const isNameValid = ValidateName(name, setErrors);
         const isDetailValid = ValidateDetail(detail, setErrors);
-
-        // const isType1Valid = ValidateType1(type1, setErrors);
         const isType1Valid = ValidateType1(selectedType1 ? selectedType1.value : '', setErrors);
-
         const isHeightValid = ValidateHeight(height, setErrors);
         const isCategoryValid = ValidateCategory(category, setErrors);
         const isWeightValid = VaildateWeight(weight, setErrors);
@@ -213,12 +209,9 @@ const Registration = () => {
             formData.append('name', name);
             formData.append('detail', detail);
 
-            // formData.append('type1', type1);
-            formData.append('type1', selectedType1.value); // type_id를 전송
-
-            // formData.append('type2', type2);
-            formData.append('type2', selectedType2.value); // type_id를 전송
-
+            // type_id를 전송
+            formData.append('type1', selectedType1.value);
+            formData.append('type2', selectedType2.value);
             formData.append('height', height);
             formData.append('category', category);
 
@@ -227,12 +220,11 @@ const Registration = () => {
             if (isMale) selectedGenders.push('남자');
             if (isFemale) selectedGenders.push('여자');
             formData.append('gender', selectedGenders.join(','));
-    
             formData.append('weight', weight);
             formData.append('characteristic1', characteristic1);
             formData.append('characteristic2', characteristic2);
             formData.append('image', image);
-    
+
             try {
                 await axios.post('http://localhost:4001/upload', formData, {
                     headers: {
@@ -241,8 +233,8 @@ const Registration = () => {
                 });
 
                 alert("정상적으로 등록 되었습니다.");
-
                 window.location.href = '/';
+
             } catch (error) {
                 console.log(error);
             }
@@ -308,8 +300,6 @@ const Registration = () => {
                                                 onChange={handleType1Change}
                                                 placeholder="타입을 선택해주세요."
                                         />
-
-                                        {/* <input type="text" id="type1" value={type1} onChange={(e) => setType1(e.target.value)} onBlur={() => handleBlur('type1', type1)} /> */}
                                     </div>
                                     {errors.type1 && <p className='error-message'>{errors.type1}</p>}
                                 </div>
@@ -326,14 +316,9 @@ const Registration = () => {
                                                 onChange={handleType2Change}
                                                 placeholder="타입을 선택해주세요."
                                         />
-
-                                        {/* <input type="text" id="type2" value={type2} onChange={(e) => setType2(e.target.value)} onBlur={() => handleBlur('type2', type2)} /> */}
                                     </div>
                                     {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                                 </div>
-
-
-
                             </div>
 
                             {/* 키 & 분류 */}
@@ -377,8 +362,6 @@ const Registration = () => {
                                     </div>
                                     {errors.weight && <p className='error-message'>{errors.weight}</p>}
                                 </div>
-
-
                             </div>
 
                             {/* 특성1 & 특성2 */}
