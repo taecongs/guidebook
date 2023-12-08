@@ -34,7 +34,8 @@ export const ValidateSerialNumber = async (id, setErrors) => {
 export const CheckDuplicateSerial = async (id, setErrors) => {
     try {
         const response = await axios.get(`http://localhost:4001/checkDuplicateSerial/${id}`);
-        console.log(response.data); // 확인용 로그
+         // 확인용 로그
+        // console.log(response.data);
         if (response.data.isDuplicate) {
             // 중복된 시리얼번호인 경우
             setErrors((prevErrors) => ({
@@ -109,7 +110,7 @@ export const ValidateDetail = (detail, setErrors) => {
 // [유효성 검사] 타입 1
 =====================================================*/
 export const ValidateType1 = (type1, setErrors) => {
-    const koreanRegex = /^[가-힣]+$/;
+    const koreanRegex = /^[가-힣0-9]+$/;
     if (!type1) {
         // 타입1을 입력하지 않은 경우
         setErrors((prevErrors) => ({
