@@ -11,7 +11,6 @@ const Information = () => {
     const {serial} = useParams();
     const [pokemonData, setPokemonData] = useState(null);
     const navigate = useNavigate();
-    const evoList = pokemonData?.evo_list || [];
 
     /*====================================================
     // 서버 데이터 가져오기 위해 정의
@@ -33,7 +32,6 @@ const Information = () => {
                     });
                 }
                 setPokemonData(data);
-                // console.log(data);
             })
             .catch(error => {
                 console.error(error);
@@ -215,7 +213,7 @@ const Information = () => {
                                             </Link>
                                             <div className="evo-name screen">{evo.name}</div>
 
-                                            <Type evoList={evoList} />
+                                            <Type evoList={evo} />
                                         </div>
                                     ))}
                                 </div>
