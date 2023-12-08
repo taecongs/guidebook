@@ -12,6 +12,7 @@ const Registration = () => {
 
     // const [type1, setType1] = useState("");
     const [selectedType1, setSelectedType1] = useState(null);  // 선택된 타입을 저장할 상태 추가
+    const [selectedType2, setSelectedType2] = useState(null);  // 선택된 타입을 저장할 상태 추가
     const [selectOptions, setSelectOptions] = useState([]);    // React-Select에서 사용할 옵션을 저장하는 상태
 
 
@@ -91,9 +92,6 @@ const Registration = () => {
             case 'detail':
                 ValidateDetail(value, setErrors);
             break;
-            case 'type2':
-                ValidateType2(value, setErrors);
-            break;
             case 'height':
                 ValidateHeight(value, setErrors);
             break;
@@ -157,6 +155,14 @@ const Registration = () => {
         ValidateType1(selectedOption, setErrors);
     };
 
+    const handleType2Change = (selectedOption) => {
+        //  선택된 옵션을 selectedType1 상태에 저장
+        setSelectedType2(selectedOption);
+
+        // 선택된 옵션을 ValidateType1 함수에 전달하여 유효성 검사를 수행
+        ValidateType2(selectedOption, setErrors);
+    };
+
 
     /*====================================================
     // 서버 Pokemon Type 정보 가져오기 위해 정의
@@ -210,7 +216,9 @@ const Registration = () => {
             // formData.append('type1', type1);
             formData.append('type1', selectedType1.value); // type_id를 전송
 
-            formData.append('type2', type2);
+            // formData.append('type2', type2);
+            formData.append('type2', selectedType2.value); // type_id를 전송
+
             formData.append('height', height);
             formData.append('category', category);
 
@@ -309,7 +317,17 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="type2" className="right-tit">타입</label>
-                                        <input type="text" id="type2" value={type2} onChange={(e) => setType2(e.target.value)} onBlur={() => handleBlur('type2', type2)} />
+
+                                        <Select
+                                                id="type2"
+                                                styles={customStyles}
+                                                value={selectedType2}
+                                                options={selectOptions}
+                                                onChange={handleType2Change}
+                                                placeholder="타입을 선택해주세요."
+                                        />
+
+                                        {/* <input type="text" id="type2" value={type2} onChange={(e) => setType2(e.target.value)} onBlur={() => handleBlur('type2', type2)} /> */}
                                     </div>
                                     {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                                 </div>
