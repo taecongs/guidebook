@@ -132,22 +132,28 @@ input#type1, input#type2{
 }
 
 /* 타입 툴팁 정의 */
+.con-tooltip.right{
+    position: relative;
+}
+
 .type-tooltip1{
     display: none;
     position: absolute;
-    top:43%;
-    left:26.5%;
-    /* top:40%; */
-    /* left:11.5%; */
+    /* top:43%; */
+    /* left:26.5%; */
+    top:-30px;
+    left:30px;
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
     color:#fff;
     font-size:12px;
     padding: 10px;
 
-    width:11%;
+    /* width:11%; */
+    width:200px;
     word-break: keep-all;
     line-height: 1.5;
+    z-index: 9999;
 }
 
 .con-tooltip.tooltip-visible .type-tooltip1{
@@ -224,19 +230,21 @@ input#weight, input#characteristic1, input#characteristic2{
 .type-tooltip2{
     display: none;
     position: absolute;
-    top:55%;
-    left:26.5%;
-    /* top:50%; */
-    /* right:14.9%; */
+    /* top:55%; */
+    /* left:26.5%; */
+    top:-110px;
+    left:30px;
     background:rgba(0,0,0,0.7);
     border: 1px solid #ccc;
     color:#fff;
     font-size:12px;
     padding: 10px;
 
-    width:30%;
+    /* width:30%; */
+    width:600px;
     word-break: keep-all;
     line-height: 1.5;
+    z-index: 9999;
 }
 
 .con-tooltip.tooltip-visible .type-tooltip2{
