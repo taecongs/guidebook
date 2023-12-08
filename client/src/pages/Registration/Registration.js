@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select'
 import './Registration.css';
 import { ValidateSerialNumber, ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2, ValidateImage } from '../../utils/Validation';
 
@@ -7,7 +8,13 @@ const Registration = () => {
     const [id, setId] = useState("");
     const [name, setName] = useState("");
     const [detail, setDetail] = useState("");
-    const [type1, setType1] = useState("");
+
+
+    // const [type1, setType1] = useState("");
+    const [selectedType1, setSelectedType1] = useState(null);  // 선택된 타입을 저장할 상태 추가
+    const [selectOptions, setSelectOptions] = useState([]);    // React-Select에서 사용할 옵션을 저장하는 상태
+
+
     const [type2, setType2] = useState("");
     const [height, setHeight] = useState("");
     const [category, setCategory] = useState("");
@@ -35,6 +42,42 @@ const Registration = () => {
         image: ""
     });
 
+    /*====================================================
+    // Select2 라이브러리 커스텀 정의
+    =====================================================*/
+    const customStyles = {
+        control: (provided, state) => ({
+            ...provided,
+            border: '1px solid ' + (state.isFocused ? '#4a90e2' : '#bbb'),
+            borderRadius: '0px',
+            boxShadow: 'none',
+            minHeight: '47.78px',
+            padding: '0px',
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            padding: '15px',
+            cursor: 'pointer',
+        }),
+        menu: (provided) => ({
+            ...provided,
+            '& > div': {
+                padding: '0px',
+                // maxHeight: '250px',
+                // overflowY: 'auto',
+                '&::-webkit-scrollbar': {
+                    width: '10px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#4a90e2',
+                    borderRadius: '0px',
+                },
+            },
+            borderRadius: '0px',
+            margin: '0px',
+        }),
+    }
+
     // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
     const handleBlur = async (fieldName, value) => {
         // 각 입력 필드에 대한 유효성 검사를 수행하고 에러 메시지 결과만 업데이트
@@ -47,9 +90,6 @@ const Registration = () => {
             break;
             case 'detail':
                 ValidateDetail(value, setErrors);
-            break;
-            case 'type1':
-                ValidateType1(value, setErrors);
             break;
             case 'type2':
                 ValidateType2(value, setErrors);
@@ -108,6 +148,35 @@ const Registration = () => {
         }
     };
 
+    // 타입1 옵션을 선택했을 때 호출
+    const handleType1Change = (selectedOption) => {
+        //  선택된 옵션을 selectedType1 상태에 저장
+        setSelectedType1(selectedOption);
+
+        // 선택된 옵션을 ValidateType1 함수에 전달하여 유효성 검사를 수행
+        ValidateType1(selectedOption, setErrors);
+    };
+
+
+    /*====================================================
+    // 서버 Pokemon Type 정보 가져오기 위해 정의
+    =====================================================*/
+    useEffect(() => {
+        axios
+            .get('http://localhost:4001/pokemon-types')
+            .then((response) => {
+                const options = response.data.map((type) => ({
+                    value: type.type_id,
+                    label: type.type_name,
+                }));
+                // React-Select에서 사용할 옵션을 설정
+                setSelectOptions(options);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
 
     /*====================================================
     // 폼 데이터 전송
@@ -119,7 +188,10 @@ const Registration = () => {
         const isSerialValid = await ValidateSerialNumber(id, setErrors);
         const isNameValid = ValidateName(name, setErrors);
         const isDetailValid = ValidateDetail(detail, setErrors);
-        const isType1Valid = ValidateType1(type1, setErrors);
+
+        // const isType1Valid = ValidateType1(type1, setErrors);
+        const isType1Valid = ValidateType1(selectedType1 ? selectedType1.value : '', setErrors);
+
         const isHeightValid = ValidateHeight(height, setErrors);
         const isCategoryValid = ValidateCategory(category, setErrors);
         const isWeightValid = VaildateWeight(weight, setErrors);
@@ -134,7 +206,10 @@ const Registration = () => {
             formData.append('serial', id);
             formData.append('name', name);
             formData.append('detail', detail);
-            formData.append('type1', type1);
+
+            // formData.append('type1', type1);
+            formData.append('type1', selectedType1.value); // type_id를 전송
+
             formData.append('type2', type2);
             formData.append('height', height);
             formData.append('category', category);
@@ -165,7 +240,6 @@ const Registration = () => {
             }
         }
     };
-
 
     return (
         <section>
@@ -217,7 +291,17 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="type1" value={type1} onChange={(e) => setType1(e.target.value)} onBlur={() => handleBlur('type1', type1)} />
+
+                                        <Select
+                                                id="type1"
+                                                styles={customStyles}
+                                                value={selectedType1}
+                                                options={selectOptions}
+                                                onChange={handleType1Change}
+                                                placeholder="타입을 선택해주세요."
+                                        />
+
+                                        {/* <input type="text" id="type1" value={type1} onChange={(e) => setType1(e.target.value)} onBlur={() => handleBlur('type1', type1)} /> */}
                                     </div>
                                     {errors.type1 && <p className='error-message'>{errors.type1}</p>}
                                 </div>
