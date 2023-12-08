@@ -28,7 +28,8 @@
     background:#fff;
     padding:27.5px;
     /* padding:55px; */
-    min-height: 695px;
+    min-height: 730px;
+    /* min-height: 695px; */
 }
 
 /*=========================================================
@@ -271,7 +272,8 @@ input#weight, input#characteristic1, input#characteristic2{
 .content-row7{
     display:grid;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 99px;
+    /* margin-bottom: 50px; */
     /* margin-bottom: 25px; */
 }
 
