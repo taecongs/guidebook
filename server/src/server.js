@@ -180,6 +180,23 @@ app.get("/guidebook/:serial", (req, res) => {
 
 
 /*====================================================
+    // 포켓몬 타입 테이블 정보 가져오기
+=====================================================*/
+app.get("/pokemon-types", (req, res) => {
+    const sql ="SELECT * FROM pokemon_type";
+
+    db.query(sql, (err, result) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("Database query error")
+        } else{
+            res.send(result);
+        }
+    })
+})
+
+
+/*====================================================
     // 포켓몬 정보 업로드
 =====================================================*/
 app.post('/upload', upload.single('image'), (req, res) => {
