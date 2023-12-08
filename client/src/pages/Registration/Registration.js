@@ -22,7 +22,9 @@ const Registration = () => {
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
+    /*====================================================
     // [유효성 검사] 에러 메시지 관리하기 위해 정의
+    =====================================================*/
     const [errors, setErrors] = useState({
         id: "",
         name: "",
@@ -36,6 +38,7 @@ const Registration = () => {
         characteristic2: "",
         image: ""
     });
+
 
     /*====================================================
     // Select2 라이브러리 커스텀 정의
@@ -73,7 +76,10 @@ const Registration = () => {
         }),
     }
 
+
+    /*====================================================
     // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
+    =====================================================*/
     const handleBlur = async (fieldName, value) => {
         // 각 입력 필드에 대한 유효성 검사를 수행하고 에러 메시지 결과만 업데이트
         switch (fieldName){
@@ -107,17 +113,22 @@ const Registration = () => {
         }
     };
 
+
     // 타입 툴팁 정의
     const typeTooltipHover = (isVisible) => {
         setTypeTooltipVisible(isVisible);
     };
+
 
     // 특성 툴팁 정의
     const charTooltipHover = (isVisible) => {
         setCharTooltipVisible(isVisible);
     };
 
-    // 시리얼번호 핸들러 정의
+
+    /*====================================================
+    // [시리얼] 시리얼번호 핸들러 정의
+    =====================================================*/
     const handleKeyDown = (e) => {
         // 입력 된 값
         const inputValue = e.target.value;
@@ -132,16 +143,9 @@ const Registration = () => {
         }
     }
 
-    // 이미지 업로드 핸들러 정의
-    const handleImageChange = (e) => {
-        const selectedImage = e.target.files[0];
-        if (ValidateImage(selectedImage, setErrors)) {
-            setImage(selectedImage);
-        }
-    };
 
     /*====================================================
-    // 타입1 옵션을 선택했을 때 호출 되는 함수 정의
+    // [타입1] 옵션을 선택했을 때 호출 되는 함수 정의
     =====================================================*/
     const handleType1Change = (selectedOption) => {
         //  선택된 옵션을 selectedType1 상태에 저장
@@ -151,8 +155,9 @@ const Registration = () => {
         ValidateType1(selectedOption, setErrors);
     };
 
+
     /*====================================================
-    // 타입2 옵션을 선택했을 때 호출 되는 함수 정의
+    // [타입2] 옵션을 선택했을 때 호출 되는 함수 정의
     =====================================================*/
     const handleType2Change = (selectedOption) => {
         //  선택된 옵션을 selectedType1 상태에 저장
@@ -164,7 +169,7 @@ const Registration = () => {
 
 
     /*====================================================
-    // 서버 Pokemon Type 정보 가져오기 위해 정의
+    // [서버] Pokemon Type 정보 가져오기 위해 정의
     =====================================================*/
     useEffect(() => {
         axios
@@ -184,7 +189,18 @@ const Registration = () => {
 
 
     /*====================================================
-    // 폼 데이터 전송
+    // [이미지] 이미지 업로드 핸들러 정의
+    =====================================================*/
+    const handleImageChange = (e) => {
+        const selectedImage = e.target.files[0];
+        if (ValidateImage(selectedImage, setErrors)) {
+            setImage(selectedImage);
+        }
+    };
+
+
+    /*====================================================
+    // [폼] 데이터 전송
     =====================================================*/
     const handleSubmit = async (e) => {
         e.preventDefault();
