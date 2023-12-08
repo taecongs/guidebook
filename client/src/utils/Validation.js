@@ -109,6 +109,7 @@ export const ValidateDetail = (detail, setErrors) => {
 /*====================================================
 // [유효성 검사] 타입 1
 =====================================================*/
+/*
 export const ValidateType1 = (type1, setErrors) => {
     const koreanRegex = /^[가-힣0-9]+$/;
     if (!type1) {
@@ -130,10 +131,10 @@ export const ValidateType1 = (type1, setErrors) => {
         return true;
     }
 };
+*/
 
-/*
-export const ValidateType1 = (type1, setErrors) => {
-    if (!type1) {
+export const ValidateType1 = (selectedType1, setErrors) => {
+    if (!selectedType1) {
         // 타입1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -145,20 +146,6 @@ export const ValidateType1 = (type1, setErrors) => {
         return true;
     }
 };
-*/
-
-/*
-export const ValidateType1 = (selectedOption) => {
-    if (!selectedOption) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            type1: "타입을 선택해주세요.",
-        }));
-    } else {
-        setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
-    }
-};
-*/
 
 /*====================================================
 // [유효성 검사] 타입 2
