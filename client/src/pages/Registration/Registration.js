@@ -76,6 +76,22 @@ const Registration = () => {
     }
 
     /*====================================================
+    // [타입] 툴팁 정의
+    =====================================================*/
+    const typeTooltipHover = (isVisible) => {
+        setTypeTooltipVisible(isVisible);
+    };
+
+    /*====================================================
+    // [특성] 툴팁 정의
+    =====================================================*/
+    const charTooltipHover = (isVisible) => {
+        setCharTooltipVisible(isVisible);
+    };
+
+
+
+    /*====================================================
     // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
     =====================================================*/
     const handleBlur = async (fieldName, value) => {
@@ -110,19 +126,6 @@ const Registration = () => {
                 break;
         }
     };
-
-
-    // 타입 툴팁 정의
-    const typeTooltipHover = (isVisible) => {
-        setTypeTooltipVisible(isVisible);
-    };
-
-
-    // 특성 툴팁 정의
-    const charTooltipHover = (isVisible) => {
-        setCharTooltipVisible(isVisible);
-    };
-
 
     /*====================================================
     // [시리얼] 시리얼번호 핸들러 정의
@@ -169,6 +172,18 @@ const Registration = () => {
     };
 
     /*====================================================
+    // [이미지] 이미지 업로드 핸들러 정의
+    =====================================================*/
+    const handleImageChange = (e) => {
+        const selectedImage = e.target.files[0];
+        if (ValidateImage(selectedImage, setErrors)) {
+            setImage(selectedImage);
+        }
+    };
+
+
+
+    /*====================================================
     // [서버] Pokemon Type 정보 가져오기 위해 정의
     =====================================================*/
     useEffect(() => {
@@ -186,16 +201,6 @@ const Registration = () => {
                 console.error(error);
             });
     }, []);
-
-    /*====================================================
-    // [이미지] 이미지 업로드 핸들러 정의
-    =====================================================*/
-    const handleImageChange = (e) => {
-        const selectedImage = e.target.files[0];
-        if (ValidateImage(selectedImage, setErrors)) {
-            setImage(selectedImage);
-        }
-    };
 
     /*====================================================
     // [폼] 데이터 전송
