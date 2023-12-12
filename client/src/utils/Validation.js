@@ -123,6 +123,7 @@ export const ValidateType1 = (selectedType1, setErrors) => {
     }
 };
 
+
 /*====================================================
 // [유효성 검사] 타입 2
 =====================================================*/
@@ -201,9 +202,6 @@ export const ValidateCategory = (category, setErrors) => {
 }
 
 
-
-
-
 /*====================================================
 // [유효성 검사] 몸무게
 =====================================================*/
@@ -234,19 +232,11 @@ export const VaildateWeight = (weight, setErrors) => {
 // [유효성 검사] 특성1
 =====================================================*/
 export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
-    const koreanRegex = /^[가-힣]+$/;
     if (!characteristic1) {
-        // 특성을 입력하지 않은 경우
+        // 특성1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            characteristic1: "참고해서 입력해주세요.",
-        }));
-        return false;
-    } else if (!koreanRegex.test(characteristic1)) {
-        // 특성이 한글이 아닌 경우
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            characteristic1: "참고해주시고 특성은 한글로만 입력해주세요.",
+            characteristic1: "특성을 선택해주세요.",
         }));
         return false;
     } else {
@@ -259,13 +249,19 @@ export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
 /*====================================================
 // [유효성 검사] 특성2 
 =====================================================*/
-export const VaildateCharacteristic2 = (characteristic2, setErrors) => {
-    const koreanRegex = /^[가-힣]+$/;
-    if (characteristic2 && !koreanRegex.test(characteristic2)) {
-        // 입력되었을 때, 그리고 입력된 값이 한글이 아닌 경우
+export const VaildateCharacteristic2 = (characteristic2, characteristic1, setErrors) => {
+    if (!characteristic2) {
+        // 특성2를 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            characteristic2: "특성은 한글로만 입력해주세요.",
+            characteristic2: "특성을 선택해주세요.",
+        }));
+        return false;
+    } else if (characteristic1 && characteristic1.value === characteristic2.value) {
+        // 특성1과 중복된 특성을 선택한 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            characteristic2: "중복된 특성은 선택할 수 없습니다.",
         }));
         return false;
     } else {
