@@ -139,6 +139,11 @@ const Registration = () => {
         if(e.key === 'Backspace' && inputValue.startsWith("No.") && selectionStart <= 3){
             e.preventDefault();
         }
+
+        // "No." 앞에 사용자가 텍스트를 입력하지 못하도록 막기
+        if (selectionStart < 3) {
+            e.preventDefault();
+        }
     }
 
     /*====================================================
@@ -258,11 +263,11 @@ const Registration = () => {
                         <h2 className="registration-content-tit">포켓몬 등록</h2>
 
                         <form onSubmit={handleSubmit}>
-                            {/* 시리얼넘버 & 이름 */}
+                            {/* 시리얼번호 & 이름 */}
                             <div className="content-row1">
                                 <div className='row1-col'>
                                     <div className='col-content'>
-                                        <label htmlFor="id">시리얼넘버</label>
+                                        <label htmlFor="id">시리얼번호</label>
                                         <input type="text" id="id" placeholder="No.0000" value={id.startsWith("No.") ? id : `No.${id}`} onChange={(e) => setId(e.target.value)} onBlur={() => handleBlur('id', id)} onKeyDown={(e) => handleKeyDown(e)} />
                                     </div>
                                     {errors.id && <p className='error-message'>{errors.id}</p>}
