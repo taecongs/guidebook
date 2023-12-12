@@ -12,7 +12,9 @@ const Registration = () => {
     const [selectedType2, setSelectedType2] = useState(null);  // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
     const [selectOptions, setSelectOptions] = useState([]);    // Input에서 Select로 변경 -> React-Select에서 사용할 옵션을 저장하는 상태
     const [height, setHeight] = useState("");
-    const [category, setCategory] = useState("");
+
+    const DEFAULT_CATEGORY = "포켓몬";
+    const [category, setCategory] = useState(DEFAULT_CATEGORY);
     const [isMale, setIsMale] = useState(false);
     const [isFemale, setIsFemale] = useState(false);
     const [weight, setWeight] = useState("");
@@ -128,7 +130,7 @@ const Registration = () => {
     };
 
     /*====================================================
-    // [시리얼] 시리얼번호 핸들러 정의
+    // [시리얼번호] 핸들러 함수 정의
     =====================================================*/
     const handleKeyDown = (e) => {
         // 입력 된 값
@@ -146,6 +148,7 @@ const Registration = () => {
         // "No." 앞에 사용자가 텍스트를 입력하지 못하도록 막기
         if (selectionStart < 3) {
             e.preventDefault();
+            e.target.setSelectionRange(3, 3);
         }
     }
 
@@ -170,6 +173,21 @@ const Registration = () => {
         // 선택된 옵션을 ValidateType2 함수에 전달하여 유효성 검사를 수행
         ValidateType2(selectedOption, selectedType1, setErrors);
     };
+
+    /*====================================================
+    // [분류] 핸들러 함수 정의
+    =====================================================*/
+    const handleCategoryKeyDown = (e) => {
+        // 텍스트의 시작 위치
+        const selectionStart = e.target.selectionStart;
+
+        // 사용자가 "포켓몬" 뒤에 텍스트나 공백을 입력하지 못하도록 막고 "포켓몬" 앞으로 커서 이동하기
+        const maxLength = category.length - DEFAULT_CATEGORY.length;
+        if (selectionStart > maxLength || e.key === ' ') {
+            e.preventDefault();
+            e.target.setSelectionRange(maxLength, maxLength);
+        }
+    }
 
     /*====================================================
     // [이미지] 이미지 업로드 핸들러 정의
@@ -353,7 +371,7 @@ const Registration = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='category' className="right-tit">분류</label>
-                                        <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} onBlur={() => handleBlur('category', category)} />
+                                        <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} onBlur={() => handleBlur('category', category)} onKeyDown={(e) => handleCategoryKeyDown(e)} />
                                     </div>
                                     {errors.category && <p className='error-message'>{errors.category}</p>}
                                 </div>
