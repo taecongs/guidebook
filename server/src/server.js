@@ -197,13 +197,31 @@ app.get("/pokemon-types", (req, res) => {
 
 
 /*====================================================
+    // 포켓몬 특성 테이블 정보 가져오기
+=====================================================*/
+app.get("/pokemon-chars", (req, res) => {
+    const sql ="SELECT * FROM pokemon_char";
+
+    db.query(sql, (err, result) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("Database query error")
+        } else{
+            res.send(result);
+        }
+    })
+})
+
+
+/*====================================================
     // 포켓몬 정보 업로드
 =====================================================*/
 app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
 
-    // type2가 빈 문자열인 경우 NULL로 대체
+    // type2, characteristic2가 빈 문자열인 경우 NULL로 대체
     const type2Value = type2 !== '' ? type2 : null;
+    const char2Value = characteristic2 !== '' ? characteristic2 : null;
 
     // 이미지 파일 경로
     const imagePath = req.file.path; 
@@ -213,7 +231,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 
     const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image, upload_date) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [serial, name, detail, type1, type2Value, height, category, gender, weight, characteristic1, characteristic2, imagePath, formattedDate], (err, result) => {
+    db.query(sql, [serial, name, detail, type1, type2Value, height, category, gender, weight, characteristic1, char2Value, imagePath, formattedDate], (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).send("Database query error");
