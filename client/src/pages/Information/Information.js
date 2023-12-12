@@ -1,4 +1,4 @@
-import { characteristicDescriptions } from "../../utils/Characteristic";
+// import { characteristicDescriptions } from "../../utils/Characteristic";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,22 +6,22 @@ import { faMars, faVenus, faHome, faEdit } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Information.css';
 import { Type } from "../../components/Type/Type";
+import { Characteristic } from "../../components/Characteristic/Characteristic";
 
 const Information = () => {
     const {serial} = useParams();
     const [pokemonData, setPokemonData] = useState(null);
     const navigate = useNavigate();
 
-    /*====================================================
+/*==================================================================================================
+====================================================================================================*/
+
     // 서버 데이터 가져오기 위해 정의
-    =====================================================*/
     useEffect(() => {
         // 해당 serial을 사용하여 데이터를 가져오는 API 호출
         fetch(`http://localhost:4001/guidebook/${serial}`)
             .then(response => response.json())
             .then(data => {
-                // console.log(data);
-
                 // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 if (data && data.evo_list) {
                     // 진화 정보 정렬
@@ -38,9 +38,10 @@ const Information = () => {
             });
     }, [serial]);
 
-    /*====================================================
+/*==================================================================================================
+====================================================================================================*/
+
     // 현재 페이지의 시리얼 넘버를 가져오는 함수 정의
-    =====================================================*/
     const getCurrentPageSerialNumber = () => {
         // 예시)No.0001 페이지라면? 1
         const currentSerialNumber = parseInt(serial.replace("No.", ""), 10);
@@ -48,17 +49,16 @@ const Information = () => {
         return currentSerialNumber;
     };
 
-    /*====================================================
     // 숫자를 4자리로 맞추어 문자열로 변환하는 함수 정의
-    =====================================================*/
     const formatSerialNumber = (number) => {
         // 예시)No.0001 페이지라면? formatSerialNumber(1) -> '0001'
         return number.toString().padStart(4, '0');
     };
 
-    /*====================================================
+/*==================================================================================================
+====================================================================================================*/
+
     // 이전 페이지로 이동하는 함수 정의
-    =====================================================*/
     const prevBtn = () => {
         const currentPage = getCurrentPageSerialNumber();
         if(currentPage > 1){
@@ -67,9 +67,7 @@ const Information = () => {
         }
     }
 
-    /*====================================================
     // 다음 페이지로 이동하는 함수 정의
-    =====================================================*/
     const nextBtn = () => {
         const currentPage = getCurrentPageSerialNumber();
 
@@ -235,21 +233,7 @@ const Information = () => {
 
                                 {/* 특성 정의 */}
                                 <div className="info-pokemon-char">
-                                    <div className="char-body char-screen screen">
-                                        <div className="char-left">
-                                            <div className="char-name">{pokemonData.characteristic1}</div>
-                                            {pokemonData.characteristic2 && <div className="char-name">{pokemonData.characteristic2}</div>}
-                                        </div>
-
-                                        <div className="char-right">
-                                            {characteristicDescriptions[pokemonData.characteristic1] && (
-                                                <p className="char_txt">{characteristicDescriptions[pokemonData.characteristic1]}</p>
-                                            )}
-                                            {pokemonData.characteristic2 && characteristicDescriptions[pokemonData.characteristic2] && (
-                                                <p className="char_txt">{characteristicDescriptions[pokemonData.characteristic2]}</p>
-                                            )}
-                                        </div>
-                                    </div>
+                                    <Characteristic pokemonData1={pokemonData.characteristic1} pokemonData2={pokemonData.characteristic2} />
                                 </div>
 
                                 {/* 세부 페이지 이동 정의 */}
