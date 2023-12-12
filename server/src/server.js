@@ -4,26 +4,8 @@ const mysql = require("mysql");
 const multer = require('multer');
 const path = require("path");
 const moment = require('moment-timezone');
-
 const app = express();
 const PORT = 4001;
-
-
-/*====================================================
-    // 파일 업로드를 위한 Multer 설정
-=====================================================*/
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../../client/public/uploads'));   // 업로드 된 파일 저장 경로
-    },
-    filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname);   // 파일 확장자 추출
-        const serial = req.body.serial;   // 받아온 serial 값 사용
-        cb(null, `${serial}${ext}`);   // 파일 이름 생성: 시리얼넘버 + 확장자
-    }
-});
-
-const upload = multer({ storage: storage });   // Multer 미들웨어 생성
 
 
 /*====================================================
@@ -36,22 +18,55 @@ const db = mysql.createPool({
     database: "guidebook4",
 });
 
-
-/*====================================================
-    // 미들웨어 설정
-=====================================================*/
-app.use(cors());   // CORS 미들웨어
-app.use(express.json());   // JSON 파싱 미들웨어
-app.use(express.urlencoded({ extended: true }));   // URL 인코딩 파싱 미들웨어
-app.use('/uploads', express.static(path.join(__dirname, '../../client/public/uploads')));   // 정적 파일 제공
-
-
 /*====================================================
     // 서버 실행
 =====================================================*/
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+/*====================================================
+    // 파일 업로드를 위한 Multer 설정
+=====================================================*/
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        // 업로드 된 파일 저장 경로
+        cb(null, path.join(__dirname, '../../client/public/uploads'));
+    },
+    filename: function (req, file, cb) {
+        // 파일 확장자 추출
+        const ext = path.extname(file.originalname);
+
+        // 받아온 serial 값 사용
+        const serial = req.body.serial; 
+
+        // 파일 이름 생성: 시리얼넘버 + 확장자
+        cb(null, `${serial}${ext}`);   
+    }
+});
+
+// Multer 미들웨어 생성
+const upload = multer({ storage: storage });   
+
+
+/*====================================================
+    // 미들웨어 설정
+=====================================================*/
+// CORS 미들웨어
+app.use(cors());
+
+// JSON 파싱 미들웨어
+app.use(express.json());
+
+ // URL 인코딩 파싱 미들웨어
+app.use(express.urlencoded({ extended: true }));  
+
+// 정적 파일 제공
+app.use('/uploads', express.static(path.join(__dirname, '../../client/public/uploads')));  
+
+/*==================================================================================================
+====================================================================================================*/
 
 /*====================================================
     // 시리얼넘버 중복 확인
@@ -73,6 +88,91 @@ app.get("/checkDuplicateSerial/:serial", (req, res) => {
     });
 });
 
+
+/*====================================================
+    // 포켓몬 타입 테이블 정보 가져오기
+=====================================================*/
+app.get("/pokemon-types", (req, res) => {
+    const sql ="SELECT * FROM pokemon_type";
+
+    db.query(sql, (err, result) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("Database query error")
+        } else{
+            res.send(result);
+        }
+    })
+})
+
+
+/*====================================================
+    // 포켓몬 특성 테이블 정보 가져오기
+=====================================================*/
+app.get("/pokemon-chars", (req, res) => {
+    const sql ="SELECT * FROM pokemon_char";
+
+    db.query(sql, (err, result) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("Database query error")
+        } else{
+            res.send(result);
+        }
+    })
+})
+
+
+/*====================================================
+    // 포켓몬 정보 업로드
+=====================================================*/
+app.post('/upload', upload.single('image'), (req, res) => {
+    const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
+
+    // type2, characteristic2가 빈 문자열인 경우 NULL로 대체
+    const type2Value = type2 !== '' ? type2 : null;
+    const char2Value = characteristic2 !== '' ? characteristic2 : null;
+
+    // 이미지 파일 경로
+    const imagePath = req.file.path; 
+
+    // 현재 한국 시간 정의
+    const formattedDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
+
+
+    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image, upload_date) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [serial, name, detail, type1, type2Value, height, category, gender, weight, characteristic1, char2Value, imagePath, formattedDate], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Database query error");
+        } else {
+            res.status(200).send("Data inserted successfully");
+        }
+    });
+});
+
+/*==================================================================================================
+====================================================================================================*/
+
+/*====================================================
+    // 포켓몬 진화 정보 업로드
+=====================================================*/
+app.post('/evolution', (req, res) => {
+    const {org_id, pkm_id, level} = req.body;
+
+    const sql = "INSERT INTO evolution (org_id, pkm_id, evolution_level) VALUES (?, ?, ?)";
+    db.query(sql, [org_id, pkm_id, level], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Database query error");
+        } else {
+            res.status(200).send("Evolution data inserted successfully");
+        }
+    });
+})
+
+/*==================================================================================================
+====================================================================================================*/
 
 /*====================================================
     // 모든 정보 가져오기
@@ -103,6 +203,8 @@ app.get("/guidebook", (req, res) => {
     });
 });
 
+/*==================================================================================================
+====================================================================================================*/
 
 /*====================================================
     // 특정 시리얼번호에 해당하는 정보 가져오기
@@ -178,86 +280,6 @@ app.get("/guidebook/:serial", (req, res) => {
     });
 });
 
-
-/*====================================================
-    // 포켓몬 타입 테이블 정보 가져오기
-=====================================================*/
-app.get("/pokemon-types", (req, res) => {
-    const sql ="SELECT * FROM pokemon_type";
-
-    db.query(sql, (err, result) => {
-        if(err){
-            console.error(err);
-            res.status(500).send("Database query error")
-        } else{
-            res.send(result);
-        }
-    })
-})
-
-
-/*====================================================
-    // 포켓몬 특성 테이블 정보 가져오기
-=====================================================*/
-app.get("/pokemon-chars", (req, res) => {
-    const sql ="SELECT * FROM pokemon_char";
-
-    db.query(sql, (err, result) => {
-        if(err){
-            console.error(err);
-            res.status(500).send("Database query error")
-        } else{
-            res.send(result);
-        }
-    })
-})
-
-
-/*====================================================
-    // 포켓몬 정보 업로드
-=====================================================*/
-app.post('/upload', upload.single('image'), (req, res) => {
-    const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
-
-    // type2, characteristic2가 빈 문자열인 경우 NULL로 대체
-    const type2Value = type2 !== '' ? type2 : null;
-    const char2Value = characteristic2 !== '' ? characteristic2 : null;
-
-    // 이미지 파일 경로
-    const imagePath = req.file.path; 
-
-    // 현재 한국 시간 정의
-    const formattedDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
-
-
-    const sql = "INSERT INTO guidebook (id, serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2, image, upload_date) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [serial, name, detail, type1, type2Value, height, category, gender, weight, characteristic1, char2Value, imagePath, formattedDate], (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Database query error");
-        } else {
-            res.status(200).send("Data inserted successfully");
-        }
-    });
-});
-
-
-/*====================================================
-    // 포켓몬 진화 정보 업로드
-=====================================================*/
-app.post('/evolution', (req, res) => {
-    const {org_id, pkm_id, level} = req.body;
-
-    const sql = "INSERT INTO evolution (org_id, pkm_id, evolution_level) VALUES (?, ?, ?)";
-    db.query(sql, [org_id, pkm_id, level], (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Database query error");
-        } else {
-            res.status(200).send("Evolution data inserted successfully");
-        }
-    });
-})
 
 /*====================================================
     // 포켓몬 정보 수정 업로드
