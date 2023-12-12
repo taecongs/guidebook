@@ -84,7 +84,7 @@ export const ValidateName = (name, setErrors) => {
 // [유효성 검사] 상세설명
 =====================================================*/
 export const ValidateDetail = (detail, setErrors) => {
-    const koreanRegex = /^[가-힣0-9\s.]+$/;
+    const koreanRegex = /^[가-힣0-9a-zA-Z\s.]+$/;
     if (!detail) {
         // 상세설명을 입력하지 않은 경우
         setErrors((prevErrors) => ({
@@ -93,10 +93,10 @@ export const ValidateDetail = (detail, setErrors) => {
         }));
         return false;
     } else if (!koreanRegex.test(detail)) {
-        // 상세설명이 한글이 아닌 경우
+        // 상세설명이 허용된 문자가 아닌 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            detail: "상세설명은 한글로만 입력해주세요.",
+            detail: "상세설명은 한글, 숫자, 영어로만 입력해주세요.",
         }));
         return false;
     } else {
@@ -179,13 +179,14 @@ export const ValidateHeight = (height, setErrors) => {
 =====================================================*/
 export const ValidateCategory = (category, setErrors) => {
     const koreanRegex = /^[가-힣]+$/;
-    if (!category) {
-        // 카테고리를 입력하지 않은 경우
+
+    // 입력값이 변경되지 않은 경우
+    if (!category || category.trim() === "포켓몬") {
         setErrors((prevErrors) => ({
             ...prevErrors,
             category: "분류를 입력해주세요. 예시)씨앗포켓몬",
         }));
-            return false;
+        return false;
     } else if (!koreanRegex.test(category)) {
         // 카테고리가 한글이 아닌 경우
         setErrors((prevErrors) => ({
@@ -198,6 +199,9 @@ export const ValidateCategory = (category, setErrors) => {
         return true;
     }
 }
+
+
+
 
 
 /*====================================================
