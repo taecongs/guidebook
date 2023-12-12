@@ -8,25 +8,36 @@ const Registration = () => {
     const [id, setId] = useState("");
     const [name, setName] = useState("");
     const [detail, setDetail] = useState("");
-    const [selectedType1, setSelectedType1] = useState(null);  // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
-    const [selectedType2, setSelectedType2] = useState(null);  // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
-    const [selectOptions, setSelectOptions] = useState([]);    // Input에서 Select로 변경 -> React-Select에서 사용할 옵션을 저장하는 상태
-    const [height, setHeight] = useState("");
 
+    // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
+    const [selectedType1, setSelectedType1] = useState(null);
+    const [selectedType2, setSelectedType2] = useState(null);
+
+    // Input에서 Select로 변경 -> React-Select에서 사용할 옵션을 저장하는 상태
+    const [selectTypeOptions, setSelectTypeOptions] = useState([]); 
+
+    const [height, setHeight] = useState("");
     const DEFAULT_CATEGORY = "포켓몬";
     const [category, setCategory] = useState(DEFAULT_CATEGORY);
     const [isMale, setIsMale] = useState(false);
     const [isFemale, setIsFemale] = useState(false);
     const [weight, setWeight] = useState("");
-    const [characteristic1, setCharacteristic1] = useState("");
-    const [characteristic2, setCharacteristic2] = useState("");
+
+    // Input에서 Select로 변경 -> 선택된 타입을 저장할 상태 추가
+    const [selectedcharacteristic1, setSelectedcharacteristic1] = useState(null);
+    const [selectedcharacteristic2, setSelectedcharacteristic2] = useState(null);
+
+    // Input에서 Select로 변경 -> React-Select에서 사용할 옵션을 저장하는 상태
+    const [selectCharOptions2, setSelectCharOption2] = useState([]);
+
     const [image, setImage] = useState(null);
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
-    /*====================================================
-    // [유효성 검사] 에러 메시지 관리하기 위해 정의
-    =====================================================*/
+/*==================================================================================================
+====================================================================================================*/
+
+    // [유효성 검사] 에러 메세지 관리하기 위해 정의
     const [errors, setErrors] = useState({
         id: "",
         name: "",
@@ -41,9 +52,7 @@ const Registration = () => {
         image: ""
     });
 
-    /*====================================================
     // Select2 라이브러리 커스텀 정의
-    =====================================================*/
     const customStyles = {
         control: (provided, state) => ({
             ...provided,
@@ -77,31 +86,26 @@ const Registration = () => {
         }),
     }
 
-    /*====================================================
     // [타입] 툴팁 정의
-    =====================================================*/
     const typeTooltipHover = (isVisible) => {
         setTypeTooltipVisible(isVisible);
     };
 
-    /*====================================================
     // [특성] 툴팁 정의
-    =====================================================*/
     const charTooltipHover = (isVisible) => {
         setCharTooltipVisible(isVisible);
     };
 
+/*==================================================================================================
+====================================================================================================*/
 
-
-    /*====================================================
     // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
-    =====================================================*/
     const handleBlur = async (fieldName, value) => {
         // 각 입력 필드에 대한 유효성 검사를 수행하고 에러 메시지 결과만 업데이트
         switch (fieldName){
             case 'id':
                 await ValidateSerialNumber(value, setErrors);
-                break;
+            break;
             case 'name':
                 ValidateName(value, setErrors);
             break;
@@ -117,21 +121,16 @@ const Registration = () => {
             case 'weight':
                 VaildateWeight(value, setErrors);
             break;
-            case 'characteristic1':
-                VaildateCharacteristic1(value, setErrors);
-            break;
-            case 'characteristic2':
-                VaildateCharacteristic2(value, setErrors);
-            break;
             default:
                 console.log('에러 발생');
-                break;
+            break;
         }
     };
 
-    /*====================================================
+/*==================================================================================================
+====================================================================================================*/
+
     // [시리얼번호] 핸들러 함수 정의
-    =====================================================*/
     const handleKeyDown = (e) => {
         // 입력 된 값
         const inputValue = e.target.value;
@@ -152,31 +151,31 @@ const Registration = () => {
         }
     }
 
-    /*====================================================
     // [타입1] 옵션을 선택했을 때 호출 되는 함수 정의
-    =====================================================*/
     const handleType1Change = (selectedOption) => {
-        //  선택된 옵션을 selectedType1 상태에 저장
-        setSelectedType1(selectedOption);
-
-        // 선택된 옵션을 ValidateType1 함수에 전달하여 유효성 검사를 수행
-        ValidateType1(selectedOption, setErrors);
+        // 선택된 옵션이 null이 아닌 경우에만 유효성 검사 수행
+        if(selectedOption){
+            //  선택된 옵션을 selectedType1 상태에 저장
+            setSelectedType1(selectedOption);    
+            
+            // 선택된 옵션을 ValidateType1 함수에 전달하여 유효성 검사를 수행
+            ValidateType1(selectedOption, setErrors);
+        }
     };
 
-    /*====================================================
     // [타입2] 옵션을 선택했을 때 호출 되는 함수 정의
-    =====================================================*/
     const handleType2Change = (selectedOption) => {
-        //  선택된 옵션을 selectedType1 상태에 저장
-        setSelectedType2(selectedOption);
+        // 선택된 옵션이 null이 아닌 경우에만 유효성 검사 수행
+        if (selectedOption) {
+            // 선택된 옵션을 selectedType2 상태에 저장
+            setSelectedType2(selectedOption);
 
-        // 선택된 옵션을 ValidateType2 함수에 전달하여 유효성 검사를 수행
-        ValidateType2(selectedOption, selectedType1, setErrors);
+            // 선택된 옵션을 ValidateType2 함수에 전달하여 유효성 검사를 수행
+            ValidateType2(selectedOption, selectedType1, setErrors);
+        }
     };
 
-    /*====================================================
     // [분류] 핸들러 함수 정의
-    =====================================================*/
     const handleCategoryKeyDown = (e) => {
         // 텍스트의 시작 위치
         const selectionStart = e.target.selectionStart;
@@ -189,9 +188,31 @@ const Registration = () => {
         }
     }
 
-    /*====================================================
+    // [특성1] 옵션을 선택했을 때 호출 되는 함수 정의
+    const handleChar1Change = (selectedOption) => {
+        // 선택된 옵션이 null이 아닌 경우에만 유효성 검사 수행
+        if (selectedOption) {
+            // 선택된 옵션을 selectedcharacteristic1 상태에 저장
+            setSelectedcharacteristic1(selectedOption);
+            
+            // 선택된 옵션을 VaildateCharacteristic1 함수에 전달하여 유효성 검사를 수행
+            VaildateCharacteristic1(selectedOption, setErrors);
+        }
+    };
+
+    // [특성2] 옵션을 선택했을 때 호출 되는 함수 정의
+    const handleChar2Change = (selectedOption) => {
+        // 선택된 옵션이 null이 아닌 경우에만 유효성 검사 수행
+        if (selectedOption) {
+            // 선택된 옵션을 selectedcharacteristic2 상태에 저장
+            setSelectedcharacteristic2(selectedOption);
+            
+            // 선택된 옵션을 VaildateCharacteristic2 함수에 전달하여 유효성 검사를 수행
+            VaildateCharacteristic2(selectedOption, selectedcharacteristic1, setErrors);
+        }
+    };
+
     // [이미지] 이미지 업로드 핸들러 정의
-    =====================================================*/
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
         if (ValidateImage(selectedImage, setErrors)) {
@@ -199,11 +220,10 @@ const Registration = () => {
         }
     };
 
+/*==================================================================================================
+====================================================================================================*/
 
-
-    /*====================================================
-    // [서버] Pokemon Type 정보 가져오기 위해 정의
-    =====================================================*/
+    // [서버] Pokemon 타입 정보 가져오기 위해 정의
     useEffect(() => {
         axios
             .get('http://localhost:4001/pokemon-types')
@@ -213,16 +233,31 @@ const Registration = () => {
                     label: type.type_name,
                 }));
                 // React-Select에서 사용할 옵션을 설정
-                setSelectOptions(options);
+                setSelectTypeOptions(options);
             })
             .catch((error) => {
                 console.error(error);
             });
     }, []);
 
-    /*====================================================
+    // [서버] Pokemon 특성 정보 가져오기 위해 정의
+    useEffect(() => {
+        axios
+            .get('http://localhost:4001/pokemon-chars')
+            .then((response) => {
+                const options = response.data.map((type) => ({
+                    value: type.char_id,
+                    label: type.char_name,
+                }));
+                // React-Select에서 사용할 옵션을 설정
+                setSelectCharOption2(options);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
     // [폼] 데이터 전송
-    =====================================================*/
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -230,11 +265,13 @@ const Registration = () => {
         const isSerialValid = await ValidateSerialNumber(id, setErrors);
         const isNameValid = ValidateName(name, setErrors);
         const isDetailValid = ValidateDetail(detail, setErrors);
-        const isType1Valid = ValidateType1(selectedType1 ? selectedType1.value : '', setErrors);
+        // const isType1Valid = ValidateType1(selectedType1 ? selectedType1.value : '', setErrors);
+        const isType1Valid = selectedType1 ? ValidateType1(selectedType1.value, setErrors) : false;
         const isHeightValid = ValidateHeight(height, setErrors);
         const isCategoryValid = ValidateCategory(category, setErrors);
         const isWeightValid = VaildateWeight(weight, setErrors);
-        const isCharacteristic1Valid = VaildateCharacteristic1(characteristic1, setErrors);
+        // const isCharacteristic1Valid = VaildateCharacteristic1(selectedcharacteristic1 ? selectedcharacteristic1.value : '', setErrors);
+        const isCharacteristic1Valid = selectedcharacteristic1 ? VaildateCharacteristic1(selectedcharacteristic1.value, setErrors) : false;
         const isImageValid = ValidateImage(image, setErrors);
 
         // 모든 [유효성 검사]가 통과된 경우에만 데이터를 서버에 전송
@@ -248,7 +285,9 @@ const Registration = () => {
 
             // type_id를 전송
             formData.append('type1', selectedType1.value);
-            formData.append('type2', selectedType2.value);
+
+            // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
+            formData.append('type2', selectedType2 ? selectedType2.value : '');   
             formData.append('height', height);
             formData.append('category', category);
 
@@ -257,9 +296,15 @@ const Registration = () => {
             if (isMale) selectedGenders.push('남자');
             if (isFemale) selectedGenders.push('여자');
             formData.append('gender', selectedGenders.join(','));
+
             formData.append('weight', weight);
-            formData.append('characteristic1', characteristic1);
-            formData.append('characteristic2', characteristic2);
+
+            // char_id를 전송
+            formData.append('characteristic1', selectedcharacteristic1.value);
+
+            // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
+            formData.append('characteristic2', selectedcharacteristic2 ? selectedcharacteristic2.value : '');
+
             formData.append('image', image);
 
             try {
@@ -333,7 +378,7 @@ const Registration = () => {
                                                 id="type1"
                                                 styles={customStyles}
                                                 value={selectedType1}
-                                                options={selectOptions}
+                                                options={selectTypeOptions}
                                                 onChange={handleType1Change}
                                                 placeholder="타입을 선택해주세요."
                                         />
@@ -349,7 +394,7 @@ const Registration = () => {
                                                 id="type2"
                                                 styles={customStyles}
                                                 value={selectedType2}
-                                                options={selectOptions}
+                                                options={selectTypeOptions}
                                                 onChange={handleType2Change}
                                                 placeholder="타입을 선택해주세요."
                                         />
@@ -423,15 +468,32 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="characteristic1" value={characteristic1} onChange={(e) => setCharacteristic1(e.target.value)} onBlur={() => handleBlur('characteristic1', characteristic1)} />
+
+                                        <Select
+                                                id="characteristic1"
+                                                styles={customStyles}
+                                                value={selectedcharacteristic1}
+                                                options={selectCharOptions2}
+                                                onChange={handleChar1Change}
+                                                placeholder="특성을 선택해주세요."
+                                        />
                                     </div>
-                                    {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
+                                    {errors.characteristic1 && <p className='error-message'>📢 {errors.characteristic1} </p>}
                                 </div>
 
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='characteristic2' className="right-tit">특성</label>
-                                        <input type="text" id="characteristic2" value={characteristic2} onChange={(e) => setCharacteristic2(e.target.value)} onBlur={() => handleBlur('characteristic2', characteristic2)} />
+
+                                        <Select
+                                                id="characteristic2"
+                                                styles={customStyles}
+                                                value={selectedcharacteristic2}
+                                                options={selectCharOptions2}
+                                                onChange={handleChar2Change}
+                                                placeholder="특성을 선택해주세요."
+                                        />
+
                                     </div>
                                     {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
                                 </div>
