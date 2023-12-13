@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+// import Select from 'react-select'
 import  './Edit.css';
 import { ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2} from '../../utils/Validation';
 
@@ -23,8 +24,13 @@ const Edit = () => {
         image: null,
     });
 
+    // const [selectTypeOptions, setSelectTypeOptions] = useState([]);
+
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
+
+/*==================================================================================================
+====================================================================================================*/
 
     // [유효성 검사] 에러 메시지 관리하기 위해 정의
     const [errors, setErrors] = useState({
@@ -41,40 +47,23 @@ const Edit = () => {
         image: ""
     });
 
-    /*====================================================
-    // 서버 데이터 가져오기 위해 정의
-    =====================================================*/
-    useEffect(() => {
-        fetch(`http://localhost:4001/guidebook/${serial}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
+/*==================================================================================================
+====================================================================================================*/
 
-                const genderArray = data.gender.split(',');
-                const isMaleChecked = genderArray.includes('남자');
-                const isFemaleChecked = genderArray.includes('여자');
-
-                setPokemonData({
-                    ...data,
-                    isMale: isMaleChecked,
-                    isFemale: isFemaleChecked,
-                });
-            })
-            .catch(error => {
-                console.error(error);
-            })
-    }, [serial]);
-
-
-    const editInputChange = (e) => {
-        const { name, value } = e.target;
-        setPokemonData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
-        handleBlur(name, value);
+    // [타입] 툴팁 정의
+    const typeTooltipHover = (isVisible) => {
+        setTypeTooltipVisible(isVisible);
+    };
+            
+    // [특성] 툴팁 정의
+    const charTooltipHover = (isVisible) => {
+        setCharTooltipVisible(isVisible);
     };
 
+/*==================================================================================================
+====================================================================================================*/
+
+    // 입력 필드에서 포커스가 빠져나갈 때 호출되는 함수 정의
     const handleBlur = async (fieldName, value) => {
         // 각 입력 필드에 대한 유효성 검사 결과만 업데이트
         switch (fieldName){
@@ -111,20 +100,66 @@ const Edit = () => {
     };
 
 
-    // 타입 툴팁 정의
-    const typeTooltipHover = (isVisible) => {
-        setTypeTooltipVisible(isVisible);
-    };
-            
-    // 특성 툴팁 정의
-    const charTooltipHover = (isVisible) => {
-        setCharTooltipVisible(isVisible);
+    // 입력 필드의 변경 이벤트를 처리하고, 상태를 업데이트한 후 handleBlur 함수 호출
+    const editInputChange = (e) => {
+         // 이벤트 객체에서 이름과 값 추출
+        const { name, value } = e.target;
+        setPokemonData(prevData => ({
+            ...prevData,
+            [name]: value,
+        }));
+        handleBlur(name, value);
     };
 
+/*==================================================================================================
+====================================================================================================*/
 
-    /*====================================================
-    // 폼 수정 데이터 전송
-    =====================================================*/
+    // [서버] 시리얼번호를 기반으로 한 데이터 가져오기 위해 정의
+    useEffect(() => {
+        fetch(`http://localhost:4001/guidebook/${serial}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                const genderArray = data.gender.split(',');
+                const isMaleChecked = genderArray.includes('남자');
+                const isFemaleChecked = genderArray.includes('여자');
+
+                setPokemonData({
+                    // spread 연산자를 통해 기본 데이터 복제하고 새로운 값을 업데이트
+                    ...data,
+                    isMale: isMaleChecked,
+                    isFemale: isFemaleChecked,
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }, [serial]);
+
+    // [서버] Pokemon 타입 정보 가져오기 위해 정의
+    useEffect(() => {
+        axios
+            .get('http://localhost:4001/pokemon-types')
+            .then((response) => {
+                console.log(response);
+                /*
+                const typeOptions = response.data.map((type) => ({
+                    type_id: type.type_id,
+                    type_name: type.type_name,
+                }));
+                */
+
+                // React-Select에서 사용할 옵션을 설정
+                // setSelectTypeOptions(typeOptions);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
+
+    // [폼] 수정 데이터 전송
     const editHandleSubmit = async (e) => {
         e.preventDefault();
 
@@ -203,7 +238,6 @@ const Edit = () => {
                                     <div className='col-content'>
                                         <label htmlFor="id">시리얼넘버</label>
                                         <input type="text" id="id" className='edit-serial-disabled' placeholder="No.0000" name="serial" value={pokemonData.serial || ""}  readOnly />
-                                        {/* <input type="text" id="id" placeholder="No.0000" name="serial" value={pokemonData.serial || ""} onChange={editInputChange} onBlur={() => handleBlur('id', pokemonData.id)} /> */}
                                     </div>
                                     {errors.id && <p className='error-message'>{errors.id}</p>}
                                 </div>
