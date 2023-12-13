@@ -128,6 +128,7 @@ export const ValidateType1 = (selectedType1, setErrors) => {
 // [유효성 검사] 타입 2
 =====================================================*/
 export const ValidateType2 = (selectedType2, selectedType1, setErrors) => {
+    console.error('유효성검사', selectedType2, selectedType1)
     if (!selectedType2) {
         // 타입2를 선택하지 않은 경우
         setErrors((prevErrors) => ({
