@@ -15,7 +15,7 @@ const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "taecongs@",
-    database: "guidebook5",
+    database: "guidebook4",
 });
 
 /*====================================================
