@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-// import Select from 'react-select'
+import Select from 'react-select'
 import  './Edit.css';
-import { ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2} from '../../utils/Validation';
+import { ValidateName, ValidateDetail, ValidateType3, ValidateType4, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic3, VaildateCharacteristic4} from '../../utils/Validation';
+import { SelectCustomStyles } from '../../utils/SelectCustomStyles';
 
 const Edit = () => {
     const {serial} = useParams();
@@ -24,7 +25,12 @@ const Edit = () => {
         image: null,
     });
 
-    // const [selectTypeOptions, setSelectTypeOptions] = useState([]);
+    // React-Select에서 사용할 옵션을 저장하기 위해 정의
+    const [selectTypeOptions, setSelectTypeOptions] = useState([]);
+    const [selectCharOptions, setSelectCharOptions] = useState([]);
+
+    // React-Select 스타일 커스텀 위해 정의
+    const customStyles = SelectCustomStyles;
 
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
@@ -74,10 +80,10 @@ const Edit = () => {
                 ValidateDetail(value, setErrors);
             break;
             case 'type1':
-                ValidateType1(value, setErrors);
+                ValidateType3(value, setErrors);
             break;
             case 'type2':
-                ValidateType2(value, setErrors);
+                ValidateType4(value, pokemonData.type1, setErrors);
             break;
             case 'height':
                 ValidateHeight(value, setErrors);
@@ -89,10 +95,10 @@ const Edit = () => {
                 VaildateWeight(value, setErrors);
             break;
             case 'characteristic1':
-                VaildateCharacteristic1(value, setErrors);
+                VaildateCharacteristic3(value, setErrors);
             break;
             case 'characteristic2':
-                VaildateCharacteristic2(value, setErrors);
+                VaildateCharacteristic4(value, pokemonData.characteristic1, setErrors);
             break;
             default:
                 break;
@@ -119,7 +125,7 @@ const Edit = () => {
         fetch(`http://localhost:4001/guidebook/${serial}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
 
                 const genderArray = data.gender.split(',');
                 const isMaleChecked = genderArray.includes('남자');
@@ -142,41 +148,63 @@ const Edit = () => {
         axios
             .get('http://localhost:4001/pokemon-types')
             .then((response) => {
-                console.log(response);
-                /*
                 const typeOptions = response.data.map((type) => ({
-                    type_id: type.type_id,
-                    type_name: type.type_name,
+                    value: type.type_id,
+                    label: type.type_name,
                 }));
-                */
+
+                // "선택하지 않음" 옵션 추가
+                const noneOption = {value: null, label: "타입을 선택해주세요."};
+                typeOptions.unshift(noneOption);
 
                 // React-Select에서 사용할 옵션을 설정
-                // setSelectTypeOptions(typeOptions);
+                setSelectTypeOptions(typeOptions);
             })
             .catch((error) => {
                 console.error(error);
             });
     }, []);
 
+    // [서버] Pokemon 특성 정보 가져오기 위해 정의
+    useEffect(() => {
+        axios
+            .get('http://localhost:4001/pokemon-chars')
+            .then((response) => {
+                const Charoptions = response.data.map((char) => ({
+                    value: char.char_id,
+                    label: char.char_name,
+                }));
+
+                // "선택하지 않음" 옵션 추가
+                const noneOption = {value: null, label: "특성을 선택해주세요."};
+                Charoptions.unshift(noneOption);
+
+                // React-Select에서 사용할 옵션을 설정
+                setSelectCharOptions(Charoptions);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
     // [폼] 수정 데이터 전송
     const editHandleSubmit = async (e) => {
         e.preventDefault();
 
         // [유효성 검사] 해당 입력필드의 유효성을 검사하고 에러 상태를 업데이트
-        // const isSerialValid = await ValidateSerialNumber(pokemonData.id, setErrors);
         const isNameValid = ValidateName(pokemonData.name, setErrors);
         const isDetailValid = ValidateDetail(pokemonData.detail, setErrors);
-        const isType1Valid = ValidateType1(pokemonData.type1, setErrors);
+        const isType1Valid = ValidateType3(pokemonData.type1, setErrors);
         const isHeightValid = ValidateHeight(pokemonData.height, setErrors);
         const isCategoryValid = ValidateCategory(pokemonData.category, setErrors);
         const isWeightValid = VaildateWeight(pokemonData.weight, setErrors);
-        const isCharacteristic1Valid = VaildateCharacteristic1(pokemonData.characteristic1, setErrors);
-        const isCharacteristic2Valid = VaildateCharacteristic2(pokemonData.characteristic2, setErrors);
+        const isCharacteristic1Valid = VaildateCharacteristic3(pokemonData.characteristic1, setErrors);
+        // const isCharacteristic2Valid = VaildateCharacteristic4(pokemonData.characteristic2, setErrors);
 
         // 모든 [유효성 검사]가 통과된 경우에만 데이터를 서버에 전송
-        if (isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isCharacteristic2Valid) {
+        if (isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid) {
             const formData = new FormData();
+
             formData.append('serial', pokemonData.serial);
             formData.append('name', pokemonData.name);
             formData.append('detail', pokemonData.detail);
@@ -196,7 +224,6 @@ const Edit = () => {
             if (pokemonData.isFemale) {
                 genderArray.push('여자');
             }
-
             formData.append('gender', genderArray.join(','));
 
             formData.append('weight', pokemonData.weight);
@@ -274,7 +301,15 @@ const Edit = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="type1" name="type1" value={pokemonData.type1 || ""} onChange={editInputChange} onBlur={() => handleBlur('type1', pokemonData.type1)} />
+
+                                        <Select 
+                                                id="type1"
+                                                name="type1"
+                                                styles={customStyles}
+                                                value={selectTypeOptions.find((option) => option.value === pokemonData.type1)}
+                                                options={selectTypeOptions}
+                                                onChange={(selectedOption) => editInputChange({target: {name: 'type1', value: selectedOption.value} })}
+                                        />
                                     </div>
                                     {errors.type1 && <p className='error-message'>{errors.type1}</p>}
                                 </div>
@@ -282,10 +317,19 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor="type2" className="right-tit">타입</label>
-                                        <input type="text" id="type2" name="type2" value={pokemonData.type2 || ""} onChange={editInputChange} onBlur={() => handleBlur('type2', pokemonData.type2)} />
+
+                                        <Select 
+                                                id="type2"
+                                                name="type2"
+                                                styles={customStyles}
+                                                value={selectTypeOptions.find((option) => option.value === pokemonData.type2)}
+                                                options={selectTypeOptions}
+                                                onChange={(selectedOption) => editInputChange({target: {name: 'type2', value: selectedOption.value} })}
+                                                placeholder="타입을 선택해주세요."
+                                        />
                                     </div>
+                                    {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                                 </div>
-                                {errors.type2 && <p className='error-message'>{errors.type2}</p>}
                             </div>
 
                             {/* 키 & 분류 */}
@@ -355,7 +399,15 @@ const Edit = () => {
                                                 </div>
                                             </div>
                                         </label>
-                                        <input type="text" id="characteristic1" name="characteristic1" value={pokemonData.characteristic1 || ""}  onChange={editInputChange} onBlur={() => handleBlur('characteristic1', pokemonData.characteristic1)} />
+
+                                        <Select 
+                                            id="characteristic1"
+                                            name="characteristic1"
+                                            styles={customStyles}
+                                            value={selectCharOptions.find((option) => option.value === pokemonData.characteristic1)}
+                                            options={selectCharOptions}
+                                            onChange={(selectedOption) => editInputChange({target: {name: 'characteristic1', value: selectedOption.value} })}
+                                        />
                                     </div>
                                     {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
                                 </div>
@@ -363,7 +415,16 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='characteristic2' className="right-tit">특성</label>
-                                        <input type="text" id="characteristic2" name="characteristic2" value={pokemonData.characteristic2 || ""}  onChange={editInputChange} onBlur={() => handleBlur('characteristic2', pokemonData.characteristic2)}  />
+
+                                        <Select 
+                                            id="characteristic2"
+                                            name="characteristic2"
+                                            styles={customStyles}
+                                            value={selectCharOptions.find((option) => option.value === pokemonData.characteristic2)}
+                                            options={selectCharOptions}
+                                            onChange={(selectedOption) => editInputChange({target: {name: 'characteristic2', value: selectedOption.value} })}
+                                            placeholder="특성을 선택해주세요."
+                                        />
                                     </div>
                                     {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
                                 </div>
