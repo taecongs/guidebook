@@ -118,6 +118,12 @@ export const ValidateType1 = (selectedType1, setErrors) => {
             type1: "타입을 선택해주세요.",
         }));
         return false;
+    } else if (selectedType1 && selectedType1.value === null) {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type1: "포켓몬의 첫 번째 타입은 필수로 선택해 주셔야 합니다.",
+        }));
+        return false;
     } else {
         setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
         return true;
