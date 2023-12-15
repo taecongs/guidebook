@@ -110,7 +110,6 @@ export const ValidateDetail = (detail, setErrors) => {
 // [유효성 검사] 타입 1 (Registration)
 =====================================================*/
 export const ValidateType1 = (selectedType1, setErrors) => {
-    console.log(selectedType1);
     if (!selectedType1) {
         // 타입1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
@@ -135,7 +134,6 @@ export const ValidateType1 = (selectedType1, setErrors) => {
 // [유효성 검사] 타입 2 (Registration)
 =====================================================*/
 export const ValidateType2 = (selectedType2, selectedType1, setErrors) => {
-    console.log('전달 받은 코드', selectedType2, selectedType1)
     if (selectedType1 && selectedType1.value === selectedType2.value) {
         // 타입1과 중복된 타입을 선택한 경우
         setErrors((prevErrors) => ({
@@ -154,12 +152,11 @@ export const ValidateType2 = (selectedType2, selectedType1, setErrors) => {
 // [유효성 검사] 타입 1 (Edit)
 =====================================================*/
 export const ValidateType3 = (selectedType1, setErrors) => {
-    console.log(selectedType1);
     if (!selectedType1) {
         // 타입1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            type1: "타입을 선택해주세요.",
+            type1: "포켓몬의 첫 번째 타입은 필수로 선택해 주셔야 합니다.",
         }));
         return false;
     } else {
@@ -173,7 +170,6 @@ export const ValidateType3 = (selectedType1, setErrors) => {
 // [유효성 검사] 타입 2 (Edit)
 =====================================================*/
 export const ValidateType4 = (selectedType2, selectedType1, setErrors) => {
-    console.log('전달 받은 코드', selectedType2, selectedType1)
     if (selectedType1 && selectedType1 === selectedType2) {
         // 타입1과 중복된 타입을 선택한 경우
         setErrors((prevErrors) => ({
@@ -317,7 +313,7 @@ export const VaildateCharacteristic3 = (characteristic1, setErrors) => {
         // 특성1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            characteristic1: "특성을 선택해주세요.",
+            characteristic1: "포켓몬의 첫 번째 특성은 필수로 선택해 주셔야 합니다.",
         }));
         return false;
     } else {
