@@ -293,11 +293,11 @@ const Edit = () => {
                         <h2 className='edit-content-tit'>포켓몬 수정</h2>
 
                         <form onSubmit={editHandleSubmit}>
-                            {/* 시리얼넘버 & 이름 */}
+                            {/* 시리얼번호 & 이름 */}
                             <div className="content-row1">
                                 <div className='row1-col'>
                                     <div className='col-content'>
-                                        <label htmlFor="id">시리얼넘버</label>
+                                        <label htmlFor="id">시리얼번호</label>
                                         <input type="text" id="id" className='edit-serial-disabled' placeholder="No.0000" name="serial" value={pokemonData.serial || ""}  readOnly />
                                     </div>
                                     {errors.id && <p className='error-message'>{errors.id}</p>}
