@@ -29,4 +29,8 @@ export const SelectCustomStyles = {
         borderRadius: '0px',
         margin: '0px',
     }),
+    placeholder: (provided, state) => ({
+        ...provided,
+        color: 'hsl(0, 0%, 20%)',
+    }),
 }
