@@ -8,6 +8,7 @@ import { SelectCustomStyles } from '../../utils/SelectCustomStyles';
 
 const Edit = () => {
     const {serial} = useParams();
+    const DEFAULT_CATEGORY = "포켓몬";
 
     const [pokemonData, setPokemonData] = useState({
         id: "",
@@ -115,6 +116,39 @@ const Edit = () => {
             [name]: value,
         }));
         handleBlur(name, value);
+    };
+
+    // [분류] 핸들러 함수 정의
+    const handleEditCategoryKeyDown = (e) => {
+        const currentValue = e.target.value;
+        const selectionStart = e.target.selectionStart;
+        const maxLength = pokemonData.category.length - DEFAULT_CATEGORY.length;
+
+        // 사용자가 텍스트를 드래그하여 선택한 부분이 있는지 확인
+        const isTextSelected = window.getSelection().toString() !== '';
+
+        // 백스페이스나 Delete 키가 눌렸을 때
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+            const textBeforeCursor = currentValue.substring(0, selectionStart);
+
+            // "포켓몬" 이전에 작성한 텍스트를 삭제할 수 있도록 처리
+            if (textBeforeCursor.length < maxLength || isTextSelected) {
+                e.preventDefault();  // 기본 동작 막기
+                return;
+            }
+
+            // Delete 키가 눌렸을 때 "포켓몬" 중 "포"가 삭제되지 않도록 처리
+            if (selectionStart <= maxLength && e.key === 'Delete') {
+                e.preventDefault();
+                return;
+            }
+        }
+
+        // 사용자가 "포켓몬" 뒤에 텍스트나 공백을 입력하지 못하도록 막고 "포켓몬" 앞으로 커서 이동하기
+        if (selectionStart > maxLength || e.key === ' ' || isTextSelected) {
+            e.preventDefault();
+            e.target.setSelectionRange(maxLength, maxLength);
+        }
     };
 
 /*==================================================================================================
@@ -345,7 +379,7 @@ const Edit = () => {
                                 <div className='row1-col'>
                                     <div className='col-content'>
                                         <label htmlFor='category' className="right-tit">분류</label>
-                                        <input type="text" id="category" name="category" value={pokemonData.category || ""} onChange={editInputChange} onBlur={() => handleBlur('category', pokemonData.category)} />
+                                        <input type="text" id="category" name="category" value={pokemonData.category || ""} onChange={editInputChange} onBlur={() => handleBlur('category', pokemonData.category)} onKeyDown={(e) => handleEditCategoryKeyDown(e)} />
                                     </div>
                                     {errors.category && <p className='error-message'>{errors.category}</p>}
                                 </div>
