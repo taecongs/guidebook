@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import './Evolution.css';
+import { SelectCustomStyles } from '../../utils/SelectCustomStyles';
 
 const Evolution = () => {
     const [data, setData] = useState([]);
@@ -19,40 +20,8 @@ const Evolution = () => {
         levels: "",
     })
 
-
-    // Select2 라이브러리 커스텀 정의
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            border: '1px solid ' + (state.isFocused ? '#4a90e2' : '#bbb'),
-            borderRadius: '0px',
-            boxShadow: 'none',
-            minHeight: '47.78px',
-            padding: '0px',
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            padding: '15px',
-            cursor: 'pointer',
-        }),
-        menu: (provided) => ({
-            ...provided,
-            '& > div': {
-                padding: '0px',
-                // maxHeight: '250px',
-                // overflowY: 'auto',
-                '&::-webkit-scrollbar': {
-                    width: '10px',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#4a90e2',
-                    borderRadius: '0px',
-                },
-            },
-            borderRadius: '0px',
-            margin: '0px',
-        }),
-    }
+    // React-Select 스타일 커스텀 위해 정의
+    const customStyles = SelectCustomStyles;
 
 /*==================================================================================================
 ====================================================================================================*/
