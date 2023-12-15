@@ -278,6 +278,12 @@ export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
             characteristic1: "특성을 선택해주세요.",
         }));
         return false;
+    } else if (characteristic1 && characteristic1.value === null) {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            characteristic1: "포켓몬의 첫 번째 특성은 필수로 선택해 주셔야 합니다.",
+        }));
+        return false;
     } else {
         setErrors((prevErrors) => ({ ...prevErrors, characteristic1: "" }));
         return true;
