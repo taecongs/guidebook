@@ -300,7 +300,7 @@ const Edit = () => {
                                         <label htmlFor="id">시리얼번호</label>
                                         <input type="text" id="id" className='edit-serial-disabled' placeholder="No.0000" name="serial" value={pokemonData.serial || ""}  readOnly />
                                     </div>
-                                    {errors.id && <p className='error-message'>{errors.id}</p>}
+                                    {errors.id && <p className='error-message'>📢 {errors.id}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -308,7 +308,7 @@ const Edit = () => {
                                         <label htmlFor="name" className="right-tit">이름</label>
                                         <input type="text" id="name" name="name" value={pokemonData.name || ""} onChange={editInputChange} onBlur={() => handleBlur('name', pokemonData.name)} />
                                     </div>
-                                    {errors.name && <p className='error-message'>{errors.name}</p>}
+                                    {errors.name && <p className='error-message'>📢 {errors.name}</p>}
                                 </div>
                             </div>
 
@@ -319,7 +319,7 @@ const Edit = () => {
                                         <label htmlFor="defail">상세설명</label>
                                         <textarea id="defail" name="detail" value={pokemonData.detail || ""} onChange={editInputChange} onBlur={() => handleBlur('detail', pokemonData.detail)}  />
                                     </div>
-                                    {errors.detail && <p className='error-message'>{errors.detail}</p>}
+                                    {errors.detail && <p className='error-message'>📢 {errors.detail}</p>}
                                 </div>
                             </div>
 
@@ -345,7 +345,7 @@ const Edit = () => {
                                                 onChange={(selectedOption) => editInputChange({target: {name: 'type1', value: selectedOption.value} })}
                                         />
                                     </div>
-                                    {errors.type1 && <p className='error-message'>{errors.type1}</p>}
+                                    {errors.type1 && <p className='error-message'>📢 {errors.type1}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -373,7 +373,7 @@ const Edit = () => {
                                         <label htmlFor='height'>키</label>
                                         <input type="text" id="height" name="height" value={pokemonData.height || ""} onChange={editInputChange} onBlur={() => handleBlur('height', pokemonData.height)}  />
                                     </div>
-                                    {errors.height && <p className='error-message'>{errors.height}</p>}
+                                    {errors.height && <p className='error-message'>📢 {errors.height}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -381,7 +381,7 @@ const Edit = () => {
                                         <label htmlFor='category' className="right-tit">분류</label>
                                         <input type="text" id="category" name="category" value={pokemonData.category || ""} onChange={editInputChange} onBlur={() => handleBlur('category', pokemonData.category)} onKeyDown={(e) => handleEditCategoryKeyDown(e)} />
                                     </div>
-                                    {errors.category && <p className='error-message'>{errors.category}</p>}
+                                    {errors.category && <p className='error-message'>📢 {errors.category}</p>}
                                 </div>
                             </div>
 
@@ -405,7 +405,7 @@ const Edit = () => {
                                         <label htmlFor='weight'>몸무게</label>
                                         <input type="text" id="weight" name="weight" value={pokemonData.weight || ""} onChange={editInputChange} onBlur={() => handleBlur('weight', pokemonData.weight)} />
                                     </div>
-                                    {errors.weight && <p className='error-message'>{errors.weight}</p>}
+                                    {errors.weight && <p className='error-message'>📢 {errors.weight}</p>}
                                 </div>
 
 
@@ -443,7 +443,7 @@ const Edit = () => {
                                             onChange={(selectedOption) => editInputChange({target: {name: 'characteristic1', value: selectedOption.value} })}
                                         />
                                     </div>
-                                    {errors.characteristic1 && <p className='error-message'>📢 특성은 <a className='viewmore-txt2' href="https://pokemon.fandom.com/ko/wiki/%ED%8A%B9%EC%84%B1" target='_blank' rel="noreferrer"> 특성 페이지</a>를 {errors.characteristic1} </p>}
+                                    {errors.characteristic1 && <p className='error-message'>📢 {errors.characteristic1} </p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -460,7 +460,7 @@ const Edit = () => {
                                             placeholder="특성을 선택해주세요."
                                         />
                                     </div>
-                                    {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
+                                    {errors.characteristic2 && <p className='error-message'>📢 {errors.characteristic2}</p>}
                                 </div>
                             </div>
 
