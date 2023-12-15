@@ -39,6 +39,7 @@ const Registration = () => {
     // React-Select 스타일 커스텀 위해 정의
     const customStyles = SelectCustomStyles;
 
+    // 타입, 툴팁 기존에 화면에 보이지 않게 하기 위해 기본값 false 로 정의 
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
@@ -158,7 +159,7 @@ const Registration = () => {
         const selectionStart = e.target.selectionStart;
         const maxLength = category.length - DEFAULT_CATEGORY.length;
     
-        // 마우스로 드래그하여 선택된 부분이 있는지 확인
+        // 드래그하여 선택된 부분이 있는지 확인
         const isTextSelected = window.getSelection().toString() !== '';
     
         // 백스페이스나 Del 키가 눌렸을 때
