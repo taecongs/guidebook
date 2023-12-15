@@ -107,9 +107,10 @@ export const ValidateDetail = (detail, setErrors) => {
 
 
 /*====================================================
-// [유효성 검사] 타입 1
+// [유효성 검사] 타입 1 (Registration)
 =====================================================*/
 export const ValidateType1 = (selectedType1, setErrors) => {
+    console.log(selectedType1);
     if (!selectedType1) {
         // 타입1을 선택하지 않은 경우
         setErrors((prevErrors) => ({
@@ -125,18 +126,49 @@ export const ValidateType1 = (selectedType1, setErrors) => {
 
 
 /*====================================================
-// [유효성 검사] 타입 2
+// [유효성 검사] 타입 2 (Registration)
 =====================================================*/
 export const ValidateType2 = (selectedType2, selectedType1, setErrors) => {
-    console.error('유효성검사', selectedType2, selectedType1)
-    if (!selectedType2) {
-        // 타입2를 선택하지 않은 경우
+    console.log('전달 받은 코드', selectedType2, selectedType1)
+    if (selectedType1 && selectedType1.value === selectedType2.value) {
+        // 타입1과 중복된 타입을 선택한 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            type2: "타입을 선택해주세요.",
+            type2: "중복된 타입은 선택할 수 없습니다.",
         }));
         return false;
-    } else if (selectedType1 && selectedType1.value === selectedType2.value) {
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, type2: "" }));
+        return true;
+    }
+};
+
+
+/*====================================================
+// [유효성 검사] 타입 1 (Edit)
+=====================================================*/
+export const ValidateType3 = (selectedType1, setErrors) => {
+    console.log(selectedType1);
+    if (!selectedType1) {
+        // 타입1을 선택하지 않은 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            type1: "타입을 선택해주세요.",
+        }));
+        return false;
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, type1: "" }));
+        return true;
+    }
+};
+
+
+/*====================================================
+// [유효성 검사] 타입 2 (Edit)
+=====================================================*/
+export const ValidateType4 = (selectedType2, selectedType1, setErrors) => {
+    console.log('전달 받은 코드', selectedType2, selectedType1)
+    if (selectedType1 && selectedType1 === selectedType2) {
         // 타입1과 중복된 타입을 선택한 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -230,7 +262,7 @@ export const VaildateWeight = (weight, setErrors) => {
 
 
 /*====================================================
-// [유효성 검사] 특성1
+// [유효성 검사] 특성1 (Registration)
 =====================================================*/
 export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
     if (!characteristic1) {
@@ -248,17 +280,46 @@ export const VaildateCharacteristic1 = (characteristic1, setErrors) => {
 
 
 /*====================================================
-// [유효성 검사] 특성2 
+// [유효성 검사] 특성2 (Registration)
 =====================================================*/
 export const VaildateCharacteristic2 = (characteristic2, characteristic1, setErrors) => {
-    if (!characteristic2) {
-        // 특성2를 선택하지 않은 경우
+    if (characteristic1 && characteristic1.value === characteristic2.value) {
+        // 특성1과 중복된 특성을 선택한 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
-            characteristic2: "특성을 선택해주세요.",
+            characteristic2: "중복된 특성은 선택할 수 없습니다.",
         }));
         return false;
-    } else if (characteristic1 && characteristic1.value === characteristic2.value) {
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, characteristic2: "" }));
+        return true;
+    }
+}
+
+
+/*====================================================
+// [유효성 검사] 특성1 (Edit)
+=====================================================*/
+export const VaildateCharacteristic3 = (characteristic1, setErrors) => {
+    if (!characteristic1) {
+        // 특성1을 선택하지 않은 경우
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            characteristic1: "특성을 선택해주세요.",
+        }));
+        return false;
+    } else {
+        setErrors((prevErrors) => ({ ...prevErrors, characteristic1: "" }));
+        return true;
+    }
+}
+
+
+/*====================================================
+// [유효성 검사] 특성2 (Edit)
+=====================================================*/
+export const VaildateCharacteristic4 = (characteristic2, characteristic1, setErrors) => {
+    if (characteristic1 && characteristic1 === characteristic2) {
         // 특성1과 중복된 특성을 선택한 경우
         setErrors((prevErrors) => ({
             ...prevErrors,
