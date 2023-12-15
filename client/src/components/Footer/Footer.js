@@ -5,7 +5,9 @@ const Footer = () => {
     return(
         <footer>
             <h1 className="footer-logo">
-                <img src="./image/ft_logo.png" alt="footer" />
+                <img src={process.env.PUBLIC_URL + '/image/ft_logo.png'} alt="footer" />
+                {/* <img src="./image/ft_logo.png" alt="footer" /> */}
+
 
                 <div className="sidemap">
                     <Link to="/" className="sm-1">
