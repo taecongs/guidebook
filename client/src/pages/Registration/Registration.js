@@ -3,6 +3,7 @@ import axios from 'axios';
 import Select from 'react-select'
 import './Registration.css';
 import { ValidateSerialNumber, ValidateName, ValidateDetail, ValidateType1, ValidateType2, ValidateHeight, ValidateCategory, VaildateWeight, VaildateCharacteristic1, VaildateCharacteristic2, ValidateImage } from '../../utils/Validation';
+import { SelectCustomStyles } from '../../utils/SelectCustomStyles';
 
 const Registration = () => {
     const [id, setId] = useState("");
@@ -31,6 +32,13 @@ const Registration = () => {
     const [selectCharOptions2, setSelectCharOption2] = useState([]);
 
     const [image, setImage] = useState(null);
+
+/*==================================================================================================
+====================================================================================================*/
+
+    // React-Select 스타일 커스텀 위해 정의
+    const customStyles = SelectCustomStyles;
+
     const [typeTooltipVisible, setTypeTooltipVisible] = useState(false);
     const [charTooltipVisible, setCharTooltipVisible] = useState(false);
 
@@ -52,39 +60,8 @@ const Registration = () => {
         image: ""
     });
 
-    // Select2 라이브러리 커스텀 정의
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            border: '1px solid ' + (state.isFocused ? '#4a90e2' : '#bbb'),
-            borderRadius: '0px',
-            boxShadow: 'none',
-            minHeight: '47.78px',
-            padding: '0px',
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            padding: '15px',
-            cursor: 'pointer',
-        }),
-        menu: (provided) => ({
-            ...provided,
-            '& > div': {
-                padding: '0px',
-                // maxHeight: '250px',
-                // overflowY: 'auto',
-                '&::-webkit-scrollbar': {
-                    width: '10px',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#4a90e2',
-                    borderRadius: '0px',
-                },
-            },
-            borderRadius: '0px',
-            margin: '0px',
-        }),
-    }
+/*==================================================================================================
+====================================================================================================*/
 
     // [타입] 툴팁 정의
     const typeTooltipHover = (isVisible) => {
@@ -177,16 +154,36 @@ const Registration = () => {
 
     // [분류] 핸들러 함수 정의
     const handleCategoryKeyDown = (e) => {
-        // 텍스트의 시작 위치
+        const currentValue = e.target.value;
         const selectionStart = e.target.selectionStart;
-
-        // 사용자가 "포켓몬" 뒤에 텍스트나 공백을 입력하지 못하도록 막고 "포켓몬" 앞으로 커서 이동하기
         const maxLength = category.length - DEFAULT_CATEGORY.length;
-        if (selectionStart > maxLength || e.key === ' ') {
+    
+        // 마우스로 드래그하여 선택된 부분이 있는지 확인
+        const isTextSelected = window.getSelection().toString() !== '';
+    
+        // 백스페이스나 Del 키가 눌렸을 때
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+            const textBeforeCursor = currentValue.substring(0, selectionStart);
+    
+            // "포켓몬" 이전에 작성한 텍스트를 삭제할 수 있도록 처리
+            if (textBeforeCursor.length < maxLength || isTextSelected) {
+                e.preventDefault();  // 이벤트의 기본 동작 막기
+                return;
+            }
+    
+            // Del 키가 눌렸을 때 "포켓몬" 중 "포"가 삭제되지 않도록 처리
+            if (selectionStart <= maxLength && e.key === 'Delete') {
+                e.preventDefault();
+                return;
+            }
+        }
+    
+        // 사용자가 "포켓몬" 뒤에 텍스트나 공백을 입력하지 못하도록 막고 "포켓몬" 앞으로 커서 이동하기
+        if (selectionStart > maxLength || e.key === ' ' || isTextSelected) {
             e.preventDefault();
             e.target.setSelectionRange(maxLength, maxLength);
         }
-    }
+    };
 
     // [특성1] 옵션을 선택했을 때 호출 되는 함수 정의
     const handleChar1Change = (selectedOption) => {
@@ -232,6 +229,11 @@ const Registration = () => {
                     value: type.type_id,
                     label: type.type_name,
                 }));
+
+                // "선택하지 않음" 옵션 추가
+                const noneOption = {value: null, label: "타입을 선택해주세요."};
+                options.unshift(noneOption);
+
                 // React-Select에서 사용할 옵션을 설정
                 setSelectTypeOptions(options);
             })
@@ -245,10 +247,15 @@ const Registration = () => {
         axios
             .get('http://localhost:4001/pokemon-chars')
             .then((response) => {
-                const options = response.data.map((type) => ({
-                    value: type.char_id,
-                    label: type.char_name,
+                const options = response.data.map((char) => ({
+                    value: char.char_id,
+                    label: char.char_name,
                 }));
+
+                // "선택하지 않음" 옵션 추가
+                const noneOption = {value: null, label: "특성을 선택해주세요."};
+                options.unshift(noneOption);
+
                 // React-Select에서 사용할 옵션을 설정
                 setSelectCharOption2(options);
             })
@@ -265,46 +272,33 @@ const Registration = () => {
         const isSerialValid = await ValidateSerialNumber(id, setErrors);
         const isNameValid = ValidateName(name, setErrors);
         const isDetailValid = ValidateDetail(detail, setErrors);
-        // const isType1Valid = ValidateType1(selectedType1 ? selectedType1.value : '', setErrors);
-        const isType1Valid = selectedType1 ? ValidateType1(selectedType1.value, setErrors) : false;
+        const isType1Valid = ValidateType1(selectedType1, setErrors);
         const isHeightValid = ValidateHeight(height, setErrors);
         const isCategoryValid = ValidateCategory(category, setErrors);
         const isWeightValid = VaildateWeight(weight, setErrors);
-        // const isCharacteristic1Valid = VaildateCharacteristic1(selectedcharacteristic1 ? selectedcharacteristic1.value : '', setErrors);
-        const isCharacteristic1Valid = selectedcharacteristic1 ? VaildateCharacteristic1(selectedcharacteristic1.value, setErrors) : false;
+        const isCharacteristic1Valid = VaildateCharacteristic1(selectedcharacteristic1, setErrors);
         const isImageValid = ValidateImage(image, setErrors);
 
         // 모든 [유효성 검사]가 통과된 경우에만 데이터를 서버에 전송
         if (isSerialValid && isNameValid && isDetailValid && isType1Valid && isHeightValid && isCategoryValid && isWeightValid && isCharacteristic1Valid && isImageValid) {
             const formData = new FormData();
 
-            // 폼 데이터에 필드 추가
             formData.append('serial', id);
             formData.append('name', name);
             formData.append('detail', detail);
-
-            // type_id를 전송
-            formData.append('type1', selectedType1.value);
-
-            // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
-            formData.append('type2', selectedType2 ? selectedType2.value : '');   
+            formData.append('type1', selectedType1.value);   // type_id를 전송
+            formData.append('type2', selectedType2 ? selectedType2.value : '');   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정  
             formData.append('height', height);
             formData.append('category', category);
 
-            // 선택된 성별을 배열에 추가하기 위해 정의
-            const selectedGenders = [];
+            const selectedGenders = [];   // 선택된 성별을 배열에 추가하기 위해 정의
             if (isMale) selectedGenders.push('남자');
             if (isFemale) selectedGenders.push('여자');
             formData.append('gender', selectedGenders.join(','));
 
             formData.append('weight', weight);
-
-            // char_id를 전송
-            formData.append('characteristic1', selectedcharacteristic1.value);
-
-            // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
-            formData.append('characteristic2', selectedcharacteristic2 ? selectedcharacteristic2.value : '');
-
+            formData.append('characteristic1', selectedcharacteristic1.value);   // char_id를 전송
+            formData.append('characteristic2', selectedcharacteristic2 ? selectedcharacteristic2.value : '');   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
             formData.append('image', image);
 
             try {
@@ -338,7 +332,7 @@ const Registration = () => {
                                         <label htmlFor="id">시리얼번호</label>
                                         <input type="text" id="id" placeholder="No.0000" value={id.startsWith("No.") ? id : `No.${id}`} onChange={(e) => setId(e.target.value)} onBlur={() => handleBlur('id', id)} onKeyDown={(e) => handleKeyDown(e)} />
                                     </div>
-                                    {errors.id && <p className='error-message'>{errors.id}</p>}
+                                    {errors.id && <p className='error-message'>📢 {errors.id}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -346,7 +340,7 @@ const Registration = () => {
                                         <label htmlFor="name" className="right-tit">이름</label>
                                         <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => handleBlur('name', name)} />
                                     </div>
-                                    {errors.name && <p className='error-message'>{errors.name}</p>}
+                                    {errors.name && <p className='error-message'>📢 {errors.name}</p>}
                                 </div>
                             </div>
 
@@ -357,7 +351,7 @@ const Registration = () => {
                                         <label htmlFor="defail">상세설명</label>
                                         <textarea id="defail" name="detail" value={detail} onChange={(e) => setDetail(e.target.value)} onBlur={() => handleBlur('detail', detail)} />
                                     </div>
-                                    {errors.detail && <p className='error-message'>{errors.detail}</p>}
+                                    {errors.detail && <p className='error-message'>📢 {errors.detail}</p>}
                                 </div>
                             </div>
 
@@ -383,7 +377,7 @@ const Registration = () => {
                                                 placeholder="타입을 선택해주세요."
                                         />
                                     </div>
-                                    {errors.type1 && <p className='error-message'>{errors.type1}</p>}
+                                    {errors.type1 && <p className='error-message'>📢 {errors.type1}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -399,7 +393,7 @@ const Registration = () => {
                                                 placeholder="타입을 선택해주세요."
                                         />
                                     </div>
-                                    {errors.type2 && <p className='error-message'>{errors.type2}</p>}
+                                    {errors.type2 && <p className='error-message'>📢 {errors.type2}</p>}
                                 </div>
                             </div>
 
@@ -410,7 +404,7 @@ const Registration = () => {
                                         <label htmlFor='height'>키</label>
                                         <input type="text" id="height" value={height} onChange={(e) => setHeight(e.target.value)} onBlur={() => handleBlur('height', height)} />
                                     </div>
-                                    {errors.height && <p className='error-message'>{errors.height}</p>}
+                                    {errors.height && <p className='error-message'>📢 {errors.height}</p>}
                                 </div>
 
                                 <div className='row1-col'>
@@ -418,7 +412,7 @@ const Registration = () => {
                                         <label htmlFor='category' className="right-tit">분류</label>
                                         <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} onBlur={() => handleBlur('category', category)} onKeyDown={(e) => handleCategoryKeyDown(e)} />
                                     </div>
-                                    {errors.category && <p className='error-message'>{errors.category}</p>}
+                                    {errors.category && <p className='error-message'>📢 {errors.category}</p>}
                                 </div>
                             </div>
 
@@ -442,7 +436,7 @@ const Registration = () => {
                                         <label htmlFor='weight'>몸무게</label>
                                         <input type="text" id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} onBlur={() => handleBlur('weight', weight)} />
                                     </div>
-                                    {errors.weight && <p className='error-message'>{errors.weight}</p>}
+                                    {errors.weight && <p className='error-message'>📢 {errors.weight}</p>}
                                 </div>
                             </div>
 
@@ -495,7 +489,7 @@ const Registration = () => {
                                         />
 
                                     </div>
-                                    {errors.characteristic2 && <p className='error-message'>{errors.characteristic2}</p>}
+                                    {errors.characteristic2 && <p className='error-message'>📢 {errors.characteristic2}</p>}
                                 </div>
                             </div>
 
@@ -506,7 +500,7 @@ const Registration = () => {
                                         <label htmlFor='file'>이미지</label>
                                         <input type="file" id="file" onChange={handleImageChange} />
                                     </div>
-                                    {errors.image && <p className='error-message'>{errors.image}</p>}
+                                    {errors.image && <p className='error-message'>📢 {errors.image}</p>}
                                 </div>
                             </div>
 
