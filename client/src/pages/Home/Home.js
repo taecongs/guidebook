@@ -109,10 +109,13 @@ const Home = () => {
                                 itemsCountPerPage={itemsPerPage}    // 페이지당 표시할 항목 수를 설정
                                 totalItemsCount={data.length}       // 전체 항목의 수를 설정
                                 pageRangeDisplayed={5}              // 페이지 범위에 표시할 페이지 수를 설정
+                                prevPageText={<span>&#x2039;</span>}
+                                nextPageText={<span>&#x203A;</span>}
                                 onChange={(pageNumber) => {
                                     // 페이지 번호가 1인 경우 메인페이지로 이동하고, 그렇지 않으면 해당 페이지로 이동
                                     navigate(pageNumber === 1 ? '/' : `/${pageNumber}`);
                                 }}
+                                itemClass="custom-page-item"
                             />
                         </>
                     )}
