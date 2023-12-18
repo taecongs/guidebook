@@ -49,10 +49,6 @@ const Home = () => {
             );
 
             setSearchResults(filteredResults);
-
-            console.log(filteredResults);
-            console.log(paginationData)
-            console.log(currentPage);
         }
     };
 
