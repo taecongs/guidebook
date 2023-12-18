@@ -13,7 +13,7 @@ const Information = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Home 컴포넌트에서 Link 컴포넌트에서 props 값으로 보내준 state={{pageNumber: pageNumber}} 값
+    // Home의 Link 컴포넌트에서 보내준 state={{pageNumber: pageNumber}} 값
     // http://localhost:3000/ -> undefined , http://localhost:3000/2 -> 2 , http://localhost:3000/3 -> 3
     const {pageNumber} = location.state || {};
 
