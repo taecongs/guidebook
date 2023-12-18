@@ -1,7 +1,5 @@
-// import { characteristicDescriptions } from "../../utils/Characteristic";
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { faMars, faVenus, faHome, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Information.css';
@@ -11,7 +9,13 @@ import { Characteristic } from "../../components/Characteristic/Characteristic";
 const Information = () => {
     const {serial} = useParams();
     const [pokemonData, setPokemonData] = useState(null);
+
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Home 컴포넌트에서 Link 컴포넌트에서 props 값으로 보내준 state={{pageNumber: pageNumber}} 값
+    // http://localhost:3000/ -> undefined , http://localhost:3000/2 -> 2 , http://localhost:3000/3 -> 3
+    const {pageNumber} = location.state || {};
 
 /*==================================================================================================
 ====================================================================================================*/
@@ -122,7 +126,7 @@ const Information = () => {
                                     </div>
 
                                     <div className="info-sprite-controls">
-                                        <Link className="info-pokemon-home-link" to='/'>
+                                        <Link className="info-pokemon-home-link" to={pageNumber ? `/${pageNumber}` : '/'}>
                                             <div className="info-pokemon-home-icon">
                                                 <FontAwesomeIcon icon={faHome} />
                                             </div>                   
