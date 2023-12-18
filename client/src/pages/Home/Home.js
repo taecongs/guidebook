@@ -22,6 +22,40 @@ const Home = () => {
     // 데이터를 가져오고 있는지 파악하기 위해 정의
     const [loading, setLoading] = useState(true);
 
+    // 검색어 상태를 저장 할 변수
+    const [searchInput, setSearchInput] = useState('');
+
+    // 검색 결과를 저장 할 배열
+    const [searchResults, setSearchResults] = useState([]);
+
+    // 페이지네이션에 필요한 데이터 개수 체크하기 위해 정의
+    const paginationData = searchResults.length > 0 ? searchResults : data;
+
+/*==================================================================================================
+====================================================================================================*/
+
+    // 검색어 입력 시 상태 업데이트 위해 정의
+    const handleSearchInputChange = (e) => {
+        setSearchInput(e.target.value);
+    }
+
+    // 검색 버튼 클릭 시 또는 엔터 키를 눌렀을 때 검색 실행
+    const handleSearch = () => {
+        if(searchInput.trim() === ''){
+            setSearchResults(data);
+        } else{
+            const filteredResults = data.filter(item => 
+                item.name.includes(searchInput) || item.detail.includes(searchInput)
+            );
+
+            setSearchResults(filteredResults);
+
+            console.log(filteredResults);
+            console.log(paginationData)
+            console.log(currentPage);
+        }
+    };
+
 /*==================================================================================================
 ====================================================================================================*/
 
@@ -41,6 +75,7 @@ const Home = () => {
 
                 setData(sortedData);
                 setLoading(false);
+
             } catch (error) {
                 console.error('데이터를 불러오는 중 오류 발생:', error);
                 setLoading(false);
@@ -74,13 +109,43 @@ const Home = () => {
     return(
         <section>
             <div className='main-container'>
+                {/* 검색 */}
+                <div className='search-wrap'>
+                    <div className='search-content'>
+                        <div className='search-div1'>
+                            <label className='search-label' htmlFor='pokemonSearch'>
+                                <img className='search-icon' src={process.env.PUBLIC_URL + '/image/icon_ball_b.png'} alt="search" />
+                                <p className='search-title'>포켓몬 도감</p>
+                            </label>
+                        </div>
+
+                        <div className='search-div2'>
+                            <input type="text" 
+                                placeholder="포켓몬 이름 또는 설명, 특성 키워드를 입력해주세요." 
+                                className='pokemon-search'
+                                value={searchInput}
+                                onChange={handleSearchInputChange}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSearch();
+                                    }
+                                }}
+                            />
+                            <button onClick={handleSearch}>클릭</button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 포켓몬 데이터 */}
                 <div className='main-wrap'>
                     {loading ? (
                         <div className="main-loading-text">loading</div>
                     ) : (
                         <>
                             <div className='main-content'>
-                                {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                            {/* 검색 결과에 따라 전체 데이터 또는 검색 결과를 보여주기 위해 정의 */}
+                            {(searchResults.length > 0 ? searchResults : data).slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
                                     <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
                                         <div className='pokemon-data'>
                                             <div className='pokemon-image'>
@@ -105,17 +170,16 @@ const Home = () => {
                                 ))}
                             </div>
                             <Pagination
-                                activePage={currentPage}            // 현재 활성화된 페이지 번호를 설정
-                                itemsCountPerPage={itemsPerPage}    // 페이지당 표시할 항목 수를 설정
-                                totalItemsCount={data.length}       // 전체 항목의 수를 설정
-                                pageRangeDisplayed={5}              // 페이지 범위에 표시할 페이지 수를 설정
+                                activePage={currentPage}                      // 현재 활성화된 페이지 번호를 설정
+                                itemsCountPerPage={itemsPerPage}              // 페이지당 표시할 항목 수를 설정
+                                totalItemsCount={paginationData.length}       // [기존]전체 항목의 수를 설정 -> [변경]전체 데이터 또는 검색 결과에 따라 설정
+                                pageRangeDisplayed={5}                        // 페이지 범위에 표시할 페이지 수를 설정
                                 prevPageText={<span>&#x2039;</span>}
                                 nextPageText={<span>&#x203A;</span>}
                                 onChange={(pageNumber) => {
                                     // 페이지 번호가 1인 경우 메인페이지로 이동하고, 그렇지 않으면 해당 페이지로 이동
                                     navigate(pageNumber === 1 ? '/' : `/${pageNumber}`);
                                 }}
-                                itemClass="custom-page-item"
                             />
                         </>
                     )}

@@ -11,8 +11,16 @@
 .main-container{
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    /* justify-content: center; */
     align-items: center;
+    flex-direction: column;
+}
+
+.search-wrap{
+    width:100%;
+    background: #393939;
+    padding: 50px 25px;
 }
 
 .main-wrap{
@@ -29,6 +37,29 @@
     /* justify-content: space-between; */
     justify-content: flex-start;
     gap: 24px;
+}
+
+/*=========================================================
+    검색 레이아웃 정의
+=========================================================*/
+.search-content{
+    /* width:92.5%; */
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    box-sizing: border-box;
+}
+
+.search-label {
+    display: flex;
+    align-items: center;
+}
+
+.search-title {
+    display: inline-block;
+    font-size:24px;
+    color:#fff;
+    font-weight: 600;
 }
 
 /*=========================================================
@@ -121,6 +152,7 @@
     height:25px;
     padding:20px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .pagination li:first-child, .pagination li:last-child{
