@@ -18,10 +18,11 @@ root.render(
   <BrowserRouter>
     <Header />
     <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/registration" element={<Registration />}></Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/:pageNumber" element={<Home />} />
+      <Route path="/registration" element={<Registration />} />
       <Route path="/information/:serial" element={<Information />} />
-      <Route path="/evolution" element={<Evolution />}></Route>
+      <Route path="/evolution" element={<Evolution />} />
       <Route path="/edit/:serial" element={<Edit />} />
     </Routes>
     <Footer />
