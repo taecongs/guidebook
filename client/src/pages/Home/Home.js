@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useMatch } from "react-router-dom";
 import Pagination from 'react-js-pagination';
 import './Home.css';
-
 
 const Home = () => {
    // 가져온 데이터를 저장 할 배열 
@@ -22,33 +21,37 @@ const Home = () => {
     // 데이터를 가져오고 있는지 파악하기 위해 정의
     const [loading, setLoading] = useState(true);
 
-    // 검색어 상태를 저장 할 변수
-    const [searchInput, setSearchInput] = useState('');
+    // 검색어를 저장하기 위해 정의
+    const [searchText, setSearchText] = useState('');
 
-    // 검색 결과를 저장 할 배열
-    const [searchResults, setSearchResults] = useState([]);
+    // 검색 결과를 저장하기 위해 정의
+    const [filteredData, setFilteredData] = useState([]);
 
-    // 페이지네이션에 필요한 데이터 개수 체크하기 위해 정의
-    const paginationData = searchResults.length > 0 ? searchResults : data;
+    // const match = useMatch("/search/:pageNumber");
 
 /*==================================================================================================
 ====================================================================================================*/
 
-    // 검색어 입력 시 상태 업데이트 위해 정의
-    const handleSearchInputChange = (e) => {
-        setSearchInput(e.target.value);
-    }
+    // 검색어 입력 시 상태 업데이트
+    const handleSearchChange = (e) => {
+        setSearchText(e.target.value);
+    };
 
-    // 검색 버튼 클릭 시 또는 엔터 키를 눌렀을 때 검색 실행
+    // 검색 버튼 클릭 또는 엔터 시 실행
     const handleSearch = () => {
-        if(searchInput.trim() === ''){
-            setSearchResults(data);
-        } else{
-            const filteredResults = data.filter(item => 
-                item.name.includes(searchInput) || item.detail.includes(searchInput)
-            );
+        // 검색어를 입력하지 않았을 때는 전체 데이터를 사용하고, 검색어를 입력하면 검색어에 따라 데이터 필터링
+        const filteredResults = searchText ? data.filter((item) => (
+                item.name.toLowerCase().includes(searchText.toLowerCase()) || item.detail.toLowerCase().includes(searchText.toLowerCase())
+        )) : [];
 
-            setSearchResults(filteredResults);
+        // 필터링된 결과를 상태에 저장
+        setFilteredData(filteredResults);
+
+        // 검색 결과가 있을 때만 페이지로 이동
+        if (filteredResults.length > 0) {
+            navigate(`/search/1`);
+        } else{
+            navigate('/');
         }
     };
 
@@ -71,7 +74,6 @@ const Home = () => {
 
                 setData(sortedData);
                 setLoading(false);
-
             } catch (error) {
                 console.error('데이터를 불러오는 중 오류 발생:', error);
                 setLoading(false);
@@ -81,14 +83,28 @@ const Home = () => {
         fetchData();
     }, [pageNumber]);
 
+
     // 페이지가 렌더링 될 때마다 맨 위로 스크롤 위해 정의
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [currentPage]);
 
+
+    // const callbackMatch = useCallback(async () => {
+    //     if (match && match.pathname.startsWith('/search')) {
+    //         setFilteredData([]);
+    //     } else{
+    //         setFilteredData([]);
+    //         setSearchText('');
+    //     }
+    // }, [match])
+
+    
+
+
     // 브라우저 뒤로 가기 이벤트 처리를 위해 정의
     useEffect(() => {
-        // 스크롤 위치를 먼저 최상단으로 이동시키고 페이지를 렌더링 한다. 
+        // 스크롤 위치를 먼저 최상단으로 이동시키고 페이지를 렌더링
         const backwards = () => {
             setTimeout(() => {
                 window.scrollTo(0, 0);
@@ -119,19 +135,15 @@ const Home = () => {
                             <input type="text" 
                                 placeholder="포켓몬 이름 또는 설명, 특성 키워드를 입력해주세요." 
                                 className='pokemon-search'
-                                value={searchInput}
-                                onChange={handleSearchInputChange}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleSearch();
-                                    }
-                                }}
+                                value={searchText}
+                                onChange={handleSearchChange}
+                                onKeyPress={(event) => event.key === 'Enter' && handleSearch()}
                             />
                             <button onClick={handleSearch}>클릭</button>
                         </div>
                     </div>
                 </div>
+
 
                 {/* 포켓몬 데이터 */}
                 <div className='main-wrap'>
@@ -140,9 +152,9 @@ const Home = () => {
                     ) : (
                         <>
                             <div className='main-content'>
-                            {/* 검색 결과에 따라 전체 데이터 또는 검색 결과를 보여주기 위해 정의 */}
-                            {(searchResults.length > 0 ? searchResults : data).slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
-                                    <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                                {filteredData.length > 0 ? (
+                                    filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                        <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
                                         <div className='pokemon-data'>
                                             <div className='pokemon-image'>
                                                 <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
@@ -163,20 +175,58 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                ))}
+                                    ))
+                                    
+                                ) : (
+                                    data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                        <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                                        <div className='pokemon-data'>
+                                            <div className='pokemon-image'>
+                                                <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                            </div>
+                                            <div className='pokemon-serial'>
+                                                <p>{item.serial}</p>
+                                            </div>
+                                            <div className='pokemon-name'>
+                                                <h2>{item.name}</h2>
+                                            </div>
+                                            <div className='pokemon-type'>
+                                                <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
+                                                    {item.main_type_name}
+                                                </p>
+                                                <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
+                                                    {item.sub_type_name}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    ))
+                                )}
                             </div>
+
                             <Pagination
-                                activePage={currentPage}                      // 현재 활성화된 페이지 번호를 설정
-                                itemsCountPerPage={itemsPerPage}              // 페이지당 표시할 항목 수를 설정
-                                totalItemsCount={paginationData.length}       // [기존]전체 항목의 수를 설정 -> [변경]전체 데이터 또는 검색 결과에 따라 설정
-                                pageRangeDisplayed={5}                        // 페이지 범위에 표시할 페이지 수를 설정
+                                // 현재 활성화된 페이지 번호를 설정
+                                activePage={currentPage}
+
+                                // 페이지당 표시할 항목 수를 설정
+                                itemsCountPerPage={itemsPerPage}  
+                                
+                                // 현재 표시되는 데이터의 전체 항목 수 설정 
+                                // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
+                                // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
+                                totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length}    
+                                
+                                // 페이지 범위에 표시할 페이지 수를 설정
+                                pageRangeDisplayed={5} 
                                 prevPageText={<span>&#x2039;</span>}
                                 nextPageText={<span>&#x203A;</span>}
                                 onChange={(pageNumber) => {
-                                    // 페이지 번호가 1인 경우 메인페이지로 이동하고, 그렇지 않으면 해당 페이지로 이동
-                                    navigate(pageNumber === 1 ? '/' : `/${pageNumber}`);
+                                    // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
+                                    const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
+                                    navigate(targetPage);
                                 }}
                             />
+
                         </>
                     )}
                 </div>
