@@ -20,6 +20,7 @@ root.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/:pageNumber" element={<Home />} />
+      <Route path="/search/:pageNumber" element={<Home />} />
       <Route path="/registration" element={<Registration />} />
       <Route path="/information/:serial" element={<Information />} />
       <Route path="/evolution" element={<Evolution />} />
