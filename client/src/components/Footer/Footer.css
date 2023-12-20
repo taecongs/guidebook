@@ -13,7 +13,7 @@ footer{
 /* 로고 */
 .footer-logo{
     display: flex;
-    width: 22.3%;
+    /* width: 22.3%; */
     /* width: 17%; */
     align-items: center;
     /* justify-content: center; */
@@ -41,5 +41,5 @@ footer{
     font-size: 12px;
     position: relative;
     margin: 0px 10px;
-    top: 2px;
+    top: 4px;
 }
