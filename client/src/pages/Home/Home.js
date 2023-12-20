@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 import Pagination from 'react-js-pagination';
-import './Home.css';
 import { pokemonState, searchTextState } from '../../atom/pokemonState';
 import { useRecoilState } from 'recoil';
+import './Home.css';
 
 const Home = () => {
    // 가져온 데이터를 저장 할 배열 
