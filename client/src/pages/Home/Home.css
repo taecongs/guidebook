@@ -20,14 +20,13 @@
 .search-wrap{
     width:100%;
     background: #393939;
-    padding: 50px 25px;
+    padding: 30px 0;
 }
 
 .main-wrap{
     width: 90%;
     margin: 0 auto;
     padding: 50px 0;
-    /* padding: 25px 0; */
     box-sizing: border-box;
 }
 
@@ -43,11 +42,13 @@
     검색 레이아웃 정의
 =========================================================*/
 .search-content{
-    /* width:92.5%; */
+    width:90%;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 150px 1fr;
     box-sizing: border-box;
+    align-items: center;
+    gap:20px;
 }
 
 .search-label {
@@ -61,6 +62,48 @@
     color:#fff;
     font-weight: 600;
 }
+
+/* 입력 필드 정의 */
+.search-div2 {
+    display: grid;
+    grid-template-columns: 1fr 55px;
+}
+
+.pokemon-search{
+    height: 55px;
+    background: #0e0e0e;
+    padding:0 20px;
+    color:#fff;
+    border:0;
+    outline: none;
+}
+
+.pokemon-search::placeholder {
+    color:#999999;
+    font-size:16px;
+}
+
+/* 버튼 */
+.search-button{
+    background-color: #da343c;
+    border:0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.search-button::before{
+    content: '';
+    width:26px;
+    height:26px;
+    position:absolute;
+    background-image: url(../../../public/image/search.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-50%,-50%);
+}
+
+
+
 
 /*=========================================================
     데이터 레이아웃 정의(1행 6열)

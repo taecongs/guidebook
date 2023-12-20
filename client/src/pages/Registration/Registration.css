@@ -80,6 +80,7 @@ input#id, input#name{
     border: 1px solid #bbb;
     border-radius: 0;
     background: var(--common-background);
+    font-size: 14px;
 }
 
 /* 라벨 */
@@ -175,6 +176,7 @@ input#height, input#category{
     border: 1px solid #bbb;
     border-radius: 0;
     background: var(--common-background);
+    font-size:14px;
 }
 
 
@@ -275,6 +277,13 @@ input#weight, input#characteristic1, input#characteristic2{
     margin-bottom: 99px;
     /* margin-bottom: 50px; */
     /* margin-bottom: 25px; */
+}
+
+/*=========================================================
+    파일 선택 정의
+=========================================================*/
+input#file {
+    font-size: 12px;
 }
 
 
