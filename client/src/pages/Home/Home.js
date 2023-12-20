@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams, useMatch } from "react-router-dom";
+import { Link, useNavigate, useParams} from "react-router-dom";
 import Pagination from 'react-js-pagination';
 import './Home.css';
+import { pokemonState } from '../../atom/pokemonState';
+import { useRecoilState } from 'recoil';
 
 const Home = () => {
    // 가져온 데이터를 저장 할 배열 
@@ -25,9 +27,7 @@ const Home = () => {
     const [searchText, setSearchText] = useState('');
 
     // 검색 결과를 저장하기 위해 정의
-    const [filteredData, setFilteredData] = useState([]);
-
-    // const match = useMatch("/search/:pageNumber");
+    const [filteredData, setFilteredData] = useRecoilState(pokemonState);
 
 /*==================================================================================================
 ====================================================================================================*/
@@ -90,24 +90,14 @@ const Home = () => {
     }, [currentPage]);
 
 
-    // const callbackMatch = useCallback(async () => {
-    //     if (match && match.pathname.startsWith('/search')) {
-    //         setFilteredData([]);
-    //     } else{
-    //         setFilteredData([]);
-    //         setSearchText('');
-    //     }
-    // }, [match])
-
-    
-
-
     // 브라우저 뒤로 가기 이벤트 처리를 위해 정의
     useEffect(() => {
         // 스크롤 위치를 먼저 최상단으로 이동시키고 페이지를 렌더링
         const backwards = () => {
             setTimeout(() => {
                 window.scrollTo(0, 0);
+                setFilteredData([]);
+                setSearchText('');
             }, 0);
         };
 
@@ -116,7 +106,7 @@ const Home = () => {
         return () => {
             window.removeEventListener('popstate', backwards);
         };
-    }, []);
+    }, [setFilteredData, setSearchText]);
 
     return(
         <section>
@@ -139,7 +129,7 @@ const Home = () => {
                                 onChange={handleSearchChange}
                                 onKeyPress={(event) => event.key === 'Enter' && handleSearch()}
                             />
-                            <button onClick={handleSearch}>클릭</button>
+                            <button className='search-button' onClick={handleSearch}></button>
                         </div>
                     </div>
                 </div>
