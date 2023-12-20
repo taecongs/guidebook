@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 import Pagination from 'react-js-pagination';
 import './Home.css';
-import { pokemonState } from '../../atom/pokemonState';
+import { pokemonState, searchTextState } from '../../atom/pokemonState';
 import { useRecoilState } from 'recoil';
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
 
     // 검색어를 저장하기 위해 정의
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useRecoilState(searchTextState);
 
     // 검색 결과를 저장하기 위해 정의
     const [filteredData, setFilteredData] = useRecoilState(pokemonState);
