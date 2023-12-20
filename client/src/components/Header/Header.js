@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import './Header.css';
 
-const Header = () => {
+export const Header = () => {
     // const navigate = useNavigate();
 
     const handleLogoClick = () => {
@@ -51,5 +51,3 @@ const Header = () => {
         </header>
     )
 }
-
-export default Header;
