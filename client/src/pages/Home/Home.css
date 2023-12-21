@@ -21,6 +21,8 @@
     width:100%;
     background: #393939;
     padding: 30px 0;
+    position: relative;
+    margin-bottom:30px;
 }
 
 .main-wrap{
@@ -50,7 +52,7 @@
     grid-template-columns: 150px 1fr;
     box-sizing: border-box;
     align-items: center;
-    gap:20px;
+    /* gap:20px; */
 }
 
 .search-label {
@@ -69,6 +71,9 @@
 .search-div2 {
     display: grid;
     grid-template-columns: 1fr 55px;
+    position: relative;
+    box-sizing: border-box;
+    padding-left:20px;
 }
 
 .pokemon-search{
@@ -102,6 +107,47 @@
     background-size: contain;
     background-repeat: no-repeat;
     transform: translate(-50%,-50%);
+}
+
+
+/* 상세검색 버튼 */
+.no-style {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.button-detail{
+    position: absolute;
+    top: 99%;
+    left: 50%;
+    width: 119px;
+    height: 29px;
+    background: url(../../../public/image/icon_close2.png) no-repeat 100% center;
+    font-size: 14px;
+    color: #fff;
+    transform: translateX(-50%);
+    z-index: 1;
+    cursor: pointer;
+    outline: none;
+}
+
+.button-detail-txt {
+    margin-top: -13px;
+}
+
+
+.type-collapse {
+    width: 100%;
+    height: 100px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.type-collapse.visible{
+    height: 100px;
 }
 
 

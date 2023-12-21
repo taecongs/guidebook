@@ -31,8 +31,14 @@ const Home = () => {
     // 검색 결과가 없는 경우를 관리하기 위해 정의
     const [noResults, setNoResults] = useRecoilState(noResultsState);
 
+    const [isTypeCollapseVisible, setIsTypeCollapseVisible] = useState(false);
+
 /*==================================================================================================
 ====================================================================================================*/
+
+    const toggleTypeCollapse = () => {
+        setIsTypeCollapseVisible(!isTypeCollapseVisible);
+    };
 
     // 검색어 입력 시 상태 업데이트
     const handleSearchChange = (e) => {
@@ -144,7 +150,17 @@ const Home = () => {
                             />
                             <button className='search-button' onClick={handleSearch}></button>
                         </div>
+
+                        <div className={`type-collapse ${isTypeCollapseVisible ? 'visible' : ''}`}>
+                            
+                        </div>
                     </div>
+
+                    <button className='button-detail no-style' onClick={toggleTypeCollapse}>
+                        <p className={`button-detail-txt ${isTypeCollapseVisible ? 'on' : ''}`}>
+                            {isTypeCollapseVisible ? '닫기' : '상세검색'}
+                        </p>
+                    </button>
                 </div>
 
 
