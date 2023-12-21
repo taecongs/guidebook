@@ -11,9 +11,10 @@ export const Header = () => {
 
         // 로고 클릭 시 새로고침 후 렌더링
         // window.location.reload();
+        window.location.href = '/'
 
         // 로고 클릭 시 메인으로 이동
-        navigate('/');
+        // navigate('/');
 
     };
     

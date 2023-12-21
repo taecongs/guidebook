@@ -69,7 +69,8 @@ const Home = () => {
             setNoResults(true);
         } else {
             // 아무런 값을 작성하지 않은 경우 -> 메인페이지로 이동
-            navigate('/');
+            // navigate('/');
+            window.location.href = '/';
         }
     };
 
