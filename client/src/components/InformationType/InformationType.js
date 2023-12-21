@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-export const Type = ({ evoList }) => {
+export const InformationType = ({ evoList }) => {
     const [pokemonTypes, setPokemonTypes] = useState([]);
 
     /*====================================================

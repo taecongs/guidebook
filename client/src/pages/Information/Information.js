@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { faMars, faVenus, faHome, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Information.css';
-import { Type } from "../../components/Type/Type";
+import { InformationType } from "../../components/InformationType/InformationType";
 import { Characteristic } from "../../components/Characteristic/Characteristic";
 
 const Information = () => {
@@ -215,7 +215,7 @@ const Information = () => {
                                             </Link>
                                             <div className="evo-name screen">{evo.name}</div>
 
-                                            <Type evoList={evo} />
+                                            <InformationType evoList={evo} />
                                         </div>
                                     ))}
                                 </div>
