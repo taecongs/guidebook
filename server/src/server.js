@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const multer = require('multer');
 const path = require("path");
 const moment = require('moment-timezone');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+
 const app = express();
 const PORT = 4001;
 
@@ -12,10 +14,10 @@ const PORT = 4001;
     // MySQL 데이터베이스 연결 설정
 =====================================================*/
 const db = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "taecongs@",
-    database: "guidebook4",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
 });
 
 /*====================================================
