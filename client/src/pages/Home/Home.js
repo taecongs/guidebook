@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
+import { useRecoilState } from 'recoil';
 import Pagination from 'react-js-pagination';
 import { pokemonState, searchTextState, noResultsState } from '../../atom/pokemonState';
-import { useRecoilState } from 'recoil';
+import { NoResultsPage } from '../../components/NoResultsPage/NoResultsPage';
 import './Home.css';
-import { NoResultsPage } from '../../components/NoResultsPage/NoResultPage';
 
 
 const Home = () => {
@@ -51,7 +51,8 @@ const Home = () => {
 
         // 검색 결과가 있을 때만 페이지로 이동
         if (filteredResults.length > 0) {
-            navigate(`/search/1`);
+            // 검색어를 입력했는데 검색 결과가 있는 경우 -> '/search/1'로 이동
+            navigate('/search/1');
 
             // 결과가 있는 경우에는 false
             setNoResults(false);
@@ -64,7 +65,7 @@ const Home = () => {
             setNoResults(true);
         } else {
             // 아무런 값을 작성하지 않은 경우 -> 메인페이지로 이동
-            window.location.href = '/';
+            navigate('/');
         }
     };
 
@@ -207,28 +208,30 @@ const Home = () => {
                         )}
                     </div>
 
-                    <Pagination
-                        // 현재 활성화된 페이지 번호를 설정
-                        activePage={currentPage}
+                    {noResults ? null : (
+                        <Pagination
+                            // 현재 활성화된 페이지 번호를 설정
+                            activePage={currentPage}
 
-                        // 페이지당 표시할 항목 수를 설정
-                        itemsCountPerPage={itemsPerPage}  
+                            // 페이지당 표시할 항목 수를 설정
+                            itemsCountPerPage={itemsPerPage}  
                         
-                        // 현재 표시되는 데이터의 전체 항목 수 설정 
-                        // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
-                        // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
-                        totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length}    
-                        
-                        // 페이지 범위에 표시할 페이지 수를 설정
-                        pageRangeDisplayed={5} 
-                        prevPageText={<span>&#x2039;</span>}
-                        nextPageText={<span>&#x203A;</span>}
-                        onChange={(pageNumber) => {
-                            // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
-                            const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
-                            navigate(targetPage);
-                        }}
-                    />
+                            // 현재 표시되는 데이터의 전체 항목 수 설정 
+                            // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
+                            // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
+                            totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length} 
+
+                            // 페이지 범위에 표시할 페이지 수를 설정
+                            pageRangeDisplayed={5} 
+                            prevPageText={<span>&#x2039;</span>}
+                            nextPageText={<span>&#x203A;</span>}
+                            onChange={(pageNumber) => {
+                                // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
+                                const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
+                                navigate(targetPage);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </section>
