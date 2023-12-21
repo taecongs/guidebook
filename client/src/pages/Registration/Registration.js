@@ -288,7 +288,7 @@ const Registration = () => {
             formData.append('name', name);
             formData.append('detail', detail);
             formData.append('type1', selectedType1.value);   // type_id를 전송
-            formData.append('type2', selectedType2 ? selectedType2.value : '');   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정  
+            formData.append('type2', selectedType2 ? selectedType2.value : null);   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정  
             formData.append('height', height);
             formData.append('category', category);
 
@@ -299,7 +299,7 @@ const Registration = () => {
 
             formData.append('weight', weight);
             formData.append('characteristic1', selectedcharacteristic1.value);   // char_id를 전송
-            formData.append('characteristic2', selectedcharacteristic2 ? selectedcharacteristic2.value : '');   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
+            formData.append('characteristic2', selectedcharacteristic2 ? selectedcharacteristic2.value : null);   // null인 상태에서 value 속성을 읽으면 에러 발생 -> null이 아닌 경우에만 value 확인하도록 수정
             formData.append('image', image);
 
             try {
