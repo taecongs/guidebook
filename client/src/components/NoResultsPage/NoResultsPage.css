@@ -1,0 +1,17 @@
+.no-results-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nrm-h2{
+    font-size:28px;
+    font-weight: 600;
+    margin-bottom:20px;
+}
+
+.nrm-p{
+    font-size:16px;
+    text-align: center;
+}
