@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import Pagination from 'react-js-pagination';
 import { pokemonState, searchTextState, noResultsState } from '../../atom/pokemonState';
 import { NoResultsPage } from '../../components/NoResultsPage/NoResultsPage';
+import { Search } from '../../components/Search/Search';
 import './Home.css';
 
 
@@ -22,6 +23,9 @@ const Home = () => {
     // 정수로 파싱, 기본값은 1페이지
     const currentPage = parseInt(pageNumber) || 1;
 
+    // 데이터를 가져오고 있는지 파악하기 위해 정의
+    const [loading, setLoading] = useState(true);
+
     // 검색어를 저장하기 위해 정의
     const [searchText, setSearchText] = useRecoilState(searchTextState);
 
@@ -31,14 +35,8 @@ const Home = () => {
     // 검색 결과가 없는 경우를 관리하기 위해 정의
     const [noResults, setNoResults] = useRecoilState(noResultsState);
 
-    const [isTypeCollapseVisible, setIsTypeCollapseVisible] = useState(false);
-
 /*==================================================================================================
 ====================================================================================================*/
-
-    const toggleTypeCollapse = () => {
-        setIsTypeCollapseVisible(!isTypeCollapseVisible);
-    };
 
     // 검색어 입력 시 상태 업데이트
     const handleSearchChange = (e) => {
@@ -93,8 +91,10 @@ const Home = () => {
                 });
 
                 setData(sortedData);
+                setLoading(false);
             } catch (error) {
                 console.error('데이터를 불러오는 중 오류 발생:', error);
+                setLoading(false);
             }
         };
 
@@ -131,123 +131,100 @@ const Home = () => {
         <section>
             <div className='main-container'>
                 {/* 검색 */}
-                <div className='search-wrap'>
-                    <div className='search-content'>
-                        <div className='search-div1'>
-                            <label className='search-label' htmlFor='pokemonSearch'>
-                                <img className='search-icon' src={process.env.PUBLIC_URL + '/image/icon_ball_b.png'} alt="search" />
-                                <p className='search-title'>포켓몬 도감</p>
-                            </label>
-                        </div>
-
-                        <div className='search-div2'>
-                            <input type="text" 
-                                placeholder="포켓몬 이름 또는 설명, 특성 키워드를 입력해주세요." 
-                                className='pokemon-search'
-                                value={searchText}
-                                onChange={handleSearchChange}
-                                onKeyPress={(event) => event.key === 'Enter' && handleSearch()}
-                            />
-                            <button className='search-button' onClick={handleSearch}></button>
-                        </div>
-
-                        <div className={`type-collapse ${isTypeCollapseVisible ? 'visible' : ''}`}>
-                            
-                        </div>
-                    </div>
-
-                    <button className='button-detail no-style' onClick={toggleTypeCollapse}>
-                        <p className={`button-detail-txt ${isTypeCollapseVisible ? 'on' : ''}`}>
-                            {isTypeCollapseVisible ? '닫기' : '상세검색'}
-                        </p>
-                    </button>
-                </div>
-
+                <Search
+                    searchText={searchText}
+                    handleSearchChange={handleSearchChange}
+                    handleSearch={handleSearch}
+                />
 
                 {/* 포켓몬 데이터 */}
                 <div className='main-wrap'>
-                    <div className='main-content'>
-                        {noResults ? (
-                            // 검색 결과가 없을 때의 메시지를 표시
-                            <NoResultsPage />
-                        ) : (
-                            // 검색 결과가 있거나 전체 데이터를 표시
-                            filteredData.length > 0 ? (
-                                filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
-                                    <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
-                                    <div className='pokemon-data'>
-                                        <div className='pokemon-image'>
-                                            <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
-                                        </div>
-                                        <div className='pokemon-serial'>
-                                            <p>{item.serial}</p>
-                                        </div>
-                                        <div className='pokemon-name'>
-                                            <h2>{item.name}</h2>
-                                        </div>
-                                        <div className='pokemon-type'>
-                                            <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
-                                                {item.main_type_name}
-                                            </p>
-                                            <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
-                                                {item.sub_type_name}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Link>
-                                ))
-                            ) : (
-                                data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
-                                    <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
-                                        <div className='pokemon-data'>
-                                            <div className='pokemon-image'>
-                                                <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
+                    {loading ? (
+                            <div className="main-loading-text">loading</div>
+                    ) : (
+                            <div className='main-content'>
+                                {noResults ? (
+                                    // 검색 결과가 없을 때의 메시지를 표시
+                                    <NoResultsPage />
+                                ) : (
+                                    // 검색 결과가 있거나 전체 데이터를 표시
+                                    filteredData.length > 0 ? (
+                                        filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                            <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                                            <div className='pokemon-data'>
+                                                <div className='pokemon-image'>
+                                                    <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                                </div>
+                                                <div className='pokemon-serial'>
+                                                    <p>{item.serial}</p>
+                                                </div>
+                                                <div className='pokemon-name'>
+                                                    <h2>{item.name}</h2>
+                                                </div>
+                                                <div className='pokemon-type'>
+                                                    <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
+                                                        {item.main_type_name}
+                                                    </p>
+                                                    <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
+                                                        {item.sub_type_name}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className='pokemon-serial'>
-                                                <p>{item.serial}</p>
-                                            </div>
-                                            <div className='pokemon-name'>
-                                                <h2>{item.name}</h2>
-                                            </div>
-                                            <div className='pokemon-type'>
-                                                <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
-                                                    {item.main_type_name}
-                                                </p>
-                                                <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
-                                                    {item.sub_type_name}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))
-                            )
+                                        </Link>
+                                        ))
+                                    ) : (
+                                        data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                            <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                                                <div className='pokemon-data'>
+                                                    <div className='pokemon-image'>
+                                                        <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                                    </div>
+                                                    <div className='pokemon-serial'>
+                                                        <p>{item.serial}</p>
+                                                    </div>
+                                                    <div className='pokemon-name'>
+                                                        <h2>{item.name}</h2>
+                                                    </div>
+                                                    <div className='pokemon-type'>
+                                                        <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
+                                                            {item.main_type_name}
+                                                        </p>
+                                                        <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
+                                                            {item.sub_type_name}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))
+                                    )
+                                )}
+                            </div>
                         )}
-                    </div>
 
-                    {noResults ? null : (
-                        <Pagination
-                            // 현재 활성화된 페이지 번호를 설정
-                            activePage={currentPage}
+                        {noResults ? null : (
+                            <Pagination
+                                // 현재 활성화된 페이지 번호를 설정
+                                activePage={currentPage}
 
-                            // 페이지당 표시할 항목 수를 설정
-                            itemsCountPerPage={itemsPerPage}  
-                        
-                            // 현재 표시되는 데이터의 전체 항목 수 설정 
-                            // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
-                            // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
-                            totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length} 
+                                // 페이지당 표시할 항목 수를 설정
+                                itemsCountPerPage={itemsPerPage}  
+                                
+                                // 현재 표시되는 데이터의 전체 항목 수 설정 
+                                // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
+                                // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
+                                totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length} 
 
-                            // 페이지 범위에 표시할 페이지 수를 설정
-                            pageRangeDisplayed={5} 
-                            prevPageText={<span>&#x2039;</span>}
-                            nextPageText={<span>&#x203A;</span>}
-                            onChange={(pageNumber) => {
-                                // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
-                                const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
-                                navigate(targetPage);
-                            }}
-                        />
-                    )}
+                                // 페이지 범위에 표시할 페이지 수를 설정
+                                pageRangeDisplayed={5} 
+                                prevPageText={<span>&#x2039;</span>}
+                                nextPageText={<span>&#x203A;</span>}
+                                onChange={(pageNumber) => {
+                                    // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
+                                    const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
+                                    navigate(targetPage);
+                                }}
+                            />
+                        )}
                 </div>
             </div>
         </section>
