@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 import Pagination from 'react-js-pagination';
-import { pokemonState, searchTextState } from '../../atom/pokemonState';
+import { pokemonState, searchTextState, noResultsState } from '../../atom/pokemonState';
 import { useRecoilState } from 'recoil';
 import './Home.css';
+import { NoResultsPage } from '../../components/NoResultsPage/NoResultPage';
+
 
 const Home = () => {
    // 가져온 데이터를 저장 할 배열 
@@ -20,14 +22,14 @@ const Home = () => {
     // 정수로 파싱, 기본값은 1페이지
     const currentPage = parseInt(pageNumber) || 1;
 
-    // 데이터를 가져오고 있는지 파악하기 위해 정의
-    const [loading, setLoading] = useState(true);
-
     // 검색어를 저장하기 위해 정의
     const [searchText, setSearchText] = useRecoilState(searchTextState);
 
     // 검색 결과를 저장하기 위해 정의
     const [filteredData, setFilteredData] = useRecoilState(pokemonState);
+
+    // 검색 결과가 없는 경우를 관리하기 위해 정의
+    const [noResults, setNoResults] = useRecoilState(noResultsState);
 
 /*==================================================================================================
 ====================================================================================================*/
@@ -50,8 +52,19 @@ const Home = () => {
         // 검색 결과가 있을 때만 페이지로 이동
         if (filteredResults.length > 0) {
             navigate(`/search/1`);
-        } else{
-            navigate('/');
+
+            // 결과가 있는 경우에는 false
+            setNoResults(false);
+            
+        } else if (searchText) {
+            // 검색어를 입력했는데 검색 결과가 없는 경우 -> '/search/noResults'로 이동
+            navigate('/search/noResults');
+            
+            // 결과가 없는 경우에는 true
+            setNoResults(true);
+        } else {
+            // 아무런 값을 작성하지 않은 경우 -> 메인페이지로 이동
+            window.location.href = '/';
         }
     };
 
@@ -73,10 +86,8 @@ const Home = () => {
                 });
 
                 setData(sortedData);
-                setLoading(false);
             } catch (error) {
                 console.error('데이터를 불러오는 중 오류 발생:', error);
-                setLoading(false);
             }
         };
 
@@ -98,6 +109,7 @@ const Home = () => {
                 window.scrollTo(0, 0);
                 setFilteredData([]);
                 setSearchText('');
+                setNoResults(false);
             }, 0);
         };
 
@@ -106,7 +118,7 @@ const Home = () => {
         return () => {
             window.removeEventListener('popstate', backwards);
         };
-    }, [setFilteredData, setSearchText]);
+    }, [setFilteredData, setSearchText, setNoResults]);
 
     return(
         <section>
@@ -137,14 +149,39 @@ const Home = () => {
 
                 {/* 포켓몬 데이터 */}
                 <div className='main-wrap'>
-                    {loading ? (
-                        <div className="main-loading-text">loading</div>
-                    ) : (
-                        <>
-                            <div className='main-content'>
-                                {filteredData.length > 0 ? (
-                                    filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
-                                        <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                    <div className='main-content'>
+                        {noResults ? (
+                            // 검색 결과가 없을 때의 메시지를 표시
+                            <NoResultsPage />
+                        ) : (
+                            // 검색 결과가 있거나 전체 데이터를 표시
+                            filteredData.length > 0 ? (
+                                filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                    <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
+                                    <div className='pokemon-data'>
+                                        <div className='pokemon-image'>
+                                            <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
+                                        </div>
+                                        <div className='pokemon-serial'>
+                                            <p>{item.serial}</p>
+                                        </div>
+                                        <div className='pokemon-name'>
+                                            <h2>{item.name}</h2>
+                                        </div>
+                                        <div className='pokemon-type'>
+                                            <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
+                                                {item.main_type_name}
+                                            </p>
+                                            <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
+                                                {item.sub_type_name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Link>
+                                ))
+                            ) : (
+                                data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                                    <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
                                         <div className='pokemon-data'>
                                             <div className='pokemon-image'>
                                                 <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
@@ -165,60 +202,33 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                    ))
-                                    
-                                ) : (
-                                    data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
-                                        <Link key={index} to={`/information/${item.serial}`} state={{pageNumber: pageNumber}} className='pokemon-col' >
-                                        <div className='pokemon-data'>
-                                            <div className='pokemon-image'>
-                                                <img className='uploads-image' src={`/uploads/${item.serial}.png`} alt={item.name} />
-                                            </div>
-                                            <div className='pokemon-serial'>
-                                                <p>{item.serial}</p>
-                                            </div>
-                                            <div className='pokemon-name'>
-                                                <h2>{item.name}</h2>
-                                            </div>
-                                            <div className='pokemon-type'>
-                                                <p style={{ backgroundColor: item.main_type_color }} className='pokemon-type1'>
-                                                    {item.main_type_name}
-                                                </p>
-                                                <p style={{ backgroundColor: item.sub_type_color }} className='pokemon-type2'>
-                                                    {item.sub_type_name}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    ))
-                                )}
-                            </div>
+                                ))
+                            )
+                        )}
+                    </div>
 
-                            <Pagination
-                                // 현재 활성화된 페이지 번호를 설정
-                                activePage={currentPage}
+                    <Pagination
+                        // 현재 활성화된 페이지 번호를 설정
+                        activePage={currentPage}
 
-                                // 페이지당 표시할 항목 수를 설정
-                                itemsCountPerPage={itemsPerPage}  
-                                
-                                // 현재 표시되는 데이터의 전체 항목 수 설정 
-                                // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
-                                // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
-                                totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length}    
-                                
-                                // 페이지 범위에 표시할 페이지 수를 설정
-                                pageRangeDisplayed={5} 
-                                prevPageText={<span>&#x2039;</span>}
-                                nextPageText={<span>&#x203A;</span>}
-                                onChange={(pageNumber) => {
-                                    // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
-                                    const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
-                                    navigate(targetPage);
-                                }}
-                            />
-
-                        </>
-                    )}
+                        // 페이지당 표시할 항목 수를 설정
+                        itemsCountPerPage={itemsPerPage}  
+                        
+                        // 현재 표시되는 데이터의 전체 항목 수 설정 
+                        // 만약 필터링 된 데이터가 있을 경우, 필터링된 데이터의 길이를 사용
+                        // 필터링 된 데이터가 없을 경우, 원본 데이터의 길이를 사용
+                        totalItemsCount={filteredData.length > 0 ? filteredData.length : data.length}    
+                        
+                        // 페이지 범위에 표시할 페이지 수를 설정
+                        pageRangeDisplayed={5} 
+                        prevPageText={<span>&#x2039;</span>}
+                        nextPageText={<span>&#x203A;</span>}
+                        onChange={(pageNumber) => {
+                            // 만약 필터링된 데이터가 있으면 '/search/'를 포함한 URL을 설정하고, 없으면 '/'를 포함한 URL을 설정, 그리고 페이지 번호가 1인 경우 메인페이지로 이동
+                            const targetPage = filteredData.length > 0 ? `/search/${pageNumber}` : pageNumber === 1 ? '/' : `/${pageNumber}`;
+                            navigate(targetPage);
+                        }}
+                    />
                 </div>
             </div>
         </section>
