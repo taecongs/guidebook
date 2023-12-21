@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import './Header.css';
 
 export const Header = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogoClick = () => {
         // '/' 경로로 이동하면서 스크롤 위치를 최상단으로 이동
@@ -10,7 +10,11 @@ export const Header = () => {
         window.scrollTo(0, 0);
 
         // 로고 클릭 시 새로고침 후 렌더링
-        window.location.reload();
+        // window.location.reload();
+
+        // 로고 클릭 시 메인으로 이동
+        navigate('/');
+
     };
     
     return(
