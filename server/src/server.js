@@ -130,8 +130,8 @@ app.post('/upload', upload.single('image'), (req, res) => {
     const { serial, name, detail, type1, type2, height, category, gender, weight, characteristic1, characteristic2 } = req.body;
 
     // type2, characteristic2가 빈 문자열인 경우 NULL로 대체
-    const type2Value = type2 !== '' ? type2 : null;
-    const char2Value = characteristic2 !== '' ? characteristic2 : null;
+    const type2Value = type2 !== '' ? null : null;
+    const char2Value = characteristic2 !== '' ? null : null;
 
     // 이미지 파일 경로
     const imagePath = req.file.path; 
