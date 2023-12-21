@@ -121,7 +121,7 @@
 }
 
 .type-collapse.visible{
-    height: 100px;
+    height: 115px;
 }
 
 .search-type {
@@ -150,10 +150,11 @@
 
 /* 타입 이미지 */
 .search-type-img {
-    width: 70%;
+    width: 75%;
 }
 
 /* 타입 텍스트 */
 .search-type-text {
     font-size: 12px;
+    padding-top:8px;
 }

@@ -57,7 +57,7 @@ export const Search = ({ searchText, handleSearchChange, handleSearch }) => {
                 <ul className="search-type-ul">
                     {homePokemonTypes.map(data => (
                         <li key={data.type_id}>
-                            <img className="search-type-img" src={data.type_image} alt={data.type_image} />
+                            <img className="search-type-img" src={data.type_color_image} alt={data.type_color_image} />
                             <p className="search-type-text">{data.type_name}</p>
 
                         </li>
