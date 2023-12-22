@@ -35,6 +35,9 @@ const Home = () => {
     // 검색 결과가 없는 경우를 관리하기 위해 정의
     const [noResults, setNoResults] = useRecoilState(noResultsState);
 
+    // 선택한 타입 정보 저장하기 위해 정의
+    const [selectedType, setSelectedType] = useState({type_id: null, type_name: null});
+
 /*==================================================================================================
 ====================================================================================================*/
 
@@ -74,6 +77,15 @@ const Home = () => {
         }
     };
 
+    // 포켓몬 타입 선택시 실행
+    const handleTypeSelection = (type_id, type_name) => {
+        if(selectedType.type_id === type_id){
+            setSelectedType({type_id: null, type_name: null});
+        } else{
+            setSelectedType({type_id, type_name});
+        }
+    }
+
 /*==================================================================================================
 ====================================================================================================*/
 
@@ -90,6 +102,8 @@ const Home = () => {
                     const serialB = parseInt(b.serial.split('.')[1]);
                     return serialA - serialB;
                 });
+
+                // console.log(sortedData);
 
                 setData(sortedData);
                 setLoading(false);
@@ -136,6 +150,8 @@ const Home = () => {
                     searchText={searchText}
                     handleSearchChange={handleSearchChange}
                     handleSearch={handleSearch}
+                    handleTypeSelection={handleTypeSelection}
+                    selectedType={selectedType}
                 />
 
                 {/* 포켓몬 데이터 */}

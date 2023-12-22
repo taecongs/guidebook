@@ -3,13 +3,18 @@ import axios from 'axios';
 import './Search.css';
 
 
-export const Search = ({ searchText, handleSearchChange, handleSearch }) => {
+export const Search = ({ searchText, handleSearchChange, handleSearch, handleTypeSelection, selectedType }) => {
+
+    // 상세 검색/닫기의 상태를 저장하기 위해 정의 
     const [isTypeCollapseVisible, setIsTypeCollapseVisible] = useState(false);
+
+    // 서버에서 가져온 포켓몬 타입 정보를 저장하기 위해 정의
     const [homePokemonTypes, setHomePokemonTypes] = useState([]);
 
 /*==================================================================================================
 ====================================================================================================*/
 
+    // 상세 검색 상태에서 클릭 시 활성화 | 닫기 상태에서 클릭 시 비활성화
     const toggleTypeCollapse = () => {
         setIsTypeCollapseVisible(!isTypeCollapseVisible);
     };
@@ -23,7 +28,7 @@ export const Search = ({ searchText, handleSearchChange, handleSearch }) => {
         .then(response => {
             setHomePokemonTypes(response.data);
 
-            console.log(response.data);
+            // console.log(response.data);
         })
         .catch(error => {
             console.error(error);
@@ -42,7 +47,7 @@ export const Search = ({ searchText, handleSearchChange, handleSearch }) => {
 
             <div className='search-div2'>
                 <input type="text" 
-                    placeholder="포켓몬 이름 또는 설명, 특성 키워드를 입력해주세요." 
+                    placeholder="포켓몬 이름 또는 설명을 입력해주세요." 
                     className='pokemon-search'
                     value={searchText}
                     onChange={handleSearchChange}
@@ -56,10 +61,9 @@ export const Search = ({ searchText, handleSearchChange, handleSearch }) => {
             <div className="search-type">
                 <ul className="search-type-ul">
                     {homePokemonTypes.map(data => (
-                        <li key={data.type_id}>
-                            <img className="search-type-img" src={data.type_color_image} alt={data.type_color_image} />
-                            <p className="search-type-text">{data.type_name}</p>
-
+                        <li key={data.type_id} onClick={() => handleTypeSelection(data.type_id, data.type_name)} className={selectedType.type_id === data.type_id ? 'typeOn' : 'search-type-li'}>
+                            <img className="search-type-img" src={selectedType.type_id === data.type_id ? data.type_image : data.type_color_image} alt="타입 이미지" />
+                            {selectedType.type_id !== data.type_id && <p className="search-type-text">{data.type_name}</p>}
                         </li>
                     ))}
                 </ul>

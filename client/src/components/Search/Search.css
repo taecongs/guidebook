@@ -121,7 +121,7 @@
 }
 
 .type-collapse.visible{
-    height: 115px;
+    height: 120px;
 }
 
 .search-type {
@@ -136,25 +136,117 @@
 .search-type-ul {
     display: grid;
     grid-template-columns: repeat(18, 1fr);
-    gap:20px;
+    gap:15px;
 }
 
-.search-type-ul li{
-    background:#fff;
+.search-type-li{
+    position: relative;
     display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 8px 13px;
+    font-size: 12px;
+    background-color: #fff;
+    text-align: center;
+    justify-content: center;
     flex-direction: column;
-    align-items: center;
-    padding: 10px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
-/* 타입 이미지 */
-.search-type-img {
-    width: 75%;
+.search-type-li {
+    width: 80px;
+    height: 80px;
 }
 
 /* 타입 텍스트 */
 .search-type-text {
     font-size: 12px;
     padding-top:8px;
+}
+
+/*=========================================================
+    타입 선택되었을 시 정의
+=========================================================*/
+.typeOn{
+    width:80px;
+    height:80px;
+    cursor: pointer;
+}
+
+.typeOn .search-type-img{
+    width:100%;
+}
+
+
+.typeOn:nth-child(1){
+    background:#999999;
+}
+
+.typeOn:nth-child(2){
+    background:#ff612c;
+}
+
+.typeOn:nth-child(3){
+    background:#2992ff;
+}
+
+.typeOn:nth-child(4){
+    background:#42bf24;
+}
+
+.typeOn:nth-child(5){
+    background:#ffdb00;
+}
+
+.typeOn:nth-child(6){
+    background:#42d8ff;
+}
+
+.typeOn:nth-child(7){
+    background:#ffa202;
+}
+
+.typeOn:nth-child(8){
+    background:#994dcf;
+}
+
+.typeOn:nth-child(9){
+    background:#ab7939;
+}
+
+.typeOn:nth-child(10){
+    background:#95c9ff;
+}
+
+.typeOn:nth-child(11){
+    background:#ff637f;
+}
+
+.typeOn:nth-child(12){
+    background:#9fa424;
+}
+
+.typeOn:nth-child(13){
+    background:#bcb889;
+}
+
+.typeOn:nth-child(14){
+    background:#6e4570;
+}
+
+.typeOn:nth-child(15){
+    background:#5462d6;
+}
+
+.typeOn:nth-child(16){
+    background:#4f4747;
+}
+
+.typeOn:nth-child(17){
+    background:#6aaed3;
+}
+
+.typeOn:nth-child(18){
+    background:#ffb1ff;
 }
