@@ -29,13 +29,14 @@ const Information = () => {
                 // 성공적으로 데이터를 가져온 경우 상태 업데이트
                 if (data && data.evo_list) {
                     // 진화 정보 정렬
-                    data.evo_list = JSON.parse(data.evo_list).sort((a, b) => {
+                    data.evo_list = data.evo_list.sort((a, b) => {
                         const serialA = parseInt(a.serial.replace("No.", ""));
                         const serialB = parseInt(b.serial.replace("No.", ""));
                         return serialA - serialB;
                     });
                 }
                 setPokemonData(data);
+                console.log(data);
             })
             .catch(error => {
                 console.error(error);
@@ -88,8 +89,7 @@ const Information = () => {
             })
             .catch(error => {
                 console.error(error);
-            })
-        
+            })        
     }
 
     return(
@@ -256,7 +256,7 @@ const Information = () => {
                     </div>
                 </div>
             ) : (
-                <p>Loading...</p>
+                <p className="infomation-loading-text">Loading...</p>
             )}
         </section>
     )
