@@ -36,7 +36,7 @@ const Home = () => {
     const [noResults, setNoResults] = useRecoilState(noResultsState);
 
     // 선택한 타입 정보 저장하기 위해 정의
-    const [selectedType, setSelectedType] = useState({type_id: null, type_name: null});
+    const [selectedTypes, setSelectedTypes] = useState([]);
 
 /*==================================================================================================
 ====================================================================================================*/
@@ -79,10 +79,15 @@ const Home = () => {
 
     // 포켓몬 타입 선택시 실행
     const handleTypeSelection = (type_id, type_name) => {
-        if(selectedType.type_id === type_id){
-            setSelectedType({type_id: null, type_name: null});
+        // 선택된 타입이 이미 존재하는지 확인
+        const useSelectedTypes = selectedTypes.findIndex(type => type.type_id === type_id);
+        
+        // 이미 선택된 타입이라면, 해당 타입의 선택을 해제
+        if(useSelectedTypes !== -1){
+            setSelectedTypes(prevTypes => prevTypes.filter(type => type.type_id !== type_id));
         } else{
-            setSelectedType({type_id, type_name});
+            // 이미 선택 된 타입이 아니라면, 해당 타입을 선택 목록에 추가
+            setSelectedTypes(prevTypes => [...prevTypes, {type_id, type_name}]);
         }
     }
 
@@ -151,7 +156,7 @@ const Home = () => {
                     handleSearchChange={handleSearchChange}
                     handleSearch={handleSearch}
                     handleTypeSelection={handleTypeSelection}
-                    selectedType={selectedType}
+                    selectedTypes={selectedTypes}
                 />
 
                 {/* 포켓몬 데이터 */}

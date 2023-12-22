@@ -3,7 +3,8 @@ import axios from 'axios';
 import './Search.css';
 
 
-export const Search = ({ searchText, handleSearchChange, handleSearch, handleTypeSelection, selectedType }) => {
+export const Search = ({ searchText, handleSearchChange, handleSearch, handleTypeSelection, selectedTypes }) => {
+    console.log(selectedTypes);
 
     // 상세 검색/닫기의 상태를 저장하기 위해 정의 
     const [isTypeCollapseVisible, setIsTypeCollapseVisible] = useState(false);
@@ -61,9 +62,11 @@ export const Search = ({ searchText, handleSearchChange, handleSearch, handleTyp
             <div className="search-type">
                 <ul className="search-type-ul">
                     {homePokemonTypes.map(data => (
-                        <li key={data.type_id} onClick={() => handleTypeSelection(data.type_id, data.type_name)} className={selectedType.type_id === data.type_id ? 'typeOn' : 'search-type-li'}>
-                            <img className="search-type-img" src={selectedType.type_id === data.type_id ? data.type_image : data.type_color_image} alt="타입 이미지" />
-                            {selectedType.type_id !== data.type_id && <p className="search-type-text">{data.type_name}</p>}
+                        <li key={data.type_id} onClick={() => handleTypeSelection(data.type_id, data.type_name)}  className={selectedTypes.some(type => type.type_id === data.type_id) ? 'typeOn' : 'search-type-li'}>
+                            <img className="search-type-img" src={selectedTypes.some(type => type.type_id === data.type_id) ? data.type_image : data.type_color_image} alt="타입이미지" />
+                            {selectedTypes.every(type => type.type_id !== data.type_id) && (
+                                <p className="search-type-text">{data.type_name}</p>
+                            )}
                         </li>
                     ))}
                 </ul>
