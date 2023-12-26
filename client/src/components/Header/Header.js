@@ -1,8 +1,8 @@
-import { Link, useNavigate} from "react-router-dom";
+import { Link} from "react-router-dom";
 import './Header.css';
 
 export const Header = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const handleLogoClick = () => {
         // '/' 경로로 이동하면서 스크롤 위치를 최상단으로 이동
